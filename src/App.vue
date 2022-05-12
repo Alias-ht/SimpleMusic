@@ -3,14 +3,20 @@ export default {};
 </script>
 
 <template>
-  <Router-view v-slot="{ Component }">
-    <Transition>
-      <Component :is="Component" />
-    </Transition>
-  </Router-view>
+  <div class="mainContainer">
+    <RouterView v-slot="{ Component }">
+      <Transition appear name="page" mode="out-in" >
+        <Component :is="Component" />
+      </Transition>
+    </RouterView>
+  </div>
 </template>
 
 <style lang="less" src="./theme/default.less"></style>
 <style lang="less" scope>
-// .fade
+.mainContainer {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 </style>

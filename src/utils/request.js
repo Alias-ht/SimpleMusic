@@ -2,7 +2,7 @@ import axios from "axios";
 
 // 引入 配置文件
 const service = axios({
-  baseURL: "",
+  baseURL: "https://www.xn--rssu31g.club:20002/",
   timeout: 8000,
 });
 

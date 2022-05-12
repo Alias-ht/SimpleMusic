@@ -7,8 +7,9 @@ export default {
     onMounted(() => {
       elAnimationFn(backBtnRef.value, "changeTrs");
     });
+
+    /** 元素动画 */
     const elAnimationFn = (el: any, className: string) => {
-      // const classNameStorage = el.className;
       el.className += ` ${className} `;
     };
     const backBtnRef = ref(null);
@@ -20,7 +21,7 @@ export default {
 <template>
   <div class="notFound">
     <!--  -->
-    <Vue3Lottie class="lottie" :animationData="NotFoundJson" :loop="false" />
+    <Vue3Lottie class="lottie" :animationData="NotFoundJson" :loop="false" :speed="1.2" />
     <button class="backBtn" ref="backBtnRef" @click="$router.push('/home')">返回首页</button>
   </div>
 </template>
@@ -52,10 +53,10 @@ export default {
           transform: translate(-50%, -50%) scale(0.8);
         }
         33% {
-          transform: translate(-50%, -50%) rotate(-20deg) scale(1);
+          transform: translate(-50%, -50%) rotate(-10deg) scale(1);
         }
         66% {
-          transform: translate(-50%, -50%) rotate(25deg) scale(1.2);
+          transform: translate(-50%, -50%) rotate(10deg) scale(1.2);
         }
         100% {
           transform: translate(-50%, -50%) scale(1);
