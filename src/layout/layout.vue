@@ -12,14 +12,14 @@ export default {
 
 <template>
   <div class="layout-container">
-    <!-- 标签栏 -->
-    <ul class="tab-bar"></ul>
     <!-- 内容区域 -->
     <div class="content">
       <div class="fillBox">
         <RouterView></RouterView>
       </div>
     </div>
+    <!-- 标签栏 -->
+    <ul class="tab-bar"></ul>
   </div>
 </template>
 
@@ -33,13 +33,7 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  .tab-bar {
-    // width: 100vw;
-    height: @tarBarHeight;
-    // flex: 1;
-    background: rgb(255, 255, 255);
-    box-shadow: 0 2vw 4vw rgba(48, 48, 48, 0.39);
-  }
+
   .content {
     height: calc(100vh - @tarBarHeight);
     flex: 1;
@@ -48,6 +42,11 @@ export default {
       height: 100%;
       overflow-x: auto;
     }
+  }
+  .tab-bar {
+    height: @tarBarHeight;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 2vw 4vw rgba(48, 48, 48, 0.39);
   }
 }
 </style>
