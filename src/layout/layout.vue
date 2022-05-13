@@ -1,12 +1,15 @@
 <script lang="ts">
 import { onBeforeMount, reactive } from "vue";
+
+// 引入 组件
+import PlayingSongVue from "../components/PlayingSong.vue";
 export default {
   name: "layout",
   setup() {
     onBeforeMount(() => {});
     return {};
   },
-  components: {},
+  components: { PlayingSongVue },
 };
 </script>
 
@@ -19,7 +22,9 @@ export default {
       </div>
     </div>
     <!-- 标签栏 -->
-    <ul class="tab-bar"></ul>
+    <ul class="tab-bar">
+      <PlayingSongVue />
+    </ul>
   </div>
 </template>
 

@@ -8,7 +8,6 @@ export default {
   setup(props: any) {
     onBeforeMount(() => {});
     const info = props.info;
-
     return { info, playingLottieJson };
   },
 };
