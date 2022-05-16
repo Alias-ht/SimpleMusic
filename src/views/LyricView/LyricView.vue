@@ -10,9 +10,15 @@ export default {
 </script>
 
 <template>
-  <div class="">
+  <div class="lyric">
     <!--  -->
   </div>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.lyric {
+  width: 100vw;
+  height: 100vh;
+  background: black;
+}
+</style>

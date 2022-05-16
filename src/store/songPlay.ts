@@ -6,6 +6,7 @@ import { ref, computed } from "vue";
 /** 引入 接口 */
 import { getSongUrlApi } from "../api/song";
 
+/** 定义 type */
 type SongStateType = {
   songInfo: object;
   songUrl: string;
@@ -16,6 +17,7 @@ type SongStateType = {
   getStoreSongPlayState?: any;
 };
 
+/** 对外导出 */
 export const useSongPlay = defineStore({
   id: "songPlay", // id必填，且需要唯一
   state: (): SongStateType => {
@@ -25,7 +27,7 @@ export const useSongPlay = defineStore({
       songUrl: "", // 音乐 url
       songId: 0, // 音乐正在播放id
       songPlaying: {}, // 正在播放的音乐信息
-      songRef: "",
+      songRef: "", // 音乐元素 保存
       songPlayState, // 播放状态
     };
   },
@@ -43,8 +45,11 @@ export const useSongPlay = defineStore({
       } = await getSongUrlApi(id);
       // 存储数据
       this.songUrl = data[0].url;
+      // 开始播放
       this.startSong();
     },
+    /** 获取音乐 歌词 */
+    getSongLyric() {},
     /** 暂停歌曲 */
     stopSong() {
       // @ts-ignore
@@ -56,10 +61,6 @@ export const useSongPlay = defineStore({
       // @ts-ignore
       this.songRef.play();
       this.songPlayState = true;
-    },
-    /** 改变歌曲播放状态 */
-    changeSongPlayState() {
-      return this.songRef.paused;
     },
   },
   // 数据持久化, 存储参数

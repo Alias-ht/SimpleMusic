@@ -24,6 +24,12 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: "/lyric",
+    name: "Lyric",
+    component: () => import("@/views/LyricView/LyricView.vue"),
+    meta: { transition: "lyricPage", title: "歌词", mode: " " },
+  },
+  {
     path: "/404",
     name: "NotFound",
     meta: {

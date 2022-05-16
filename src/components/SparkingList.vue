@@ -10,23 +10,16 @@ export default {
   props: ["info"],
   setup(props: any) {
     onMounted(() => {
-      // @ts-ignore
-      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
-      try {
-        setTimeout(() => {
-          // @ts-ignore
-          playinglottieRef.value.goToAndStop(0);
-        }, 50);
-      } catch (err) {
-        console.log(err);
-      }
+      onPlayingAniStop();
     });
     onUnmounted(() => {
-      // @ts-ignore
-      playinglottieRef.destroy();
+      try {
+        // @ts-ignore
+        playinglottieRef.value && playinglottieRef.value?.destroy();
+      } catch {}
     });
+    props.info.picUrl = `${props.info.picUrl}?param=160y160`;
     const info = props.info;
-    info.picUrl = `${info.picUrl}?param=160y160`;
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
 
@@ -49,7 +42,7 @@ export default {
 
     /** 根据播放状态 更改正在播放按钮动画 */
     function watchChangeAnimation(flag: boolean) {
-      /** 是否执行过, 执行标识        */
+      /** 是否执行过, 执行标识  */
       // @ts-ignore
       if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
       try {
@@ -62,12 +55,21 @@ export default {
       }
     }
 
+    /** 播放中动画暂停 */
     function onPlayingAniStop() {
       // @ts-ignore
-      playinglottieRef.value.stop();
+      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
+      try {
+        setTimeout(() => {
+          // @ts-ignore
+          playinglottieRef.value.goToAndStop(0);
+        }, 50);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
-    return { info, playingLottieJson, clickSongList, storeSongPlay, playinglottieRef, onPlayingAniStop };
+    return { info, playingLottieJson, clickSongList, storeSongPlay, playinglottieRef };
   },
 };
 </script>
@@ -89,7 +91,7 @@ export default {
       </li>
       <div class="playFLag">
         <div class="box" v-if="info.id === storeSongPlay.songId">
-          <Vue3Lottie ref="playinglottieRef" class="lottie" :animationData="playingLottieJson" @onEnterFrame.once="onPlayingAniStop" />
+          <Vue3Lottie ref="playinglottieRef" class="lottie" :animationData="playingLottieJson" />
         </div>
       </div>
     </ul>

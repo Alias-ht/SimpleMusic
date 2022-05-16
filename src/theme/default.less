@@ -35,6 +35,7 @@ button {
     }
 }
 
+/** 超出显示 省略号 */
 .textEllipsis {
     white-space: nowrap;
     /*溢出部分文字隐藏*/
@@ -43,9 +44,19 @@ button {
     text-overflow: ellipsis;
 }
 
+/* 模糊效果 */
+#app {
+    transition: filter 0.3s;
+}
+
+#app.filterBlur {
+    filter: blur(5px);
+}
+
+
 .page-enter-active,
 .page-leave-active {
-    transition: all 0.4s 0.14s;
+    transition: all 0.4s 0.12s;
 }
 
 .page-enter-from {
@@ -58,4 +69,24 @@ button {
     opacity: 0;
     visibility: hidden;
     transform: translate(-10%, 0);
+}
+
+.lyricPage-enter-active,
+.lyricPage-leave-active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.5s 0.1s;
+}
+
+.lyricPage-enter-from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(100%) scale(1.05);
+}
+
+.lyricPage-leave-to {
+    opacity: 0.5;
+    visibility: hidden;
+    transform: scale(0.9);
 }

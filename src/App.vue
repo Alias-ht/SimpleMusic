@@ -5,7 +5,7 @@ export default {};
 <template>
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
-      <Transition appear name="page" mode="out-in" >
+      <Transition appear :name="$route.meta?.transition || 'page'" :mode="$route.meta?.mode || 'out-in'">
         <Component :is="Component" />
       </Transition>
     </RouterView>
@@ -19,4 +19,5 @@ export default {};
   height: 100vh;
   overflow: hidden;
 }
+
 </style>

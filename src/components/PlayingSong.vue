@@ -42,7 +42,8 @@ export default {
       pauseOnHover: true,
     };
     const Vue3LottieRef = ref(null); // 播放组件 ref
-    /** 动画切换  需要采用监听器模式 */
+
+    /** 动画切换   */
     function startFn() {
       if (storeSongPlay.songRef.paused) {
         // @ts-ignore
@@ -69,63 +70,90 @@ export default {
     const startSongPlay = (elInfo: any) => {};
     /** 音乐结束 */
     const songEnd = () => {};
-    return { audioRef, startSongPlay, songEnd, storeSongPlay, Vue3LottieObj, onSegmentStart, startFn, Vue3LottieRef };
+
+    const playLyricPage = ref(false);
+    // watch(playLyricPage, (newVal) => {
+    //   const app = document.querySelector("#app");
+    //   if (newVal) {
+    //     // @ts-ignore
+    //     app.className += " filterBlur ";
+    //   } else {
+    //     // @ts-ignore
+    //     app.className = "";
+    //   }
+    // });
+    return { audioRef, startSongPlay, songEnd, storeSongPlay, Vue3LottieObj, onSegmentStart, startFn, Vue3LottieRef, playLyricPage };
   },
 };
 </script>
 
 <template>
-  <div class="playBox">
-    <!-- controls 显示控件    :autoplay="true" 自动播放  -->
-    <audio ref="audioRef" :src="storeSongPlay.songUrl" :autoplay="true" id="song" @play="startSongPlay" @ended="songEnd"></audio>
-    <ul class="playSongComopnent">
-      <li class="picUrl">
-        <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
-      </li>
-      <li class="songLyricInfo">
-        <div class="title textEllipsis">
-          {{ storeSongPlay.songInfo.name || "歌曲名称" }}
-          <!-- <span class="author textEllipsis">
+  <teleport to="body">
+    <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="playLyricPage = !playLyricPage">
+      <!-- controls 显示控件    :autoplay="true" 自动播放  -->
+      <audio ref="audioRef" :src="storeSongPlay.songUrl" :autoplay="true" id="song" @play="startSongPlay" @ended="songEnd"></audio>
+      <ul class="playSongComopnent">
+        <li class="picUrl">
+          <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
+        </li>
+        <li class="songLyricInfo">
+          <div class="title textEllipsis">
+            {{ storeSongPlay.songInfo.name || "歌曲名称" }}
+            <!-- <span class="author textEllipsis">
             <span v-for="(artistsItem, index) in storeSongPlay.songInfo.song.artists">
               {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
             </span>
           </span> -->
-        </div>
-        <div class="lyric">lyric PlaceHolder</div>
-      </li>
-
-      <li class="btnGroup">
-        <div class="stop" @click.stop.prevent="startFn">
-          <div v-if="true" class="Vue3LottieBox">
-            <Vue3Lottie
-              class="Vue3Lottie"
-              :animationData="Vue3LottieObj.animationData"
-              :loop="Vue3LottieObj.loop"
-              :speed="Vue3LottieObj.speed"
-              :autoPlay="Vue3LottieObj.autoPlay"
-              :options="{ renderer: 'svg', autoPlay: false, loop: false }"
-              @onEnterFrame.once="onSegmentStart"
-              ref="Vue3LottieRef"
-            />
           </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+          <div class="lyric">lyric PlaceHolder test</div>
+        </li>
+
+        <li class="btnGroup">
+          <div class="stop" @click.stop.prevent="startFn">
+            <div v-if="true" class="Vue3LottieBox">
+              <Vue3Lottie
+                class="Vue3Lottie"
+                :animationData="Vue3LottieObj.animationData"
+                :loop="Vue3LottieObj.loop"
+                :speed="Vue3LottieObj.speed"
+                :autoPlay="Vue3LottieObj.autoPlay"
+                :options="{ renderer: 'svg', autoPlay: false, loop: false }"
+                @onEnterFrame.once="onSegmentStart"
+                ref="Vue3LottieRef"
+              />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </teleport>
 </template>
 
 <style scoped lang="less">
+@transitionTime: all 0.6s;
 .playBox {
-  transition: all 0.3s;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 20vw;
+  transition: @transitionTime;
+  background: rgba(255, 255, 255);
+
   .playSongComopnent {
-    position: relative;
-    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 20vw;
-    padding: 2.5vw 4vw;
     box-sizing: border-box;
     overflow: hidden;
+    transition: @transitionTime;
+
     .picUrl {
+      position: absolute;
+      top: 2.5vw;
+      left: 4vw;
       overflow: hidden;
       width: 15vw;
       height: 15vw;
@@ -141,12 +169,23 @@ export default {
       }
     }
     .songLyricInfo {
-      flex: 1;
-      padding-left: 2vw;
+      position: absolute;
+      top: 2.5vw;
+      left: 23vw;
+      width: 58vw;
+      height: 15vw;
       overflow: hidden;
+      transition: @transitionTime;
+
       .title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: black;
         font-weight: 600;
         font-size: 5vw;
+        transition: @transitionTime;
+
         .author {
           padding-left: 1vw;
           font-weight: 500;
@@ -154,23 +193,56 @@ export default {
         }
       }
       .lyric {
+        position: absolute;
+        left: 0;
+        top: 6vw;
         font-size: 4vw;
         padding-top: 2vw;
+        transition: @transitionTime;
       }
     }
     .btnGroup {
+      position: absolute;
+      top: 2.5vw;
+      left: 81vw;
+      transition: @transitionTime;
+
       .stop {
         width: 15vw;
       }
     }
   }
 }
-.playBox.playPage {
+.playBox.playLyricPage {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
   height: 100vh;
-  background: black;
+  .playSongComopnent {
+    top: 3vh;
+    left: 2.5vw;
+    width: 95vw;
+    height: 94vh;
+    .songLyricInfo {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 20vw;
+      .title {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      /** 歌词 */
+      .lyric {
+        left: 50%;
+        height: 60vh;
+        transform: translateX(-50%);
+        overflow: hidden;
+      }
+    }
+    .btnGroup {
+      left: 50%;
+      transform: translateX(-50%);
+      top: 70vh;
+    }
+  }
 }
 </style>
