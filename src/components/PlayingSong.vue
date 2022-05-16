@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, reactive, ref, onMounted, watch, computed } from "vue";
 // 引入接口
 import { getSongUrlApi, searchApi } from "../api/song";
 // 引入 状态
@@ -10,12 +10,29 @@ export default {
   name: "PlayingSong",
   setup() {
     onBeforeMount(() => {});
-    const storeSongPlay = useSongPlay();
-    // storeSongPlay.getSongUrl(537470060);
+    onMounted(() => {
+      storeSongPlay.songRef = audioRef.value; // 初始化传递参数
+      storeSongPlay.stopSong(); // 初始化暂停歌曲
+    });
+    const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
+    // 创建 计算属性用于 监听变化 更改按钮样式
+    const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
+    watch(getStoreSongPlayState, (newVal, oldVal) => {
+      // console.log(newVal);
 
-    console.log(storeSongPlay.songInfo);
+      // @ts-ignore
+      newVal && Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放 5-24 帧
+      // @ts-ignore
+      !newVal && Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放 37-60 帧动画
+    });
 
     /** 动画相关 --------------------------- start */
+    /** 动画暂停相关
+     *      播放暂停同步,页面渲染好之后,根据歌曲播放状态设置按钮状态
+     *      歌词页码,根据 歌曲状态渲染
+     *  歌词
+     *      每次切换重置, 根据 时间 ,调整歌词,根据歌词位置,调整音乐频段
+     */
     // 动画参数
     const Vue3LottieObj = {
       animationData: playStopLotttieJson,
@@ -24,18 +41,18 @@ export default {
       loop: false,
       pauseOnHover: true,
     };
-    const animFlag = ref(true); // 播放状态
     const Vue3LottieRef = ref(null); // 播放组件 ref
-    /** 动画切换 */
+    /** 动画切换  需要采用监听器模式 */
     function startFn() {
-      if (animFlag.value) {
+      if (storeSongPlay.songRef.paused) {
         // @ts-ignore
         Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放5-24帧
-        animFlag.value = false;
+        storeSongPlay.startSong();
       } else {
         // @ts-ignore
         Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放37-60帧
-        animFlag.value = true;
+        // audioRef.value.pause();
+        storeSongPlay.stopSong();
       }
     }
     /** 首次动画暂停 */
@@ -45,11 +62,14 @@ export default {
     }
     /** 动画相关 --------------------------- end */
 
+    /** 音乐播放 控件 */
+    const audioRef = ref(null as any);
+
     /** 音乐播放 */
     const startSongPlay = (elInfo: any) => {};
     /** 音乐结束 */
     const songEnd = () => {};
-    return { startSongPlay, songEnd, storeSongPlay, Vue3LottieObj, onSegmentStart, startFn, Vue3LottieRef };
+    return { audioRef, startSongPlay, songEnd, storeSongPlay, Vue3LottieObj, onSegmentStart, startFn, Vue3LottieRef };
   },
 };
 </script>
@@ -57,7 +77,7 @@ export default {
 <template>
   <div class="playBox">
     <!-- controls 显示控件    :autoplay="true" 自动播放  -->
-    <audio ref="audio" :src="storeSongPlay.songUrl" id="song" @play="startSongPlay" @ended="songEnd"></audio>
+    <audio ref="audioRef" :src="storeSongPlay.songUrl" :autoplay="true" id="song" @play="startSongPlay" @ended="songEnd"></audio>
     <ul class="playSongComopnent">
       <li class="picUrl">
         <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />

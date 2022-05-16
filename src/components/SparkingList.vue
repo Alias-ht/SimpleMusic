@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, reactive } from "vue";
+import { onMounted, onUnmounted, reactive, computed, watch, ref } from "vue";
 // 引入 lottie 动画
 import playingLottieJson from "../assets/lottie/playing.json";
 
@@ -9,18 +9,65 @@ export default {
   name: "SparkingList",
   props: ["info"],
   setup(props: any) {
-    onBeforeMount(() => {});
+    onMounted(() => {
+      // @ts-ignore
+      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
+      try {
+        setTimeout(() => {
+          // @ts-ignore
+          playinglottieRef.value.goToAndStop(0);
+        }, 50);
+      } catch (err) {
+        console.log(err);
+      }
+    });
+    onUnmounted(() => {
+      // @ts-ignore
+      playinglottieRef.destroy();
+    });
     const info = props.info;
     info.picUrl = `${info.picUrl}?param=160y160`;
+    /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
-    function clickSongList() {
-      // console.log(props.info);
-      console.log(info);
 
-      storeSongPlay.getSongUrl(props.info);
-      // }
+    /** ref 属性获取 */
+    const playinglottieRef = ref(null);
+
+    /** 创建 计算属性,动态改变 */
+    const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
+    watch(getStoreSongPlayState, (newVal, oldVal) => {
+      setTimeout(() => {
+        watchChangeAnimation(newVal);
+      }, 40);
+    });
+
+    /** 点击 歌曲 进行播放 */
+    function clickSongList() {
+      const info = reactive({ ...props.info, playState: true });
+      storeSongPlay.getSongUrl(info);
     }
-    return { info, playingLottieJson, clickSongList, storeSongPlay };
+
+    /** 根据播放状态 更改正在播放按钮动画 */
+    function watchChangeAnimation(flag: boolean) {
+      /** 是否执行过, 执行标识        */
+      // @ts-ignore
+      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
+      try {
+        // @ts-ignore
+        !flag && playinglottieRef.value?.pause();
+        // @ts-ignore
+        flag && playinglottieRef.value?.play();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    function onPlayingAniStop() {
+      // @ts-ignore
+      playinglottieRef.value.stop();
+    }
+
+    return { info, playingLottieJson, clickSongList, storeSongPlay, playinglottieRef, onPlayingAniStop };
   },
 };
 </script>
@@ -33,7 +80,7 @@ export default {
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
-        <div class="author">
+        <div class="author textEllipsis">
           <span v-for="(artistsItem, index) in info.song.artists"> {{ index > 0 ? " /" : "" }} {{ artistsItem.name }} </span>
         </div>
         <div class="alias">
@@ -42,7 +89,7 @@ export default {
       </li>
       <div class="playFLag">
         <div class="box" v-if="info.id === storeSongPlay.songId">
-          <Vue3Lottie class="lottie" :animationData="playingLottieJson" />
+          <Vue3Lottie ref="playinglottieRef" class="lottie" :animationData="playingLottieJson" @onEnterFrame.once="onPlayingAniStop" />
         </div>
       </div>
     </ul>
