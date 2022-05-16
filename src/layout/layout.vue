@@ -51,7 +51,7 @@ export default {
   .tab-bar {
     height: @tarBarHeight;
     background: rgb(255, 255, 255);
-    box-shadow: 0 2vw 4vw rgba(48, 48, 48, 0.39);
+    box-shadow: 0 0vw 3vw rgba(0, 0, 0, 0.315);
   }
 }
 </style>

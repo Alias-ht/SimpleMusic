@@ -2,34 +2,46 @@
 import { onBeforeMount, reactive } from "vue";
 // 引入 lottie 动画
 import playingLottieJson from "../assets/lottie/playing.json";
+
+// 引入 状态管理 - 音乐
+import { useSongPlay } from "../store/songPlay";
 export default {
   name: "SparkingList",
   props: ["info"],
   setup(props: any) {
     onBeforeMount(() => {});
     const info = props.info;
-    return { info, playingLottieJson };
+    info.picUrl = `${info.picUrl}?param=160y160`;
+    const storeSongPlay = useSongPlay();
+    function clickSongList() {
+      // console.log(props.info);
+      console.log(info);
+
+      storeSongPlay.getSongUrl(props.info);
+      // }
+    }
+    return { info, playingLottieJson, clickSongList, storeSongPlay };
   },
 };
 </script>
 
 <template>
   <div class="listContainer">
-    <ul class="listBox" :class="{ InThePlay: info.id === 1942372651 }">
+    <ul class="listBox" :class="{ InThePlay: info.id === storeSongPlay.songId }" @click="clickSongList">
       <li class="avatarBox">
-        <img :src="`${info.picUrl}?param=160y160`" alt="" />
+        <img :src="info.picUrl" alt="" />
       </li>
       <li class="infoBox">
-        <div class="title">{{ info.name }}</div>
+        <div class="title textEllipsis">{{ info.name }}</div>
         <div class="author">
-          <span v-for="aliasItem in info.song.artists">{{ aliasItem.name }} </span>
+          <span v-for="(artistsItem, index) in info.song.artists"> {{ index > 0 ? " /" : "" }} {{ artistsItem.name }} </span>
         </div>
         <div class="alias">
           <span v-for="aliasItem in info.song.alias">{{ aliasItem }} </span>
         </div>
       </li>
-      <div class="playFLag" v-if="info.id === 1942372651">
-        <div class="box">
+      <div class="playFLag">
+        <div class="box" v-if="info.id === storeSongPlay.songId">
           <Vue3Lottie class="lottie" :animationData="playingLottieJson" />
         </div>
       </div>
@@ -54,6 +66,7 @@ export default {
   border-radius: 2vw;
   box-sizing: border-box;
   transition: background 0.3s;
+  overflow: hidden;
   .avatarBox {
     overflow: hidden;
     width: 15vw;
@@ -70,6 +83,7 @@ export default {
   .infoBox {
     flex: 1;
     padding-left: 4vw;
+    overflow: hidden;
     .title {
       font-weight: 600;
       font-size: 4vw;
@@ -92,6 +106,12 @@ export default {
       transition: @colortrans;
     }
   }
+  .playFLag {
+    position: relative;
+    width: 15vw;
+    height: 15vw;
+    overflow: hidden;
+  }
 }
 .listBox.InThePlay {
   background: royalblue;
@@ -107,9 +127,6 @@ export default {
     }
   }
   .playFLag {
-    position: relative;
-    width: 15vw;
-    overflow: hidden;
     & > .box {
       position: absolute;
       width: 25vw;
