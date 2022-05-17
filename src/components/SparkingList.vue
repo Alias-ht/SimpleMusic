@@ -18,7 +18,7 @@ export default {
         playinglottieRef.value && playinglottieRef.value?.destroy();
       } catch {}
     });
-    props.info.picUrl = `${props.info.picUrl}?param=160y160`;
+    props.info.picUrlHandler = `${props.info.picUrl}?param=160y160`;
     const info = props.info;
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
@@ -78,7 +78,7 @@ export default {
   <div class="listContainer">
     <ul class="listBox" :class="{ InThePlay: info.id === storeSongPlay.songId }" @click="clickSongList">
       <li class="avatarBox">
-        <img :src="info.picUrl" alt="" />
+        <img :src="info.picUrlHandler || info.picUrl" alt="" />
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
