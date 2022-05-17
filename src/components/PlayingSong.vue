@@ -71,7 +71,16 @@ export default {
     /** 音乐播放 控件 */
     const audioRef = ref(null as any);
 
+    /* 歌词弹窗 开启状态 */
     const playLyricPage = ref(false);
+
+    console.log(storeSongPlay.songLyricInfo);
+
+    // 计算属性 歌词信息
+    watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
+      console.log(newVal);
+    });
+
     return { audioRef, storeSongPlay, Vue3LottieObj, startFn, Vue3LottieRef, playLyricPage, onFirstStopAnimation };
   },
 };
@@ -93,7 +102,13 @@ export default {
             </span>
           </span> -->
         </div>
-        <div class="lyric">lyric PlaceHolder test</div>
+        <div class="lyricDiv">
+          <ul class="lyricUl">
+            <li v-for="(item, index) in storeSongPlay.songLyricInfo.lyric" :key="index">
+              <span>{{ item.txt }}</span>
+            </li>
+          </ul>
+        </div>
       </li>
 
       <li class="btnGroup">
@@ -180,13 +195,28 @@ export default {
           font-size: 3vw;
         }
       }
-      .lyric {
+      .lyricDiv {
         position: absolute;
         left: 0;
         top: 8vw;
         font-size: 4vw;
+        width: 100%;
         overflow: hidden;
+        text-align: center;
         transition: @transitionTime;
+        .lyricUl {
+          li {
+            position: relative;
+            height: 5vw;
+            //   span {
+            //     white-space: nowrap;
+            //     position: absolute;
+            //     top: 0;
+            //     left: 0;
+            //     transition: @transitionTime;
+            //   }
+          }
+        }
       }
     }
     .btnGroup {
@@ -219,12 +249,20 @@ export default {
         transform: translateX(-50%);
       }
       /** 歌词 */
-      .lyric {
+      .lyricDiv {
         top: 8vh;
         left: 50%;
         height: 60vh;
         transform: translateX(-50%);
-        overflow: hidden;
+        // overflow: hidden;
+        overflow-y: auto;
+        li {
+          // span {
+          //   top: 50%;
+          //   left: 50%;
+          //   transform: translate(-50%, -50%);
+          // }
+        }
       }
     }
     .btnGroup {

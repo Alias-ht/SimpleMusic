@@ -77,7 +77,7 @@ export const useSongPlay = defineStore({
         },
       } = await getLyricApi(id);
       // 如果存在实例, 先暂停,再进行下一个
-      this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation.stop();
+      this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation?.stop && this.songLyricInfo.lyricParserInstantiation.stop();
       // 解析歌词 创建实例
       this.songLyricInfo.lyricParserInstantiation = new LyricParser(lyric, (info) => {
         this.songLyricInfo.index = info.lineNum;
@@ -113,7 +113,7 @@ export const useSongPlay = defineStore({
     strategies: [
       {
         storage: localStorage,
-        paths: ["songInfo", "songUrl", "songId"],
+        paths: ["songInfo", "songUrl", "songId", "songLyricInfo"],
       },
     ],
   },
