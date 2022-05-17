@@ -1,8 +1,15 @@
 <script lang="ts">
-export default {};
+import AudioPlayControl from "./components/AudioPlayControl.vue";
+export default {
+  components: {
+    AudioPlayControl,
+  },
+};
 </script>
 
 <template>
+  <AudioPlayControl />
+
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
       <Transition appear :name="$route.meta?.transition || 'page'" :mode="$route.meta?.mode || 'out-in'">
@@ -10,6 +17,7 @@ export default {};
       </Transition>
     </RouterView>
   </div>
+  <teleport to="body"> </teleport>
 </template>
 
 <style lang="less" src="./theme/default.less"></style>
@@ -19,5 +27,4 @@ export default {};
   height: 100vh;
   overflow: hidden;
 }
-
 </style>

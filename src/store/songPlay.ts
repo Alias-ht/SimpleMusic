@@ -62,6 +62,12 @@ export const useSongPlay = defineStore({
       this.songRef.play();
       this.songPlayState = true;
     },
+    /** 每次播放音乐 触发函数 */
+    songPlayStart(elInfo: any) {
+      console.log(elInfo);
+    },
+    /** 音乐播放完毕 触发函数 */
+    songPlayEnd() {},
   },
   // 数据持久化, 存储参数
   persist: {

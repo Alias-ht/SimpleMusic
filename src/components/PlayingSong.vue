@@ -1,29 +1,33 @@
 <script lang="ts">
-import { onBeforeMount, reactive, ref, onMounted, watch, computed } from "vue";
+import { onBeforeMount, reactive, ref, onMounted, watch, computed, nextTick } from "vue";
 // 引入接口
 import { getSongUrlApi, searchApi } from "../api/song";
 // 引入 状态
 import { useSongPlay } from "../store/songPlay";
 // 引入动画
 import playStopLotttieJson from "../assets/lottie/playStop.json";
+// 引入公共函数
+import { delayedExecute } from "../hooks/common";
 export default {
   name: "PlayingSong",
   setup() {
     onBeforeMount(() => {});
     onMounted(() => {
-      storeSongPlay.songRef = audioRef.value; // 初始化传递参数
-      storeSongPlay.stopSong(); // 初始化暂停歌曲
+      // storeSongPlay.songRef = audioRef.value; // 初始化传递参数
+      // storeSongPlay.stopSong(); // 初始化暂停歌曲
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     // 创建 计算属性用于 监听变化 更改按钮样式
     const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
     watch(getStoreSongPlayState, (newVal, oldVal) => {
-      // console.log(newVal);
-
-      // @ts-ignore
-      newVal && Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放 5-24 帧
-      // @ts-ignore
-      !newVal && Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放 37-60 帧动画
+      try {
+        // @ts-ignore
+        newVal && Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放 5-24 帧
+        // @ts-ignore
+        !newVal && Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放 37-60 帧动画
+      } catch (err) {
+        console.log(err);
+      }
     });
 
     /** 动画相关 --------------------------- start */
@@ -36,13 +40,12 @@ export default {
     // 动画参数
     const Vue3LottieObj = {
       animationData: playStopLotttieJson,
-      speed: 1.4,
+      speed: 1,
       autoPlay: true,
       loop: false,
       pauseOnHover: true,
     };
     const Vue3LottieRef = ref(null); // 播放组件 ref
-
     /** 动画切换   */
     function startFn() {
       if (storeSongPlay.songRef.paused) {
@@ -56,77 +59,65 @@ export default {
         storeSongPlay.stopSong();
       }
     }
-    /** 首次动画暂停 */
-    function onSegmentStart() {
-      // @ts-ignore
-      Vue3LottieRef.value?.stop();
-    }
+    /** 首次暂停动画播放 */
+    const onFirstStopAnimation = () => {
+      delayedExecute(() => {
+        // @ts-ignore
+        Vue3LottieRef.value.stop();
+        // @ts-ignore
+        Vue3LottieRef.value.goToAndStop(0);
+      });
+    };
+
     /** 动画相关 --------------------------- end */
 
     /** 音乐播放 控件 */
     const audioRef = ref(null as any);
 
-    /** 音乐播放 */
-    const startSongPlay = (elInfo: any) => {};
-    /** 音乐结束 */
-    const songEnd = () => {};
-
     const playLyricPage = ref(false);
-    // watch(playLyricPage, (newVal) => {
-    //   const app = document.querySelector("#app");
-    //   if (newVal) {
-    //     // @ts-ignore
-    //     app.className += " filterBlur ";
-    //   } else {
-    //     // @ts-ignore
-    //     app.className = "";
-    //   }
-    // });
-    return { audioRef, startSongPlay, songEnd, storeSongPlay, Vue3LottieObj, onSegmentStart, startFn, Vue3LottieRef, playLyricPage };
+    return { audioRef, storeSongPlay, Vue3LottieObj, startFn, Vue3LottieRef, playLyricPage, onFirstStopAnimation };
   },
 };
 </script>
 
 <template>
-  <teleport to="body">
-    <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="playLyricPage = !playLyricPage">
-      <!-- controls 显示控件    :autoplay="true" 自动播放  -->
-      <audio ref="audioRef" :src="storeSongPlay.songUrl" :autoplay="true" id="song" @play="startSongPlay" @ended="songEnd"></audio>
-      <ul class="playSongComopnent">
-        <li class="picUrl">
-          <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
-        </li>
-        <li class="songLyricInfo">
-          <div class="title textEllipsis">
-            {{ storeSongPlay.songInfo.name || "歌曲名称" }}
-            <!-- <span class="author textEllipsis">
+  <!-- <teleport to="body"> -->
+  <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="playLyricPage = !playLyricPage">
+    <ul class="playSongComopnent">
+      <li class="picUrl">
+        <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
+      </li>
+      <li class="songLyricInfo">
+        <div class="title textEllipsis">
+          {{ storeSongPlay.songInfo.name || "歌曲名称" }}
+          <!-- <span class="author textEllipsis">
             <span v-for="(artistsItem, index) in storeSongPlay.songInfo.song.artists">
               {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
             </span>
           </span> -->
-          </div>
-          <div class="lyric">lyric PlaceHolder test</div>
-        </li>
+        </div>
+        <div class="lyric">lyric PlaceHolder test</div>
+      </li>
 
-        <li class="btnGroup">
-          <div class="stop" @click.stop.prevent="startFn">
-            <div v-if="true" class="Vue3LottieBox">
-              <Vue3Lottie
-                class="Vue3Lottie"
-                :animationData="Vue3LottieObj.animationData"
-                :loop="Vue3LottieObj.loop"
-                :speed="Vue3LottieObj.speed"
-                :autoPlay="Vue3LottieObj.autoPlay"
-                :options="{ renderer: 'svg', autoPlay: false, loop: false }"
-                @onEnterFrame.once="onSegmentStart"
-                ref="Vue3LottieRef"
-              />
-            </div>
+      <li class="btnGroup">
+        <div class="stop" @click.stop.prevent="startFn">
+          <div v-if="true" class="Vue3LottieBox">
+            <Vue3Lottie
+              class="Vue3Lottie"
+              :animationData="Vue3LottieObj.animationData"
+              :loop="Vue3LottieObj.loop"
+              :speed="Vue3LottieObj.speed"
+              :autoPlay="Vue3LottieObj.autoPlay"
+              :options="{ renderer: 'svg', autoPlay: false, loop: false }"
+              @onEnterFrame.once="onFirstStopAnimation"
+              ref="Vue3LottieRef"
+            />
           </div>
-        </li>
-      </ul>
-    </div>
-  </teleport>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- </teleport> -->
 </template>
 
 <style scoped lang="less">
@@ -195,9 +186,9 @@ export default {
       .lyric {
         position: absolute;
         left: 0;
-        top: 6vw;
+        top: 8vw;
         font-size: 4vw;
-        padding-top: 2vw;
+        overflow: hidden;
         transition: @transitionTime;
       }
     }
@@ -225,13 +216,14 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 20vw;
+      height: 68vh;
       .title {
         left: 50%;
         transform: translateX(-50%);
       }
       /** 歌词 */
       .lyric {
+        top: 8vh;
         left: 50%;
         height: 60vh;
         transform: translateX(-50%);
@@ -240,8 +232,8 @@ export default {
     }
     .btnGroup {
       left: 50%;
-      transform: translateX(-50%);
-      top: 70vh;
+      transform: translate(-50%, -50%);
+      top: 75vh;
     }
   }
 }
