@@ -84,33 +84,31 @@ button {
 }
 
 .page-enter-from {
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.15);
+    // opacity: 0;
+    // visibility: hidden;
+    // transform: scale(1.15);
 }
 
 .page-leave-to {
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-10%, 0);
+    // opacity: 0;
+    // visibility: hidden;
+    // transform: translate(-10%, 0);
 }
 
-.lyricPage-enter-active,
-.lyricPage-leave-active {
+.lyricPageEnter-enter-active,
+.lyricPageLeave-leave-active,
+.lyricPageEnter-leave-active {
     position: absolute;
     top: 0;
     left: 0;
     transition: all 0.5s 0.1s;
+    z-index: 99;
 }
 
-.lyricPage-enter-from {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(100%) scale(1.05);
+.lyricPageEnter-enter-from {
+    transform: translateY(100%);
 }
 
-.lyricPage-leave-to {
-    opacity: 0.5;
-    visibility: hidden;
-    transform: scale(0.9);
+.lyricPageLeave-leave-to {
+    transform: translateY(100%);
 }

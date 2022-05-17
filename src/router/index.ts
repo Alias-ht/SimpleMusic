@@ -62,6 +62,12 @@ router.beforeEach((to, from, next) => {
   } else {
     document.title = "sparking";
   }
+  if (from.fullPath === "/lyric") {
+    to.query.upPage = "/lyric";
+  }
+  if (to.fullPath === "/lyric") {
+    to.query.nextPage = "/lyric";
+  }
   next();
 });
 

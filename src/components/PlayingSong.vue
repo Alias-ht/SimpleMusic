@@ -88,7 +88,8 @@ export default {
 
 <template>
   <!-- <teleport to="body"> -->
-  <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="playLyricPage = !playLyricPage">
+  <!-- <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="playLyricPage = !playLyricPage"> -->
+  <div class="playBox" :class="{ playLyricPage: playLyricPage }" @click="$router.push('/lyric')">
     <ul class="playSongComopnent">
       <li class="picUrl">
         <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
@@ -208,13 +209,6 @@ export default {
           li {
             position: relative;
             height: 5vw;
-            //   span {
-            //     white-space: nowrap;
-            //     position: absolute;
-            //     top: 0;
-            //     left: 0;
-            //     transition: @transitionTime;
-            //   }
           }
         }
       }
