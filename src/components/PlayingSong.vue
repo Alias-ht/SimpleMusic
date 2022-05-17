@@ -12,10 +12,7 @@ export default {
   name: "PlayingSong",
   setup() {
     onBeforeMount(() => {});
-    onMounted(() => {
-      // storeSongPlay.songRef = audioRef.value; // 初始化传递参数
-      // storeSongPlay.stopSong(); // 初始化暂停歌曲
-    });
+    onMounted(() => {});
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     // 创建 计算属性用于 监听变化 更改按钮样式
     const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);

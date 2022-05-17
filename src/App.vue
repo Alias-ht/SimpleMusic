@@ -17,7 +17,7 @@ export default {
       </Transition>
     </RouterView>
   </div>
-  <teleport to="body"> </teleport>
+  <div id="total"></div>
 </template>
 
 <style lang="less" src="./theme/default.less"></style>

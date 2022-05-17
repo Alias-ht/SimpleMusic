@@ -3,6 +3,9 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
+// 引入公共函数
+import { totalTip } from "../hooks/common";
+
 /** 引入 接口 */
 import { getSongUrlApi } from "../api/song";
 
@@ -47,6 +50,8 @@ export const useSongPlay = defineStore({
       this.songUrl = data[0].url;
       // 开始播放
       this.startSong();
+      // 调用提示
+      totalTip('程序异常')
     },
     /** 获取音乐 歌词 */
     getSongLyric() {},
@@ -67,7 +72,9 @@ export const useSongPlay = defineStore({
       console.log(elInfo);
     },
     /** 音乐播放完毕 触发函数 */
-    songPlayEnd() {},
+    songPlayEnd() {
+      this.songPlayState = false;
+    },
   },
   // 数据持久化, 存储参数
   persist: {
