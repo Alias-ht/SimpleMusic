@@ -31,3 +31,13 @@ export const searchApi = (keywords: string) => {
     },
   });
 };
+
+export const getLyricApi = (id: number) => {
+  return request({
+    url: api.getLyric,
+    method: "GET",
+    params: {
+      id,
+    },
+  });
+};

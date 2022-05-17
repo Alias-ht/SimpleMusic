@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onBeforeMount, reactive, ref, onMounted, watch, computed, nextTick } from "vue";
 // 引入接口
-import { getSongUrlApi, searchApi } from "../api/song";
+// import { getSongUrlApi, searchApi } from "../api/song";
 // 引入 状态
 import { useSongPlay } from "../store/songPlay";
 // 引入动画

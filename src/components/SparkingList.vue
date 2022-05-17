@@ -37,7 +37,7 @@ export default {
     /** 点击 歌曲 进行播放 */
     function clickSongList() {
       const info = reactive({ ...props.info, playState: true });
-      storeSongPlay.getSongUrl(info);
+      storeSongPlay.getSongInfo(info);
     }
 
     /** 根据播放状态 更改正在播放按钮动画 */
