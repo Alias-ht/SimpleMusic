@@ -77,7 +77,9 @@ export const useSongPlay = defineStore({
         },
       } = await getLyricApi(id);
       // 如果存在实例, 先暂停,再进行下一个
-      this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation?.stop && this.songLyricInfo.lyricParserInstantiation.stop();
+      this.songLyricInfo.lyricParserInstantiation &&
+        this.songLyricInfo.lyricParserInstantiation?.stop &&
+        this.songLyricInfo.lyricParserInstantiation.stop();
       // 解析歌词 创建实例
       this.songLyricInfo.lyricParserInstantiation = new LyricParser(lyric, (info) => {
         this.songLyricInfo.index = info.lineNum;
@@ -91,6 +93,9 @@ export const useSongPlay = defineStore({
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
+      try {
+        this.songLyricInfo.lyricParserInstantiation.stop();
+      } catch {}
     },
     /** 播放歌曲 */
     startSong() {
@@ -100,7 +105,12 @@ export const useSongPlay = defineStore({
     },
     /** 每次播放音乐 触发函数 */
     songPlayStart(elInfo: any) {
-      // console.log(elInfo);
+      if (this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation.seek) {
+        this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
+      } else {
+        console.log(1);
+        this.getSongLyric(this.songId);
+      }
     },
     /** 音乐播放完毕 触发函数 */
     songPlayEnd() {
