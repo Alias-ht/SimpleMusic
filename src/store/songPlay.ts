@@ -96,6 +96,7 @@ export const useSongPlay = defineStore({
       });
       // 存储并 设置 歌词 歌曲同步
       this.songLyricInfo.lyric = this.songLyricInfo.lyricParserInstantiation.lines;
+
       this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
     },
     /** 暂停歌曲 */
@@ -109,26 +110,27 @@ export const useSongPlay = defineStore({
         this.songLyricInfo.lyricParserInstantiation.stop();
       } catch {}
     },
-    /** 播放歌曲 */
-    startSong() {
+    /** 播放歌曲  @param flag 是否需要执行 歌词草错*/
+    startSong(lyricFlag?: boolean) {
       if (!this.songUrl) return totalTip("请先选择播放歌曲");
       try {
         this.songRef.play();
         this.songPlayState = true;
+        const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
+        if (lyricFlag) lyricInstan.seek && lyricInstan.seek(this.songRef.currentTime * 1000);
       } catch (err) {
         console.log(err);
       }
-      // @ts-ignore
-      // this.songRef.play();
-      // this.songPlayState = true;
     },
-    /** 每次播放音乐 触发函数 */
+    /** 每次播放音乐 触发函数 执行歌词 */
     songPlayStart(elInfo: any) {
-      if (this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation.seek) {
-        this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
+      // this.songPlayState = true;
+      const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
+      if (lyricInstan && lyricInstan.seek) {
+        lyricInstan.seek(this.songRef.currentTime * 1000);
       } else {
         /** 存在歌曲存储记录 直接播放 */
-        if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songLyricInfo.songPlayTime;
+        if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime;
         console.log("播放歌曲,歌词实例消失,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
@@ -139,14 +141,20 @@ export const useSongPlay = defineStore({
     },
     /** 歌曲播放 触发进度获取 */
     getSongPlayProgress() {
-      // console.log(this.songRef.currentTime);
-      // console.log(this.songRef.duration);
-
-      this.songPlaygress.timer = setInterval(() => {
+      this.songPlaygress.timer && clearInterval(this.songPlaygress.timer);
+      const timePlaygressFn = () => {
         const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime || 0;
         const allTime = this.songRef.duration;
         this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
-      }, 200);
+      };
+      // @ts-ignore
+      this.songPlaygress.timer = setInterval(timePlaygressFn(), 300);
+    },
+    /** 设置歌曲进度 */
+    setSongProgress(percentage: number) {
+      if (!this.songRef) return totalTip("未获取到相关歌曲信息");
+      this.songRef.currentTime = percentage * this.songRef.duration;
+      this.startSong(true); // 需要更新歌词 传递标识
     },
   },
   // 数据持久化, 存储参数
