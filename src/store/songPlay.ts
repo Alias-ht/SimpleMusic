@@ -141,9 +141,10 @@ export const useSongPlay = defineStore({
     },
     /** 歌曲播放 触发进度获取 */
     getSongPlayProgress() {
-      this.songPlaygress.timer && clearInterval(this.songPlaygress.timer);
+      clearInterval(this.songPlaygress.timer);
       const timePlaygressFn = () => {
-        const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime || 0;
+        const currentTime = this.songLyricInfo.songPlayTime || 0;
+        // const currentTime = this.songRef.currentTime;
         const allTime = this.songRef.duration;
         this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
       };
@@ -154,6 +155,7 @@ export const useSongPlay = defineStore({
     setSongProgress(percentage: number) {
       if (!this.songRef) return totalTip("未获取到相关歌曲信息");
       this.songRef.currentTime = percentage * this.songRef.duration;
+      this.songLyricInfo.songPlayTime = this.songRef.currentTime;
       this.startSong(true); // 需要更新歌词 传递标识
     },
   },

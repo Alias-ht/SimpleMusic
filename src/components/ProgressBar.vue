@@ -27,7 +27,7 @@ export default {
     /** ref 元素 ---- 进度条 */
     const progressContainerRef = ref(null as any);
     /**  */
-    watch(storeSongPlay.songPlaygress, (newVal) => {
+    watch(storeSongPlay.songPlaygress, (newVal,oldVal) => {
       // console.log(newVal);
       const progressNum = newVal.progress;
       // console.log(progressNum);
