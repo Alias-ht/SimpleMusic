@@ -97,18 +97,58 @@ button {
 
 .lyricPageEnter-enter-active,
 .lyricPageLeave-leave-active,
+.lyricPageLeave-enter-active,
 .lyricPageEnter-leave-active {
     position: absolute;
     top: 0;
     left: 0;
     transition: all 0.5s 0.04s;
     z-index: 99;
+
+    &::after {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        content: "";
+        opacity: 0;
+        visibility: hidden;
+        transition: all .5s;
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+.lyricPageEnter-leave-to {
+    &::after {
+        opacity: 1;
+        visibility: visible;
+        background: rgba(0, 0, 0, 0.8);
+    }
 }
 
 .lyricPageEnter-enter-from {
     transform: translateY(100%);
 }
 
+
+.lyricPageLeave-enter-active {
+    &::after {
+        transition: all 1 s;
+    }
+}
+
+.lyricPageLeave-enter-from {
+    z-index: 95;
+
+    &::after {
+        opacity: 1;
+        visibility: visible;
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
 .lyricPageLeave-leave-to {
+    z-index: 100;
     transform: translateY(100%);
 }

@@ -9,22 +9,18 @@ export function delayedExecute(fn?: Function, time?: number) {
   });
 }
 
-var total = document.querySelector("#total");
-// @ts-ignore
-var totalTimer = null;
+var total = document.querySelector("#total") as any;
+var totalTimer = null as any;
 /** total 消息文字提示 */
 export function totalTip(text: string) {
-  !total && (total = document.querySelector("#total"));
-  console.log(total);
   // @ts-ignore
+  !total && (total = document.querySelector("#total"));
   clearTimeout(totalTimer);
   // 打开文字提醒
-  // @ts-ignore
   total.className = " actived ";
-  // @ts-ignore
   total.innerText = text;
   totalTimer = setTimeout(() => {
-    // @ts-ignore
     total.className = "";
+    total.innerText = "";
   }, 1.6 * 1000);
 }

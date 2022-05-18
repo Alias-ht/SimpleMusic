@@ -95,6 +95,7 @@ export const useSongPlay = defineStore({
     },
     /** 暂停歌曲 */
     stopSong() {
+      if (!this.songUrl) return totalTip("请先选择播放歌曲");
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
@@ -104,9 +105,16 @@ export const useSongPlay = defineStore({
     },
     /** 播放歌曲 */
     startSong() {
+      if (!this.songUrl) return totalTip("请先选择播放歌曲");
+      try {
+        this.songRef.play();
+        this.songPlayState = true;
+      } catch (err) {
+        console.log(err);
+      }
       // @ts-ignore
-      this.songRef.play();
-      this.songPlayState = true;
+      // this.songRef.play();
+      // this.songPlayState = true;
     },
     /** 每次播放音乐 触发函数 */
     songPlayStart(elInfo: any) {

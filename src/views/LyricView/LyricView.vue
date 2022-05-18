@@ -5,6 +5,7 @@ import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
 import { useSongPlay } from "../../store/songPlay";
 // 引入组件
 import StopSongBtn from "@/components/StopSongBtn.vue";
+import { BeakerIcon } from "@heroicons/vue/solid";
 // // 引入动画
 // import playStopLotttieJson from "../../assets/lottie/playStop.json";
 // // 引入公共函数
@@ -15,10 +16,20 @@ export default {
   setup() {
     onBeforeMount(() => {});
     onMounted(() => {
-      getIndexChangeScrollFn();
+      if (storeSongPlay.songLyricInfo.lyric) {
+        getIndexChangeScrollFn();
+      }
+      initLyricUlPadding();
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
+
+    function initLyricUlPadding() {
+      const height = lyricDivRef.value.offsetHeight / 2;
+      const lyricUlStyle = lyricDivRef.value.children[0].style as any;
+      lyricUlStyle.paddingTop = height + "px";
+      lyricUlStyle.paddingBottom = height + "px";
+    }
 
     /** 创建监听器函数 触碰滑动时暂停, 2秒钟不操作继续监听器 */
     let lyricScrollUnwatch = null as any;
@@ -48,17 +59,35 @@ export default {
     function getIndexChangeScrollFn(index?: number) {
       const i = index || storeSongPlay.songLyricInfo.index;
       const lyricRef = lyricDivRef.value;
-      if (!lyricRef) return;
+      if (!lyricRef) return false;
       const height = lyricRef.offsetHeight / 2;
       const lis = lyricRef.children[0].children;
+      if (!lis[i]) return false;
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
     }
 
-    return { storeSongPlay, lyricUlScroll, lyricDivRef, lyricScrollTouchEnd };
+    /* 歌曲进度滚动条 ------- start */
+    /** 进度条类名 actived */
+    const progressClassActived = ref(false);
+
+    /** 进度条手指触摸事件 */
+    function progressTouchStart() {
+      // console.log(1);
+      progressClassActived.value = true;
+    }
+
+    /** 手指离开进度条事件 */
+    function progressTouchEnd() {
+      progressClassActived.value = false;
+    }
+    /* 歌曲进度滚动条 ------- end */
+
+    return { storeSongPlay, lyricUlScroll, lyricDivRef, lyricScrollTouchEnd, progressClassActived, progressTouchStart, progressTouchEnd };
   },
   components: {
     StopSongBtn,
+    BeakerIcon,
   },
 };
 </script>
@@ -70,15 +99,22 @@ export default {
         <img v-show="storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
       </li>
       <li class="songLyricInfo">
-        <div class="backup"></div>
+        <div class="backup" @click="$router.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
-        <!-- <div class="lyricDiv" ref="lyricDivRef"> -->
         <div class="lyricDiv" @touchstart="lyricUlScroll" @touchend="lyricScrollTouchEnd" ref="lyricDivRef">
-          <!-- <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }"> -->
           <ul class="lyricUl">
             <li
+              class="textEllipsis"
               :class="{ lyricActivedNum: storeSongPlay.songLyricInfo.index === index }"
               v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
               :key="index"
@@ -88,12 +124,16 @@ export default {
           </ul>
         </div>
       </li>
-
       <li class="btnGroup">
         <StopSongBtn class="stopBox" />
       </li>
-      <li>
+      <li class="progressBox" @touchstart="progressTouchStart" @touchend="progressTouchEnd">
         <!-- 进度条 -->
+        <div class="progressBar" :class="{ actived: progressClassActived }">
+          <div class="progressContainer"></div>
+        </div>
+        <!-- @touchstart="progressTouchStart"
+          @touchend="progressTouchEnd" -->
       </li>
     </ul>
   </div>
@@ -108,9 +148,10 @@ export default {
     height: 100vh;
     overflow: hidden;
     box-shadow: 0 0 5vw rgba(0, 0, 0, 0.4);
-    // background: rgba(0, 0, 0, 0.651);
     background: white;
     color: black;
+    display: flex;
+    flex-direction: column;
     .picUrl {
       position: absolute;
       top: 50%;
@@ -126,7 +167,8 @@ export default {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(255, 255, 255, 0.692);
+        background: rgba(255, 255, 255, 0.6);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.3));
         // background: white;
       }
       img {
@@ -142,6 +184,12 @@ export default {
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      .backup {
+        padding-left: 5vw;
+        color: black;
+        z-index: 1;
+        width: 10vw;
+      }
 
       .title {
         text-align: center;
@@ -163,7 +211,6 @@ export default {
         scroll-behavior: smooth;
         .lyricUl {
           position: absolute;
-          // top: 50%;
           padding-top: 31vh;
           padding-bottom: 31vh;
           width: 100%;
@@ -187,13 +234,41 @@ export default {
     }
     .btnGroup {
       position: relative;
-      top: 2vh;
-      height: 20vh;
+      padding-top: 2vh;
+      // top: 2vh;
+      height: 12vh;
       .stopBox {
         position: absolute;
         left: 50%;
         width: 20vw;
         transform: translate(-50%);
+      }
+    }
+    .progressBox {
+      position: relative;
+      height: 2vh;
+      margin: 2vh 4vw 0;
+      z-index: 1;
+      .progressBar {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 0.5vh;
+        background: #000;
+        background: white;
+        border-radius: 0.5vh;
+        transition: all 0.24s;
+        &.actived {
+          height: 1.5vh;
+          border-radius: 1.5vh;
+        }
+        .progressContainer {
+          background: royalblue;
+          height: 100%;
+          width: 10%;
+          border-radius: 1.5vh;
+        }
       }
     }
   }

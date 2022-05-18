@@ -50,7 +50,7 @@ export default {
         </div>
         <div class="lyricDiv">
           <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }">
-            <li v-for="(item, index) in storeSongPlay.songLyricInfo.lyric" :key="index">
+            <li class="textEllipsis" v-for="(item, index) in storeSongPlay.songLyricInfo.lyric" :key="index">
               <span>{{ item.txt }}</span>
             </li>
           </ul>
