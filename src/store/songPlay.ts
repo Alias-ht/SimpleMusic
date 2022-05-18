@@ -21,6 +21,7 @@ type SongStateType = {
   songRef: any;
   songPlayState?: boolean;
   getStoreSongPlayState?: any;
+  songPlaygress?: any;
   songLyricInfo: {
     lyric: any;
     lyricParserInstantiation?: any;
@@ -41,6 +42,10 @@ export const useSongPlay = defineStore({
       songPlaying: {}, // 正在播放的音乐信息
       songRef: "", // 音乐元素 保存
       songPlayState, // 播放状态
+      songPlaygress: {
+        progress: "",
+        timer: "",
+      }, // 歌曲播放进度
       songLyricInfo: {
         lyric: null, // 歌词列表
         index: 0, // 歌词索引
@@ -123,13 +128,19 @@ export const useSongPlay = defineStore({
       } else {
         /** 存在歌曲存储记录 直接播放 */
         if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songLyricInfo.songPlayTime;
-        console.log("播放歌曲,触发重新加载歌词 ");
+        console.log("播放歌曲,歌词实例消失,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
     },
     /** 音乐播放完毕 触发函数 */
     songPlayEnd() {
       this.songPlayState = false;
+    },
+    /* 歌曲播放 触发进度获取 */
+    getSongPlayProgress() {
+      this.songPlaygress.timer = setInterval(() => {
+
+      }, 200);
     },
   },
   // 数据持久化, 存储参数
@@ -138,7 +149,7 @@ export const useSongPlay = defineStore({
     strategies: [
       {
         storage: localStorage,
-        paths: ["songInfo", "songUrl", "songId", "songLyricInfo"],
+        paths: ["songInfo", "songUrl", "songId", "songPlaygress", "songLyricInfo"],
       },
     ],
   },

@@ -5,11 +5,7 @@ import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
 import { useSongPlay } from "../../store/songPlay";
 // 引入组件
 import StopSongBtn from "@/components/StopSongBtn.vue";
-import { BeakerIcon } from "@heroicons/vue/solid";
-// // 引入动画
-// import playStopLotttieJson from "../../assets/lottie/playStop.json";
-// // 引入公共函数
-// import { delayedExecute } from "../../hooks/common";
+import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
   name: "PlayingSong",
@@ -24,7 +20,10 @@ export default {
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
 
+    /** 初始化歌词 容器*/
     function initLyricUlPadding() {
+      lyricDivRef.value.style.scrollBehavior = "smooth";
+      // 初始化歌词 ul
       const height = lyricDivRef.value.offsetHeight / 2;
       const lyricUlStyle = lyricDivRef.value.children[0].style as any;
       lyricUlStyle.paddingTop = height + "px";
@@ -67,27 +66,16 @@ export default {
       lyricRef.scrollTop = offsetTop - height;
     }
 
-    /* 歌曲进度滚动条 ------- start */
-    /** 进度条类名 actived */
-    const progressClassActived = ref(false);
-
-    /** 进度条手指触摸事件 */
-    function progressTouchStart() {
-      // console.log(1);
-      progressClassActived.value = true;
-    }
-
-    /** 手指离开进度条事件 */
-    function progressTouchEnd() {
-      progressClassActived.value = false;
-    }
-    /* 歌曲进度滚动条 ------- end */
-
-    return { storeSongPlay, lyricUlScroll, lyricDivRef, lyricScrollTouchEnd, progressClassActived, progressTouchStart, progressTouchEnd };
+    return {
+      storeSongPlay,
+      lyricUlScroll,
+      lyricDivRef,
+      lyricScrollTouchEnd /*  progressClassActived, progressTouchStart, progressTouchEnd */,
+    };
   },
   components: {
     StopSongBtn,
-    BeakerIcon,
+    ProgressBar,
   },
 };
 </script>
@@ -99,6 +87,7 @@ export default {
         <img v-show="storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
       </li>
       <li class="songLyricInfo">
+        <!-- 返回 -->
         <div class="backup" @click="$router.back()">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -108,9 +97,11 @@ export default {
             />
           </svg>
         </div>
+        <!-- 歌名 -->
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
+        <!-- 歌词 -->
         <div class="lyricDiv" @touchstart="lyricUlScroll" @touchend="lyricScrollTouchEnd" ref="lyricDivRef">
           <ul class="lyricUl">
             <li
@@ -124,16 +115,14 @@ export default {
           </ul>
         </div>
       </li>
+      <!-- 按钮组 -->
       <li class="btnGroup">
         <StopSongBtn class="stopBox" />
       </li>
-      <li class="progressBox" @touchstart="progressTouchStart" @touchend="progressTouchEnd">
-        <!-- 进度条 -->
-        <div class="progressBar" :class="{ actived: progressClassActived }">
-          <div class="progressContainer"></div>
-        </div>
-        <!-- @touchstart="progressTouchStart"
-          @touchend="progressTouchEnd" -->
+
+      <!-- 进度条 -->
+      <li class="yricProgressBox">
+        <ProgressBar></ProgressBar>
       </li>
     </ul>
   </div>
@@ -207,8 +196,7 @@ export default {
         margin: 3vw;
         margin-top: 6vw;
         overflow-y: auto;
-        transition: all 0.3s;
-        scroll-behavior: smooth;
+        transition: all 0.4s;
         .lyricUl {
           position: absolute;
           padding-top: 31vh;
@@ -244,32 +232,8 @@ export default {
         transform: translate(-50%);
       }
     }
-    .progressBox {
-      position: relative;
-      height: 2vh;
+    .yricProgressBox {
       margin: 2vh 4vw 0;
-      z-index: 1;
-      .progressBar {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 100%;
-        height: 0.5vh;
-        background: #000;
-        background: white;
-        border-radius: 0.5vh;
-        transition: all 0.24s;
-        &.actived {
-          height: 1.5vh;
-          border-radius: 1.5vh;
-        }
-        .progressContainer {
-          background: royalblue;
-          height: 100%;
-          width: 10%;
-          border-radius: 1.5vh;
-        }
-      }
     }
   }
 }
