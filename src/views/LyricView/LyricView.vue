@@ -48,6 +48,7 @@ export default {
     function getIndexChangeScrollFn(index?: number) {
       const i = index || storeSongPlay.songLyricInfo.index;
       const lyricRef = lyricDivRef.value;
+      if (!lyricRef) return;
       const height = lyricRef.offsetHeight / 2;
       const lis = lyricRef.children[0].children;
       const offsetTop = lis[i].offsetTop;

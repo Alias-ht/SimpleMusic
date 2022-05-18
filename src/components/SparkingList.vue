@@ -15,9 +15,8 @@ export default {
       // onPlayingAniStop();
       if (playinglottieRef.value) {
         delayedExecute(() => {
-          // console.log("playing Animation");
           try {
-            console.log("playing Animation");
+            // console.log("playing Animation");
             // @ts-ignore
             getStoreSongPlayState.value && playinglottieRef.value.play();
             // @ts-ignore
@@ -46,7 +45,9 @@ export default {
     const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
     watch(getStoreSongPlayState, (newVal, oldVal) => {
       setTimeout(() => {
-        watchChangeAnimation(newVal);
+        if (typeof newVal === "boolean") {
+          watchChangeAnimation(newVal);
+        }
       }, 40);
     });
 

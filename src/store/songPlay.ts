@@ -19,12 +19,13 @@ type SongStateType = {
   songId: number;
   songPlaying: any;
   songRef: any;
-  songPlayState?: any;
+  songPlayState?: boolean;
   getStoreSongPlayState?: any;
   songLyricInfo: {
     lyric: any;
     lyricParserInstantiation?: any;
     index: number;
+    songPlayTime?: any;
   };
 };
 
@@ -41,9 +42,10 @@ export const useSongPlay = defineStore({
       songRef: "", // 音乐元素 保存
       songPlayState, // 播放状态
       songLyricInfo: {
-        lyric: null,
-        index: 0,
-        lyricParserInstantiation: null,
+        lyric: null, // 歌词列表
+        index: 0, // 歌词索引
+        lyricParserInstantiation: null, // 歌词实例存储
+        songPlayTime: null, // 歌曲播放时间
       },
     };
   },
@@ -68,6 +70,8 @@ export const useSongPlay = defineStore({
       // 存储数据
       this.songUrl = songUrlInfo[0].url;
       this.startSong(); // 开始播放
+      // 重置播放时间
+      this.songLyricInfo.songPlayTime = null;
     },
     /** 获取音乐 歌词   并解析 */
     async getSongLyric(id: number) {
@@ -83,8 +87,9 @@ export const useSongPlay = defineStore({
       // 解析歌词 创建实例
       this.songLyricInfo.lyricParserInstantiation = new LyricParser(lyric, (info) => {
         this.songLyricInfo.index = info.lineNum;
+        this.songLyricInfo.songPlayTime = this.songRef.currentTime;
       });
-
+      // 存储并 设置 歌词 歌曲同步
       this.songLyricInfo.lyric = this.songLyricInfo.lyricParserInstantiation.lines;
       this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
     },
@@ -108,6 +113,8 @@ export const useSongPlay = defineStore({
       if (this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation.seek) {
         this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
       } else {
+        /** 存在歌曲存储记录 直接播放 */
+        if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songLyricInfo.songPlayTime;
         console.log("播放歌曲,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
