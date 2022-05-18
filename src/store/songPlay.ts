@@ -43,7 +43,7 @@ export const useSongPlay = defineStore({
       songRef: "", // 音乐元素 保存
       songPlayState, // 播放状态
       songPlaygress: {
-        progress: "",
+        progress: 0,
         timer: "",
       }, // 歌曲播放进度
       songLyricInfo: {
@@ -104,6 +104,7 @@ export const useSongPlay = defineStore({
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
+      // clearInterval(this.songPlaygress.timer); // 清除进度条 计时器
       try {
         this.songLyricInfo.lyricParserInstantiation.stop();
       } catch {}
@@ -136,10 +137,15 @@ export const useSongPlay = defineStore({
     songPlayEnd() {
       this.songPlayState = false;
     },
-    /* 歌曲播放 触发进度获取 */
+    /** 歌曲播放 触发进度获取 */
     getSongPlayProgress() {
-      this.songPlaygress.timer = setInterval(() => {
+      // console.log(this.songRef.currentTime);
+      // console.log(this.songRef.duration);
 
+      this.songPlaygress.timer = setInterval(() => {
+        const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime || 0;
+        const allTime = this.songRef.duration;
+        this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
       }, 200);
     },
   },

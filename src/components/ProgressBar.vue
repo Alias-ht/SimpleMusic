@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, onUnmounted, watch } from "vue";
 
 // 引入 状态管理 - 音乐
 import { useSongPlay } from "../store/songPlay";
@@ -10,10 +10,32 @@ export default {
     onMounted(() => {
       initProgress();
     });
-    const storeSongPlay = useSongPlay();
+    onUnmounted(() => {
+      clearInterval(storeSongPlay.songPlaygress.timer);
+    });
+    const storeSongPlay = useSongPlay(); // 音乐实例
 
+    /** 初始化进度条 */
     function initProgress() {
-      console.log(storeSongPlay);
+      // console.log(storeSongPlay);
+      changeProgressWidthNum(storeSongPlay.songPlaygress.progress || 0);
+      storeSongPlay.getSongPlayProgress();
+    }
+
+    /** ref 元素 ---- 进度条 */
+    const progressContainerRef = ref(null as any);
+    /**  */
+    watch(storeSongPlay.songPlaygress, (newVal) => {
+      // console.log(newVal);
+      const progressNum = newVal.progress;
+      // console.log(progressNum);
+      changeProgressWidthNum(progressNum);
+    });
+
+    /** 改变进度条宽度 */
+    function changeProgressWidthNum(num: number) {
+      const proStyle = progressContainerRef.value.style;
+      proStyle.width = `${num}%`;
     }
 
     /* 歌曲进度滚动条 ------- start */
@@ -30,8 +52,8 @@ export default {
     function progressTouchEnd() {
       progressClassActived.value = false;
     }
-    /* 歌曲进度滚动条 ------- end */
-    return { progressClassActived, progressTouchStart, progressTouchEnd };
+    /**  歌曲进度滚动条 ------- end */
+    return { progressClassActived, progressTouchStart, progressTouchEnd, progressContainerRef };
   },
 };
 </script>
@@ -39,7 +61,7 @@ export default {
 <template>
   <div class="progressBarBox" @touchstart="progressTouchStart" @touchend="progressTouchEnd">
     <div class="progressBar" :class="{ actived: progressClassActived }">
-      <div class="progressContainer" @touchmove="progress">
+      <div class="progressContainer" @touchmove="progress" ref="progressContainerRef">
         <div class="circle"></div>
       </div>
     </div>
@@ -86,7 +108,7 @@ export default {
       position: relative;
       background: royalblue;
       height: 100%;
-      width: 3%;
+      width: 0%;
       padding-right: 0.5vh;
       border-radius: 0.5vh;
       transition: @progressTransition;

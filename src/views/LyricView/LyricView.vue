@@ -83,8 +83,9 @@ export default {
 <template>
   <div class="playLyricPage">
     <ul class="playSongComopnent">
+      <!-- v-show="false" -->
       <li class="picUrl">
-        <img v-show="storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
+        <img v-show="false && storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
       </li>
       <li class="songLyricInfo">
         <!-- 返回 -->
