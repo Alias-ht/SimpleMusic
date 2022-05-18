@@ -72,18 +72,18 @@ export default {
     }
 
     /** 播放中动画暂停 */
-    function onPlayingAniStop() {
-      // @ts-ignore
-      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
-      try {
-        setTimeout(() => {
-          // @ts-ignore
-          playinglottieRef.value.goToAndStop(0);
-        }, 42);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+    // function onPlayingAniStop() {
+    //   // @ts-ignore
+    //   if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
+    //   try {
+    //     setTimeout(() => {
+    //       // @ts-ignore
+    //       playinglottieRef.value.goToAndStop(0);
+    //     }, 42);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
 
     return { info, playingLottieJson, clickSongList, storeSongPlay, playinglottieRef };
   },

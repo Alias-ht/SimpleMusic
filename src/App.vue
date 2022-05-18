@@ -1,13 +1,15 @@
 <script lang="ts">
 import AudioPlayControl from "./components/AudioPlayControl.vue";
-// import { computed } from "vue";
-// import { useRouter, useRoute } from "vue-router";
-// import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
+import { computed, onBeforeUnmount } from "vue";
 export default {
   components: {
     AudioPlayControl,
   },
   setup() {
+    onBeforeUnmount(() => {
+      console.log(1);
+    });
+
     function transNameChange(route: any) {
       // console.log(route);
       if (route.query.upPage === "/lyric") {
@@ -28,6 +30,7 @@ export default {
       return "";
       // return "out-in";
     }
+
     return {
       transNameChange,
       modeChange,

@@ -108,7 +108,7 @@ export const useSongPlay = defineStore({
       if (this.songLyricInfo.lyricParserInstantiation && this.songLyricInfo.lyricParserInstantiation.seek) {
         this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
       } else {
-        console.log('播放歌曲,触发重新加载歌词 ');
+        console.log("播放歌曲,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
     },

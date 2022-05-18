@@ -14,10 +14,47 @@ export default {
   name: "PlayingSong",
   setup() {
     onBeforeMount(() => {});
-    onMounted(() => {});
+    onMounted(() => {
+      getIndexChangeScrollFn();
+    });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
+    const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
 
-    return { storeSongPlay };
+    /** 创建监听器函数 触碰滑动时暂停, 2秒钟不操作继续监听器 */
+    let lyricScrollUnwatch = null as any;
+    lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
+      getIndexChangeScrollFn(newVal.index);
+    });
+    /** 定时器 存储 */
+    let watchTimer = null as any;
+    /** 歌词 滚动时 触发函数 */
+    function lyricUlScroll(event: any) {
+      lyricScrollUnwatch && lyricScrollUnwatch(); // 存在的话清除 监听器
+      clearTimeout(watchTimer);
+    }
+
+    /** 手指移开,触发函数 */
+    function lyricScrollTouchEnd() {
+      clearTimeout(watchTimer); //  清除定时器
+      watchTimer = setTimeout(() => {
+        //  赋予监听器
+        lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
+          getIndexChangeScrollFn(newVal.index);
+        });
+      }, 1.2 * 1000);
+    }
+
+    /** 创建根据歌词索引滚动到相应位置 */
+    function getIndexChangeScrollFn(index?: number) {
+      const i = index || storeSongPlay.songLyricInfo.index;
+      const lyricRef = lyricDivRef.value;
+      const height = lyricRef.offsetHeight / 2;
+      const lis = lyricRef.children[0].children;
+      const offsetTop = lis[i].offsetTop;
+      lyricRef.scrollTop = offsetTop - height;
+    }
+
+    return { storeSongPlay, lyricUlScroll, lyricDivRef, lyricScrollTouchEnd };
   },
   components: {
     StopSongBtn,
@@ -36,7 +73,8 @@ export default {
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
-        <div class="lyricDiv">
+        <!-- <div class="lyricDiv" ref="lyricDivRef"> -->
+        <div class="lyricDiv" @touchstart="lyricUlScroll" @touchend="lyricScrollTouchEnd" ref="lyricDivRef">
           <!-- <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }"> -->
           <ul class="lyricUl">
             <li
@@ -120,10 +158,13 @@ export default {
         margin: 3vw;
         margin-top: 6vw;
         overflow-y: auto;
+        transition: all 0.3s;
+        scroll-behavior: smooth;
         .lyricUl {
           position: absolute;
-          top: 50%;
-          padding-bottom: 30vh;
+          // top: 50%;
+          padding-top: 31vh;
+          padding-bottom: 31vh;
           width: 100%;
           text-align: center;
 

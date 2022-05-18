@@ -65,7 +65,7 @@ export default {
         // @ts-ignore
         Vue3LottieRef.value.goToAndStop(0);
 
-        console.log(getStoreSongPlayState);
+        // console.log(getStoreSongPlayState);
 
         if (getStoreSongPlayState.value) {
           // @ts-ignore
