@@ -27,10 +27,8 @@ export default {
     /** ref 元素 ---- 进度条 */
     const progressContainerRef = ref(null as any);
     /**  */
-    watch(storeSongPlay.songPlaygress, (newVal,oldVal) => {
-      // console.log(newVal);
+    watch(storeSongPlay.songPlaygress, (newVal) => {
       const progressNum = newVal.progress;
-      // console.log(progressNum);
       changeProgressWidthNum(progressNum);
     });
 
@@ -107,7 +105,7 @@ export default {
 </template>
 
 <style scoped lang="less">
-@progressTransition: all 0.2s ease;
+@progressTransition: all 0.3s ease;
 .progressBarBox {
   position: relative;
   height: 2vh;

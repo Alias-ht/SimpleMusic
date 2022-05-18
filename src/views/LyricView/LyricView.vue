@@ -16,13 +16,13 @@ export default {
       if (storeSongPlay.songLyricInfo.lyric) {
         getIndexChangeScrollFn();
       }
-      initLyricUlPadding();
+      initLyricUlContainer();
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
 
     /** 初始化歌词 容器*/
-    function initLyricUlPadding() {
+    function initLyricUlContainer() {
       lyricDivRef.value.style.scrollBehavior = "smooth";
       // 初始化歌词 ul
       const height = lyricDivRef.value.offsetHeight / 2;
@@ -37,17 +37,17 @@ export default {
       getIndexChangeScrollFn(newVal.index);
     });
     /** 定时器 存储 */
-    let watchTimer = null as any;
+    let storageWatchTimer = null as any;
     /** 歌词 滚动时 触发函数 */
     function lyricUlScroll(event: any) {
       lyricScrollUnwatch && lyricScrollUnwatch(); // 存在的话清除 监听器
-      clearTimeout(watchTimer);
+      clearTimeout(storageWatchTimer);
     }
 
     /** 手指移开,触发函数 */
     function lyricScrollTouchEnd() {
-      clearTimeout(watchTimer); //  清除定时器
-      watchTimer = setTimeout(() => {
+      clearTimeout(storageWatchTimer); //  清除定时器
+      storageWatchTimer = setTimeout(() => {
         //  赋予监听器
         lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
           getIndexChangeScrollFn(newVal.index);
@@ -71,7 +71,7 @@ export default {
       storeSongPlay,
       lyricUlScroll,
       lyricDivRef,
-      lyricScrollTouchEnd /*  progressClassActived, progressTouchStart, progressTouchEnd */,
+      lyricScrollTouchEnd,
     };
   },
   components: {
@@ -235,7 +235,7 @@ export default {
       }
     }
     .yricProgressBox {
-      margin: 2vh 8vw 0;
+      margin: 2vh 10vw 0;
     }
   }
 }

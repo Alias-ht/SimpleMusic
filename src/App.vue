@@ -1,22 +1,24 @@
 <script lang="ts">
 import AudioPlayControl from "./components/AudioPlayControl.vue";
-import { computed, onBeforeUnmount } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 export default {
   components: {
     AudioPlayControl,
   },
   setup() {
-    onBeforeUnmount(() => {
-      console.log(1);
-    });
+    onBeforeUnmount(() => {});
 
+    let nameTransition = ref("" as string);
     function transNameChange(route: any) {
       // console.log(route);
       if (route.query.upPage === "/lyric") {
+        nameTransition.value = "lyricPageLeave";
         return "lyricPageLeave";
       } else if (route.query.nextPage === "/lyric") {
+        nameTransition.value = "lyricPageEnter";
         return "lyricPageEnter";
       } else {
+        nameTransition.value = route.meta.transition || "page";
         return route.meta.transition || "page";
       }
     }
@@ -26,9 +28,11 @@ export default {
         if (route.meta.mode === " ") return "";
         return route.meta.mode;
       }
-      // $route.meta?.mode || "out-in";
+      if (nameTransition.value === "page") {
+        return "out-in";
+      }
       return "";
-      // return "out-in";
+      // $route.meta?.mode || "out-in";
     }
 
     return {
