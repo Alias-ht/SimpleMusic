@@ -5,12 +5,28 @@ import playingLottieJson from "../assets/lottie/playing.json";
 
 // 引入 状态管理 - 音乐
 import { useSongPlay } from "../store/songPlay";
+// 引入 hooks 函数
+import { delayedExecute } from "../hooks/common";
 export default {
   name: "SparkingList",
   props: ["info"],
   setup(props: any) {
     onMounted(() => {
-      onPlayingAniStop();
+      // onPlayingAniStop();
+      if (playinglottieRef.value) {
+        delayedExecute(() => {
+          // console.log("playing Animation");
+          try {
+            console.log("playing Animation");
+            // @ts-ignore
+            getStoreSongPlayState.value && playinglottieRef.value.play();
+            // @ts-ignore
+            !getStoreSongPlayState.value && playinglottieRef.value.pause();
+          } catch (err) {
+            console.log(err);
+          }
+        });
+      }
     });
     onUnmounted(() => {
       try {
@@ -63,7 +79,7 @@ export default {
         setTimeout(() => {
           // @ts-ignore
           playinglottieRef.value.goToAndStop(0);
-        }, 50);
+        }, 42);
       } catch (err) {
         console.log(err);
       }

@@ -3,103 +3,47 @@ import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
 
 // 引入 状态
 import { useSongPlay } from "../../store/songPlay";
-// 引入动画
-import playStopLotttieJson from "../../assets/lottie/playStop.json";
-// 引入公共函数
-import { delayedExecute } from "../../hooks/common";
+// 引入组件
+import StopSongBtn from "@/components/StopSongBtn.vue";
+// // 引入动画
+// import playStopLotttieJson from "../../assets/lottie/playStop.json";
+// // 引入公共函数
+// import { delayedExecute } from "../../hooks/common";
+
 export default {
   name: "PlayingSong",
   setup() {
     onBeforeMount(() => {});
     onMounted(() => {});
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
-    // 创建 计算属性用于 监听变化 更改按钮样式
-    const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
-    watch(getStoreSongPlayState, (newVal) => {
-      try {
-        // @ts-ignore
-        newVal && Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放 5-24 帧
-        // @ts-ignore
-        !newVal && Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放 37-60 帧动画
-      } catch (err) {
-        console.log(err);
-      }
-    });
 
-    /** 动画相关 --------------------------- start */
-    /** 动画暂停相关
-     *      播放暂停同步,页面渲染好之后,根据歌曲播放状态设置按钮状态
-     *      歌词页码,根据 歌曲状态渲染
-     *  歌词
-     *      每次切换重置, 根据 时间 ,调整歌词,根据歌词位置,调整音乐频段
-     */
-    // 动画参数
-    const Vue3LottieObj = {
-      animationData: playStopLotttieJson,
-      speed: 1,
-      autoPlay: true,
-      loop: false,
-      pauseOnHover: true,
-    };
-    const Vue3LottieRef = ref(null); // 播放组件 ref
-    /** 动画切换   */
-    function startFn() {
-      if (storeSongPlay.songRef.paused) {
-        // @ts-ignore
-        Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放5-24帧
-        storeSongPlay.startSong();
-      } else {
-        // @ts-ignore
-        Vue3LottieRef.value.playSegments([37, 60], true); // 直接播放37-60帧
-        // audioRef.value.pause();
-        storeSongPlay.stopSong();
-      }
-    }
-    /** 首次暂停动画播放 */
-    const onFirstStopAnimation = () => {
-      delayedExecute(() => {
-        // @ts-ignore
-        Vue3LottieRef.value.stop();
-        // @ts-ignore
-        Vue3LottieRef.value.goToAndStop(0);
-      });
-    };
-
-    /** 动画相关 --------------------------- end */
-
-    /** 音乐播放 控件 */
-    const audioRef = ref(null as any);
-
-    /* 歌词弹窗 开启状态 */
-    const playLyricPage = ref(false);
-
-    // console.log(storeSongPlay.songLyricInfo);
-
-
-    // 计算属性 歌词信息
-    // watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
-    //   console.log("watch 属性监听 歌曲的歌词信息");
-    //   console.log(newVal);
-    // });
-
-    return { audioRef, storeSongPlay, Vue3LottieObj, startFn, Vue3LottieRef, playLyricPage, onFirstStopAnimation };
+    return { storeSongPlay };
+  },
+  components: {
+    StopSongBtn,
   },
 };
 </script>
 
 <template>
-  <div class="lyric playLyricPage">
+  <div class="playLyricPage">
     <ul class="playSongComopnent">
       <li class="picUrl">
-        <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
+        <img v-show="storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
       </li>
       <li class="songLyricInfo">
+        <div class="backup"></div>
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
         <div class="lyricDiv">
-          <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }">
-            <li v-for="(item, index) in storeSongPlay.songLyricInfo.lyric" :key="index">
+          <!-- <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }"> -->
+          <ul class="lyricUl">
+            <li
+              :class="{ lyricActivedNum: storeSongPlay.songLyricInfo.index === index }"
+              v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
+              :key="index"
+            >
               <span>{{ item.txt }}</span>
             </li>
           </ul>
@@ -107,61 +51,108 @@ export default {
       </li>
 
       <li class="btnGroup">
-        <div class="stop" @click.stop.prevent="startFn">
-          <div v-if="true" class="Vue3LottieBox">
-            <Vue3Lottie
-              class="Vue3Lottie"
-              :animationData="Vue3LottieObj.animationData"
-              :loop="Vue3LottieObj.loop"
-              :speed="Vue3LottieObj.speed"
-              :autoPlay="Vue3LottieObj.autoPlay"
-              :options="{ renderer: 'svg', autoPlay: false, loop: false }"
-              @onEnterFrame.once="onFirstStopAnimation"
-              ref="Vue3LottieRef"
-            />
-          </div>
-        </div>
+        <StopSongBtn class="stopBox" />
+      </li>
+      <li>
+        <!-- 进度条 -->
       </li>
     </ul>
   </div>
 </template>
 
 <style scoped lang="less">
-.lyric {
-  width: 100vw;
-  height: 100vh;
+.playLyricPage {
   background: white;
-}
-.lyric.playLyricPage {
-  position: fixed;
-  height: 100vh;
   .playSongComopnent {
-    top: 3vh;
-    left: 2.5vw;
-    width: 95vw;
-    height: 94vh;
-    .songLyricInfo {
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 68vh;
-      .title {
-        left: 50%;
-        transform: translateX(-50%);
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    box-shadow: 0 0 5vw rgba(0, 0, 0, 0.4);
+    // background: rgba(0, 0, 0, 0.651);
+    background: white;
+    color: black;
+    .picUrl {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      transform: translate(-50%, -50%);
+      // filter: blur(3vw);
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.692);
+        // background: white;
       }
-      /** 歌词 */
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .songLyricInfo {
+      height: 75vh;
+      padding-top: 3vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+
+      .title {
+        text-align: center;
+        font-weight: 600;
+        font-size: 7.6vw;
+        z-index: 50;
+        padding: 2vw;
+        box-sizing: border-box;
+      }
       .lyricDiv {
-        top: 8vh;
-        left: 50%;
-        height: 60vh;
-        transform: translateX(-50%);
+        position: relative;
+        flex: 8;
+        overflow: hidden;
+        box-sizing: border-box;
+        margin: 3vw;
+        margin-top: 6vw;
         overflow-y: auto;
+        .lyricUl {
+          position: absolute;
+          top: 50%;
+          padding-bottom: 30vh;
+          width: 100%;
+          text-align: center;
+
+          li {
+            height: 9vw;
+            font-weight: 600;
+            font-size: 4.5vw;
+            color: #000;
+            transition: all 0.3s;
+            transform: scale(1);
+
+            &.lyricActivedNum {
+              color: royalblue;
+              transform: scale(1.24);
+            }
+          }
+        }
       }
     }
     .btnGroup {
-      left: 50%;
-      transform: translate(-50%, -50%);
-      top: 75vh;
+      position: relative;
+      top: 2vh;
+      height: 20vh;
+      .stopBox {
+        position: absolute;
+        left: 50%;
+        width: 20vw;
+        transform: translate(-50%);
+      }
     }
   }
 }

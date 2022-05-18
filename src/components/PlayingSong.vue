@@ -34,7 +34,10 @@ export default {
   <div class="playBox" @click="$router.push('/lyric')">
     <ul class="playSongComopnent">
       <li class="picUrl">
-        <img v-show="storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrl" />
+        <img
+          v-show="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl"
+          :src="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl"
+        />
       </li>
       <li class="songLyricInfo">
         <div class="title textEllipsis">

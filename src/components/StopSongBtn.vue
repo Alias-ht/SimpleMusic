@@ -43,7 +43,7 @@ export default {
       pauseOnHover: true,
     };
     const Vue3LottieRef = ref(null); // 播放组件 ref
-    /** 动画切换   */
+    /** 播放暂停 动画和音乐 切换   */
     function startFn() {
       if (storeSongPlay.songRef.paused) {
         // @ts-ignore
@@ -64,6 +64,16 @@ export default {
         Vue3LottieRef.value.stop();
         // @ts-ignore
         Vue3LottieRef.value.goToAndStop(0);
+
+        console.log(getStoreSongPlayState);
+
+        if (getStoreSongPlayState.value) {
+          // @ts-ignore
+          Vue3LottieRef.value.playSegments([23, 24], true); // 直接播放 5-24 帧
+        } else {
+          // @ts-ignore
+          Vue3LottieRef.value.playSegments([59, 60], true); // 直接播放 37-60 帧动画
+        }
       });
     };
     return { storeSongPlay, Vue3LottieObj, startFn, Vue3LottieRef, onFirstStopAnimation };
