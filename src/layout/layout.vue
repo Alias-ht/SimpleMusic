@@ -1,13 +1,43 @@
 <script lang="ts">
-import { onBeforeMount, reactive } from "vue";
+import { onBeforeMount, onUpdated, onBeforeUnmount, ref, watch, onActivated, onDeactivated } from "vue";
 
 // 引入 组件
 import PlayingSongVue from "../components/PlayingSong.vue";
+
+// 引入hooks 函数
+import { routerSkipTransitionName, routerSkipMode, delayedExecute } from "../hooks/common";
+
 export default {
   name: "layout",
   setup() {
     onBeforeMount(() => {});
-    return {};
+    onUpdated(() => {
+      // console.log(fillBoxRefScrollTop);
+      // delayedExecute(() => {
+      //   const fillBoxRefScrollTop = JSON.parse(localStorage.getItem("UpPageScroll") || "0");
+      //   // fillBoxRefScrollTop && (fillBoxRef.value.scrollTop = fillBoxRefScrollTop);
+      //   if (fillBoxRefScrollTop) {
+      //     fillBoxRef.value.scrollTop = fillBoxRefScrollTop;
+      //     // console.log(fillBoxRef.value.scrollTop);
+      //     console.log(fillBoxRef.value.scrollHeight);
+      //     console.log(fillBoxRefScrollTop);
+      //   }
+      //   // console.log(fillBoxRef.value.scrollTop);
+      //   // console.log(fillBoxRefScrollTop);
+      // },500);
+      // fillBoxRefScrollTop.value && (fillBoxRef.value.scrollTop = fillBoxRefScrollTop);
+      // fillBoxRefScrollTop.value = 0;
+    });
+    onActivated(() => {});
+    onDeactivated(() => {
+      // localStorage.setItem("UpPageScroll", JSON.stringify(fillBoxRef.value.scrollTop));
+    });
+    onBeforeUnmount(() => {});
+
+    let timer = null as any;
+    const fillBoxRef = ref(null as any);
+
+    return { routerSkipTransitionName, routerSkipMode, fillBoxRef };
   },
   components: { PlayingSongVue },
 };
@@ -17,8 +47,15 @@ export default {
   <div class="layout-container">
     <!-- 内容区域 -->
     <div class="content">
-      <div class="fillBox">
-        <RouterView></RouterView>
+      <div class="fillBox" ref="fillBoxRef">
+        <RouterView v-slot="{ Component }">
+          <Transition appear :name="routerSkipTransitionName($route)" :mode="routerSkipMode($route)">
+            <!-- 非活跃的组件将会被缓存！ -->
+            <!-- <KeepAlive :max="3"> -->
+            <Component :is="Component" />
+            <!-- </KeepAlive> -->
+          </Transition>
+        </RouterView>
       </div>
     </div>
     <!-- 标签栏 -->
@@ -48,12 +85,15 @@ export default {
 
   .content {
     // height: calc(100vh - @tarBarHeight - 10vw);
-    overflow-x: auto;
+    // overflow-y: auto;
+    overflow: hidden;
     flex: 1;
+    z-index: 4;
     .fillBox {
       width: 100%;
       height: 100%;
-      overflow-x: auto;
+      overflow: hidden;
+      overflow-y: auto !important;
     }
   }
   .songPlayComponent {
@@ -63,13 +103,14 @@ export default {
     box-shadow: 0 -3vw 5vw rgba(0, 0, 0, 0.2);
     overflow: hidden;
     // z-index: 50;
-    z-index: 1;
+    z-index: 5;
   }
   .tarBarBox {
     // flex: 1;
     height: 10vw;
-    z-index: 3;
+    z-index: 101;
     background: white;
+    z-index: 6;
     .tabBar {
       display: flex;
       font-weight: 600;

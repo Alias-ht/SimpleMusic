@@ -103,7 +103,7 @@ button {
     top: 0;
     left: 0;
     transition: all 0.5s 0.04s;
-    z-index: 99;
+    z-index: 55;
 
     &::after {
         position: fixed;
@@ -116,6 +116,7 @@ button {
         visibility: hidden;
         transition: all .5s;
         background: rgba(0, 0, 0, 0);
+        z-index: 61;
     }
 }
 
@@ -139,7 +140,7 @@ button {
 }
 
 .lyricPageLeave-enter-from {
-    z-index: 95;
+    z-index: 50;
 
     &::after {
         opacity: 1;
@@ -149,6 +150,6 @@ button {
 }
 
 .lyricPageLeave-leave-to {
-    z-index: 100;
+    z-index: 60;
     transform: translateY(100%);
 }

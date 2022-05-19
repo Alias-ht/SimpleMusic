@@ -24,6 +24,9 @@ export default {
     }
 
     function modeChange(route: any) {
+      // console.log('app');
+
+      if (nameTransition.value === "lyricPageLeave" || nameTransition.value === "lyricPageEnter") return "";
       if (route.meta.mode) {
         if (route.meta.mode === " ") return "";
         return route.meta.mode;
@@ -32,7 +35,6 @@ export default {
         return "out-in";
       }
       return "";
-      // $route.meta?.mode || "out-in";
     }
 
     return {
@@ -49,7 +51,9 @@ export default {
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
       <Transition appear :name="transNameChange($route)" :mode="modeChange($route)">
-        <Component :is="Component" />
+        <KeepAlive :max="4">
+          <Component :is="Component" />
+        </KeepAlive>
       </Transition>
     </RouterView>
   </div>
