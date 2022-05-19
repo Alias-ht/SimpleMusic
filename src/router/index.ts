@@ -6,10 +6,6 @@ import {
 } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
-  //   {
-  //     path: "/",
-  //     redirect: "/home",
-  //   },
   {
     path: "/",
     name: "layout",
@@ -20,6 +16,16 @@ const routes: Array<RouteRecordRaw> = [
         path: "home",
         name: "Home",
         component: () => import("@/views/HomeView/HomeView.vue"),
+      },
+      {
+        path: "search",
+        name: "Search",
+        component: () => import("@/views/SearchView/SearchView.vue"),
+      },
+      {
+        path: "my",
+        name: "My",
+        component: () => import("@/views/MyView/MyView.vue"),
       },
     ],
   },

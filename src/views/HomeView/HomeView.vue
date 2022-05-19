@@ -39,6 +39,9 @@ export default {
 <style scoped lang="less">
 .Home {
   & > h2 {
+    // margin-top: 2vw;
+    margin: 3vw 0;
+    font-size: 7vw;
     padding-left: 3vw;
   }
 }

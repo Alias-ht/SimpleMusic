@@ -67,9 +67,10 @@ export default {
 <style scoped lang="less">
 @transitionTime: all 0.6s;
 .playBox {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  position: relative;
+  // position: fixed;
+  // left: 0;
+  // bottom: 0;
   width: 100vw;
   height: 20vw;
   transition: @transitionTime;

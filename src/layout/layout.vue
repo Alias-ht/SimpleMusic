@@ -22,9 +22,16 @@ export default {
       </div>
     </div>
     <!-- 标签栏 -->
-    <ul class="tab-bar">
+    <ul class="songPlayComponent">
       <PlayingSongVue />
     </ul>
+    <div class="tarBarBox">
+      <ul class="tabBar">
+        <li @click="$router.push('/home')">主页</li>
+        <li @click="$router.push('/search')">搜索</li>
+        <li @click="$router.push('/my')">我的</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -40,7 +47,8 @@ export default {
   flex-direction: column;
 
   .content {
-    height: calc(100vh - @tarBarHeight);
+    // height: calc(100vh - @tarBarHeight - 10vw);
+    overflow-x: auto;
     flex: 1;
     .fillBox {
       width: 100%;
@@ -48,10 +56,28 @@ export default {
       overflow-x: auto;
     }
   }
-  .tab-bar {
+  .songPlayComponent {
+    // flex: 2;
     height: @tarBarHeight;
     background: rgb(255, 255, 255);
-    box-shadow: 0 0vw 3vw rgba(0, 0, 0, 0.315);
+    box-shadow: 0 -3vw 5vw rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    // z-index: 50;
+    z-index: 1;
+  }
+  .tarBarBox {
+    // flex: 1;
+    height: 10vw;
+    z-index: 3;
+    background: white;
+    .tabBar {
+      display: flex;
+      font-weight: 600;
+      li {
+        flex: 1;
+        text-align: center;
+      }
+    }
   }
 }
 </style>

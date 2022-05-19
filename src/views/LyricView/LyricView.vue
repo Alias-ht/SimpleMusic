@@ -48,11 +48,12 @@ export default {
     function lyricScrollTouchEnd() {
       clearTimeout(storageWatchTimer); //  清除定时器
       storageWatchTimer = setTimeout(() => {
+        getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
         //  赋予监听器
         lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
           getIndexChangeScrollFn(newVal.index);
         });
-      }, 1.2 * 1000);
+      }, 1.5 * 1000);
     }
 
     /** 创建根据歌词索引滚动到相应位置 */
@@ -175,6 +176,7 @@ export default {
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      user-select: nonee;
       .backup {
         padding-left: 5vw;
         color: black;
