@@ -117,9 +117,12 @@ export const useSongPlay = defineStore({
         this.songRef.play();
         this.songPlayState = true;
         const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
+        // console.log(this.songRef.currentTime);
+
         if (lyricFlag) lyricInstan.seek && lyricInstan.seek(this.songRef.currentTime * 1000);
       } catch (err) {
         console.log(err);
+        this.stopSong();
       }
     },
     /** 每次播放音乐 触发函数 执行歌词 */
@@ -130,7 +133,7 @@ export const useSongPlay = defineStore({
         lyricInstan.seek(this.songRef.currentTime * 1000);
       } else {
         /** 存在歌曲存储记录 直接播放 */
-        if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime;
+        if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songLyricInfo.songPlayTime;
         console.log("播放歌曲,歌词实例消失,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
@@ -143,13 +146,17 @@ export const useSongPlay = defineStore({
     getSongPlayProgress() {
       clearInterval(this.songPlaygress.timer);
       const timePlaygressFn = () => {
+        // this.songLyricInfo.songPlayTime = this.songRef.currentTime;
         const currentTime = this.songLyricInfo.songPlayTime || 0;
         // const currentTime = this.songRef.currentTime;
         const allTime = this.songRef.duration;
         this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
       };
+      timePlaygressFn();
       // @ts-ignore
-      this.songPlaygress.timer = setInterval(timePlaygressFn(), 300);
+      this.songPlaygress.timer = setInterval(() => {
+        timePlaygressFn();
+      }, 200);
     },
     /** 设置歌曲进度 */
     setSongProgress(percentage: number) {

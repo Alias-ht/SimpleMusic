@@ -12,6 +12,7 @@ export default {
     });
     onUnmounted(() => {
       clearInterval(storeSongPlay.songPlaygress.timer);
+      // console.log('清除');
     });
 
     /** 音乐实例 */
@@ -19,7 +20,6 @@ export default {
 
     /** 初始化进度条 */
     function initProgress() {
-      // console.log(storeSongPlay);
       changeProgressWidthNum(storeSongPlay.songPlaygress.progress || 0);
       storeSongPlay.getSongPlayProgress();
     }
@@ -147,6 +147,7 @@ export default {
       width: 0%;
       padding-right: 0.5vh;
       border-radius: 0.5vh;
+      // transition: all .03s;
       .circle {
         position: absolute;
         top: 0;

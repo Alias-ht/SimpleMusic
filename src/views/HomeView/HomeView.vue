@@ -9,33 +9,21 @@ export default {
   name: "",
   setup() {
     onMounted(() => {
-      console.dir(homeRef.value.childNodes[0].offsetHeight);
+
     });
     onUpdated(() => {
-      scrollStorageInfo.height = homeRef.value.offsetHeight;
-      scrollStorageInfo.scrollTop = homeRef.value.scrollTop;
+
     });
     onActivated(() => {
-      // const scrollInfo = JSON.parse(localStorage.getItem("scrollStorageInfo") || "{}");
 
-      console.log(scrollStorageInfo);
-      // homeRef.value.style.height = scrollInfo.height + "px";
-      // homeRef.value.scrollTop = scrollInfo.scrollTop;
     });
     onBeforeUnmount(() => {
-      scrollStorageInfo.height = homeRef.value.childNodes[0].offsetHeight;
-      scrollStorageInfo.scrollTop = homeRef.value.scrollTop;
-      console.log(scrollStorageInfo);
-      localStorage.setItem("scrollStorageInfo", JSON.stringify(scrollStorageInfo));
+
     });
 
     /** ref 元素 */
     const homeRef = ref(null as any);
-    let scrollStorageInfo = JSON.parse(localStorage.getItem("scrollStorageInfo") || "") || {
-      height: 0,
-      scrollTop: 0,
-      
-    };
+
 
     /** 获取 新歌曲 推荐 (无需登录)  ---- start */
     const newSongList = ref([]);
@@ -69,8 +57,10 @@ export default {
 <style scoped lang="less">
 .Home {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  // height: 100%;
+    // height: calc(100vh - 30vw);
+
+  // overflow: hidden;
   overflow-y: auto;
   .container {
     & > h2 {

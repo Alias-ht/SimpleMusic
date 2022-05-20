@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
+import { onBeforeMount, ref, onMounted, watch, computed} from "vue";
 
 // 引入 状态
 import { useSongPlay } from "../../store/songPlay";
@@ -8,7 +8,7 @@ import StopSongBtn from "@/components/StopSongBtn.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
-  name: "PlayingSong",
+  name: "LyricView",
   setup() {
     onBeforeMount(() => {});
     // 周期函数 创建后
@@ -23,7 +23,7 @@ export default {
 
     /** 初始化歌词 容器*/
     function initLyricUlContainer() {
-      lyricDivRef.value.style.scrollBehavior = "smooth";
+      // lyricDivRef.value.style.scrollBehavior = "smooth";
       // 初始化歌词 ul
       const height = lyricDivRef.value.offsetHeight / 2;
       const lyricUlStyle = lyricDivRef.value.children[0].style as any;
@@ -66,6 +66,10 @@ export default {
       if (!lis[i]) return false;
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
+      // lyricRef.scrollTo({
+      //   top:offsetTop - height,
+      //   behavior:'smooth'
+      // })
     }
 
     return {
@@ -200,7 +204,8 @@ export default {
         margin: 3vw;
         margin-top: 6vw;
         overflow-y: auto;
-        transition: all 0.4s;
+        // transition: all 0.4s;
+        scroll-behavior: smooth;
         .lyricUl {
           position: absolute;
           padding-top: 31vh;
@@ -213,7 +218,7 @@ export default {
             font-weight: 600;
             font-size: 4.5vw;
             color: #000;
-            transition: all 0.3s;
+            transition: all 0.24s;
             transform: scale(1);
 
             &.lyricActivedNum {

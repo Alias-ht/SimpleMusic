@@ -16,6 +16,7 @@ export default {
     // 创建 计算属性用于 监听变化 更改按钮样式
     const getStoreSongPlayState = computed(() => storeSongPlay.songPlayState);
     watch(getStoreSongPlayState, (newVal) => {
+      // console.log(newVal);
       try {
         // @ts-ignore
         newVal && Vue3LottieRef.value.playSegments([5, 24], true); // 直接播放 5-24 帧

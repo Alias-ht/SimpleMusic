@@ -10,27 +10,15 @@ import { routerSkipTransitionName, routerSkipMode, delayedExecute } from "../hoo
 export default {
   name: "layout",
   setup() {
-    onBeforeMount(() => {});
+    onBeforeMount(() => {
+      console.log(1,'layout before mount');
+
+    });
     onUpdated(() => {
-      // console.log(fillBoxRefScrollTop);
-      // delayedExecute(() => {
-      //   const fillBoxRefScrollTop = JSON.parse(localStorage.getItem("UpPageScroll") || "0");
-      //   // fillBoxRefScrollTop && (fillBoxRef.value.scrollTop = fillBoxRefScrollTop);
-      //   if (fillBoxRefScrollTop) {
-      //     fillBoxRef.value.scrollTop = fillBoxRefScrollTop;
-      //     // console.log(fillBoxRef.value.scrollTop);
-      //     console.log(fillBoxRef.value.scrollHeight);
-      //     console.log(fillBoxRefScrollTop);
-      //   }
-      //   // console.log(fillBoxRef.value.scrollTop);
-      //   // console.log(fillBoxRefScrollTop);
-      // },500);
-      // fillBoxRefScrollTop.value && (fillBoxRef.value.scrollTop = fillBoxRefScrollTop);
-      // fillBoxRefScrollTop.value = 0;
+
     });
     onActivated(() => {});
     onDeactivated(() => {
-      // localStorage.setItem("UpPageScroll", JSON.stringify(fillBoxRef.value.scrollTop));
     });
     onBeforeUnmount(() => {});
 
@@ -51,9 +39,9 @@ export default {
         <RouterView v-slot="{ Component }">
           <Transition appear :name="routerSkipTransitionName($route)" :mode="routerSkipMode($route)">
             <!-- 非活跃的组件将会被缓存！ -->
-            <!-- <KeepAlive :max="3"> -->
+            <KeepAlive :max="3">
             <Component :is="Component" />
-            <!-- </KeepAlive> -->
+            </KeepAlive>
           </Transition>
         </RouterView>
       </div>
@@ -84,12 +72,13 @@ export default {
   flex-direction: column;
 
   .content {
-    // height: calc(100vh - @tarBarHeight - 10vw);
+    // height: calc(100vh - 30vw);
     // overflow-y: auto;
     overflow: hidden;
     flex: 1;
     z-index: 4;
     .fillBox {
+      position: relative;
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -97,6 +86,7 @@ export default {
     }
   }
   .songPlayComponent {
+    // opacity: 0;
     // flex: 2;
     height: @tarBarHeight;
     background: rgb(255, 255, 255);
@@ -106,6 +96,7 @@ export default {
     z-index: 5;
   }
   .tarBarBox {
+    // opacity: 0;
     // flex: 1;
     height: 10vw;
     z-index: 101;
