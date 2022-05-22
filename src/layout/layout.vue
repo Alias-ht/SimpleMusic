@@ -11,7 +11,6 @@ export default {
   name: "layout",
   setup() {
     onBeforeMount(() => {
-      console.log(1,'layout before mount');
 
     });
     onUpdated(() => {

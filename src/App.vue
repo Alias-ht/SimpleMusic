@@ -50,9 +50,9 @@ export default {
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
       <Transition appear :name="transNameChange($route)" :mode="modeChange($route)">
-        <!-- <KeepAlive :max="4" exclude='LyricView'> -->
+        <KeepAlive :max="4" exclude='LyricView'>
           <Component :is="Component" />
-        <!-- </KeepAlive> -->
+        </KeepAlive>
       </Transition>
     </RouterView>
   </div>

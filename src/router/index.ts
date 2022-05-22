@@ -16,19 +16,19 @@ const routes: Array<RouteRecordRaw> = [
         path: "home",
         name: "Home",
         component: () => import("@/views/HomeView/HomeView.vue"),
-        meta: { transition: "", title: "主页", mode: "out-in" },
+        meta: { title: "主页", mode: "out-in", transIndex: 1 },
       },
       {
         path: "search",
         name: "Search",
         component: () => import("@/views/SearchView/SearchView.vue"),
-        meta: { transition: "", title: "搜索", mode: "out-in" },
+        meta: { title: "搜索", mode: "out-in", transIndex: 2 },
       },
       {
         path: "my",
         name: "My",
         component: () => import("@/views/MyView/MyView.vue"),
-        meta: { transition: "", title: "我的", mode: "out-in" },
+        meta: { title: "我的", mode: "out-in", transIndex: 3 },
       },
     ],
   },
@@ -77,6 +77,10 @@ router.beforeEach((to, from, next) => {
   if (to.fullPath === "/lyric") {
     to.query.nextPage = "/lyric";
   }
+
+  // @ts-ignore
+  to.query.fromMeta = from.meta;
+
   next();
 });
 

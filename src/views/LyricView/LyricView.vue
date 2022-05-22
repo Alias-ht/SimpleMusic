@@ -23,7 +23,7 @@ export default {
 
     /** 初始化歌词 容器*/
     function initLyricUlContainer() {
-      // lyricDivRef.value.style.scrollBehavior = "smooth";
+      lyricDivRef.value.style.scrollBehavior = "smooth";
       // 初始化歌词 ul
       const height = lyricDivRef.value.offsetHeight / 2;
       const lyricUlStyle = lyricDivRef.value.children[0].style as any;
@@ -205,7 +205,7 @@ export default {
         margin-top: 6vw;
         overflow-y: auto;
         // transition: all 0.4s;
-        scroll-behavior: smooth;
+        // scroll-behavior: smooth;
         .lyricUl {
           position: absolute;
           padding-top: 31vh;
