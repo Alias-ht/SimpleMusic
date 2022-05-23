@@ -10,10 +10,21 @@ export default {
 </script>
 
 <template>
-  <div class="">
-    <h2>搜索</h2>
+  <div class="SearchView">
+    <div class="serch">
+      <h2>搜索</h2>
+    </div>
     <!--  -->
   </div>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.SearchView {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  .serch {
+    overflow: hidden;
+  }
+}
+</style>

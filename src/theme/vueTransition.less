@@ -74,4 +74,27 @@
     transform: translateY(100%);
 }
 
-// 
+//
+
+
+.homeUpPage-enter-active,
+.homeUpPage-leave-active,
+.homeNextPage-enter-active,
+.homeNextPage-leave-active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // transition: all 0.5s 0.06s cubic-bezier(0.25, -0.2, 0.75, 1.2);
+    transition: all 0.24s 0.05s;
+}
+
+
+.homeNextPage-leave-to,
+.homeUpPage-enter-from {
+    transform: translateX(100%);
+}
+
+.homeUpPage-leave-to,
+.homeNextPage-enter-from {
+    transform: translateX(-100%);
+}

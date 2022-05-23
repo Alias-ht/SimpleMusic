@@ -28,29 +28,28 @@ export function totalTip(text: string) {
 }
 
 /** 动画名称 */
-let transitionName = ref("" as string);
+// let transitionName = ref("" as string);
 
 /** 路由跳转 动画名称 */
 export function routerSkipTransitionName(route?: any) {
-  // console.log(route);
+  // console.log(1);
   // const regRouter = {
   //   // "/lyric": "",
   //   upPage: "lyricPageLeave",
   //   nextPage: "lyricPageEnter",
   //   default: route.meta.transition,
   // };
+  // const
 
-  transitionName.value = "";
+  // transitionName.value = "";
 
   /** 歌词页面 进行对应匹配 */
   if (route.query.upPage === "/lyric") {
-    transitionName.value = "lyricPageLeave";
     return "lyricPageLeave";
+    // return "lyricPageLeave";
   } else if (route.query.nextPage === "/lyric") {
-    transitionName.value = "lyricPageEnter";
+    // transitionName.value = "lyricPageEnter";
     return "lyricPageEnter";
-  } else {
-    transitionName.value = route.meta.transition;
   }
 
   const toMeta = route.meta;
@@ -58,14 +57,22 @@ export function routerSkipTransitionName(route?: any) {
   if (toMeta?.transIndex && fromMeta?.transIndex && toMeta.transIndex !== fromMeta.transIndex) {
     const toIndex = toMeta.transIndex;
     const fromIndex = fromMeta.transIndex;
+    // console.log(toIndex > fromIndex);
+    // let letf = "";
+
     if (toIndex > fromIndex) {
-      transitionName.value = "homeUpPage";
+      // return "homeUpPage";
+      return "homeUpPage";
     } else {
-      transitionName.value = "homeNextPage";
+      return "homeNextPage";
     }
+    // console.log(letf);
+
+    // return letf;
   }
 
-  return transitionName.value;
+  // return "";
+  return route.meta.transition || "";
 }
 
 /** 路由跳转 模式 */

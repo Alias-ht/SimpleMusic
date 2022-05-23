@@ -10,15 +10,10 @@ import { routerSkipTransitionName, routerSkipMode, delayedExecute } from "../hoo
 export default {
   name: "layout",
   setup() {
-    onBeforeMount(() => {
-
-    });
-    onUpdated(() => {
-
-    });
+    onBeforeMount(() => {});
+    onUpdated(() => {});
     onActivated(() => {});
-    onDeactivated(() => {
-    });
+    onDeactivated(() => {});
     onBeforeUnmount(() => {});
 
     let timer = null as any;
@@ -37,9 +32,10 @@ export default {
       <div class="fillBox" ref="fillBoxRef">
         <RouterView v-slot="{ Component }">
           <Transition appear :name="routerSkipTransitionName($route)" :mode="routerSkipMode($route)">
+          <!-- <Transition name="page" :mode="routerSkipMode($route)"> -->
             <!-- 非活跃的组件将会被缓存！ -->
             <KeepAlive :max="3">
-            <Component :is="Component" />
+              <Component :is="Component" />
             </KeepAlive>
           </Transition>
         </RouterView>
@@ -51,9 +47,15 @@ export default {
     </ul>
     <div class="tarBarBox">
       <ul class="tabBar">
-        <li @click="$router.push('/home')">主页</li>
-        <li @click="$router.push('/search')">搜索</li>
-        <li @click="$router.push('/my')">我的</li>
+        <li @click="$router.push('/home')">
+        <span>主页</span>
+        </li>
+        <li @click="$router.push('/search')">
+        <span>搜索</span>
+        </li>
+        <li @click="$router.push('/my')">
+        <span>我的</span>
+        </li>
       </ul>
     </div>
   </div>
@@ -105,8 +107,16 @@ export default {
       display: flex;
       font-weight: 600;
       li {
+        height: 10vw;
+        line-height: 10vw;
         flex: 1;
         text-align: center;
+        // background: #000;
+        span{
+          display: inline-block;
+          width: 100%;
+          background: royalblue;
+        }
       }
     }
   }

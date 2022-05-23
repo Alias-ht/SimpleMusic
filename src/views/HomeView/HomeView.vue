@@ -8,22 +8,13 @@ import { newSongApi } from "../../api/home";
 export default {
   name: "",
   setup() {
-    onMounted(() => {
-
-    });
-    onUpdated(() => {
-
-    });
-    onActivated(() => {
-
-    });
-    onBeforeUnmount(() => {
-
-    });
+    onMounted(() => {});
+    onUpdated(() => {});
+    onActivated(() => {});
+    onBeforeUnmount(() => {});
 
     /** ref 元素 */
     const homeRef = ref(null as any);
-
 
     /** 获取 新歌曲 推荐 (无需登录)  ---- start */
     const newSongList = ref([]);
@@ -46,22 +37,25 @@ export default {
 </script>
 
 <template>
-  <div class="Home" ref="homeRef">
-    <div class="container">
-      <h2>新歌推荐</h2>
-      <SparkingList v-for="item in newSongList" :key="item.id" :info="item"></SparkingList>
+  <div class="HomeView" ref="homeRef">
+    <div class="home">
+      <div class="container">
+        <h2>新歌推荐</h2>
+        <SparkingList v-for="item in newSongList" :key="item.id" :info="item"></SparkingList>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
-.Home {
+.HomeView {
   width: 100%;
-  // height: 100%;
-    // height: calc(100vh - 30vw);
-
-  // overflow: hidden;
+  height: 100%;
   overflow-y: auto;
+  .home {
+    width: 100%;
+    height: 100%;
+  }
   .container {
     & > h2 {
       // margin-top: 2vw;

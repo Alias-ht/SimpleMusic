@@ -216,7 +216,7 @@ export default {
           li {
             height: 9vw;
             font-weight: 600;
-            font-size: 4.5vw;
+            font-size: 3.5vw;
             color: #000;
             transition: all 0.24s;
             transform: scale(1);

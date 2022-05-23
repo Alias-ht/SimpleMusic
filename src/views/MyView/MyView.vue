@@ -10,10 +10,21 @@ export default {
 </script>
 
 <template>
-  <div class="">
+  <div class="MyView">
+    <div class="my">
       <h2>我的信息</h2>
+    </div>
     <!--  -->
   </div>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.MyView {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  .my {
+    overflow: hidden;
+  }
+}
+</style>
