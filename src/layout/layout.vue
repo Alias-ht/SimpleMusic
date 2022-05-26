@@ -111,11 +111,11 @@ export default {
         line-height: 10vw;
         flex: 1;
         text-align: center;
-        // background: #000;
+        box-sizing: border-box;
+        padding: 0 3vw;
         span{
           display: inline-block;
           width: 100%;
-          background: royalblue;
         }
       }
     }

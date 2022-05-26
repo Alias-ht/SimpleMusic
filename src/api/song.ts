@@ -1,5 +1,5 @@
 // 引入接口
-import request from "../utils/request";
+import { get } from "../utils/request";
 
 // 引入接口路径
 import api from "./index";
@@ -9,35 +9,11 @@ import api from "./index";
  * @param id 需传递id
  * @returns
  */
-export const getSongUrlApi = (id: number) => {
-  return request({
-    url: api.getSongUrl,
-    method: "GET",
-    params: { id },
-  });
-};
+export const getSongUrlApi = (id: number) => get(api.getSongUrl, { id });
 
 /**
- *  搜索
- * @param keywords 关键词
- * @returns promise
+ *  根据歌曲 id 获取歌词
+ * @param id id
+ * @returns
  */
-export const searchApi = (keywords: string) => {
-  return request({
-    url: api.search,
-    method: "GET",
-    params: {
-      keywords,
-    },
-  });
-};
-
-export const getLyricApi = (id: number) => {
-  return request({
-    url: api.getLyric,
-    method: "GET",
-    params: {
-      id,
-    },
-  });
-};
+export const getLyricApi = (id: number) => get(api.getLyric, { id });
