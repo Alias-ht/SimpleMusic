@@ -7,7 +7,7 @@ import { ref, computed } from "vue";
 import { totalTip } from "../hooks/common";
 
 /** 引入 接口 */
-import { getSongUrlApi, getLyricApi } from "../api/song";
+import { getSongUrlApi, getLyricApi, getSongDetailApi, getCheckMusicApi } from "../api/song";
 
 /** 引入歌词解析 */
 import LyricParser from "lyric-parser";
@@ -56,29 +56,37 @@ export const useSongPlay = defineStore({
   },
   actions: {
     /** 获取 歌曲 信息 */
-    async getSongInfo(info: object) {
-      // @ts-ignore
-      const { id } = info;
-      if (id == this.songId) return;
-      this.songId = id;
-      this.songInfo = info; // 解析存储  信息和id
+    async getSongInfo(info: any) {
+      if (typeof info.id !== "number") return totalTip("歌曲格式不正确");
+      getCheckMusicApi(info.id, ({ success }: { success: boolean }) => {
+        if (success) {
+          const { id } = info;
+          if (id == this.songId) return;
+          this.songId = id;
+          this.songInfo = info; // 解析存储  信息和id
+          // @ts-ignore
+          this.songInfo.picUrl || this.getSongPictrue(this.songId);
 
-      this.getSongUrl(); // 获取url 并调用开始播放
-      this.getSongLyric(id); // 获取歌词
+          this.getSongUrl(); // 获取url 并调用开始播放
+          this.getSongLyric(this.songId); // 获取歌词
+        }
+      });
     },
     /** 获取歌曲 url
      *  @params flag 用来确定(true)是否需要指定播放重置
-    */
-    async getSongUrl(flag?:boolean) {
-      console.log(' 获取 song url ');
+     */
+    async getSongUrl(flag?: boolean) {
+      // console.log(" 获取 song url ");
 
       //  调用接口 ,根据id  查询 url
       const {
         data: { data: songUrlInfo },
       } = await getSongUrlApi(this.songId);
+      // console.log(songUrlInfo);
+
       // 存储数据
       this.songUrl = songUrlInfo[0].url;
-      if(flag) return
+      if (flag) return;
       this.startSong(); // 开始播放
       // 重置播放时间
       this.songLyricInfo.songPlayTime = null;
@@ -106,7 +114,7 @@ export const useSongPlay = defineStore({
     },
     /** 暂停歌曲 */
     stopSong() {
-      if (!this.songUrl) return totalTip("请先选择播放歌曲");
+      // if (!this.songUrl) return totalTip("请先选择播放歌曲");
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
@@ -117,7 +125,7 @@ export const useSongPlay = defineStore({
     },
     /** 播放歌曲  @param flag 是否需要执行 歌词草错*/
     startSong(lyricFlag?: boolean) {
-      if (!this.songUrl) return totalTip("请先选择播放歌曲");
+      // if (!this.songUrl) return totalTip("请先选择播放歌曲");
       try {
         this.songRef.play();
         this.songPlayState = true;
@@ -152,8 +160,9 @@ export const useSongPlay = defineStore({
       clearInterval(this.songPlaygress.timer);
       const timePlaygressFn = () => {
         // this.songLyricInfo.songPlayTime = this.songRef.currentTime;
-        const currentTime = this.songLyricInfo.songPlayTime || 0;
-        // const currentTime = this.songRef.currentTime;
+        // const currentTime = this.songLyricInfo.songPlayTime || 0;
+        // const currentTime = this.songLyricInfo.songPlayTime || 0;
+        const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime;
         const allTime = this.songRef.duration;
         this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
       };
@@ -169,6 +178,14 @@ export const useSongPlay = defineStore({
       this.songRef.currentTime = percentage * this.songRef.duration;
       this.songLyricInfo.songPlayTime = this.songRef.currentTime;
       this.startSong(true); // 需要更新歌词 传递标识
+    },
+    /** 歌曲图片信息为空时,获取图片 */
+    getSongPictrue(id: number) {
+      // console.log(" 暂无 歌曲图片,进行获取 --- ");
+      getSongDetailApi(id, (data: any) => {
+        // @ts-ignore
+        this.songInfo.picUrlHandler = data.songs[0].al.picUrl + "?param=160y160";
+      });
     },
   },
   // 数据持久化, 存储参数

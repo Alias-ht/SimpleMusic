@@ -83,7 +83,6 @@ export default {
         <li v-for='(item,index) in tabBarList' :key='index' @click="$router.push(item.pushPath)" :class='{actived:$route.fullPath === item.pushPath}'>
           <!-- {{$route.fullPath}} -->
           <span class="icon">
-              <!-- <HomeIcon class="h-5 w-5 text-blue-500"/> -->
               <component :is="item.component" class="h-5 w-5 text-blue-500"></component>
           </span>
           <span class="text"> {{item.text }} </span>
@@ -151,9 +150,9 @@ export default {
         .icon{
           width: 8vw;
         }
-        .text{
+       /*  .text{
 
-        }
+        } */
       }
       li.actived{
         color: royalblue;

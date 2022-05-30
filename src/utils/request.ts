@@ -1,4 +1,8 @@
+// 引入 axios
 import axios, { AxiosPromise, AxiosRequestConfig, AxiosError } from "axios";
+
+// 引入公共函数
+import { totalTip } from "../hooks/common";
 
 // 引入 配置文件
 const service = axios.create({
@@ -21,13 +25,31 @@ service.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
+    console.log(error);
+
     return error;
   }
 );
-// interface getDel {
-//   url: string;
-//   params: any;
-// }
+service.interceptors.response.use(
+  (response) => {
+    // console.log(response.status);
+    // if (response.status !== 200) {
+    //   console.log(response);
+    // }
+
+    return response;
+  },
+  (error: AxiosError) => {
+    // console.log(error);
+    // console.log();
+
+    if (JSON.stringify(error?.response?.data) !== "{}") {
+      const data = error?.response?.data;
+      // @ts-ignore
+      if (data?.message) totalTip(data.message);
+    }
+  }
+);
 
 // 请求类型
 const get = (url: string, params?: any): AxiosPromise<any> => {

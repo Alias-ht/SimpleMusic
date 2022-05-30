@@ -1,7 +1,9 @@
 export default {
+  checkMusic: "/check/music", // 检查音乐是否 可用
   getSongUrl: "/song/url", // 获取音乐 url
   getLyric: "/lyric", // 获取歌词
   newSong: "/personalized/newsong", // 新歌 推荐
+  songDetail: "/song/detail", // 歌曲详情
   search: "/search", // 搜索
   searchDefault: "/search/default", // 默认搜索关键词
   searchHot: "/search/hot", // 热搜列表 (简略)

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, ref, onMounted, watch, computed} from "vue";
+import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
 
 // 引入 状态
 import { useSongPlay } from "../../store/songPlay";
@@ -33,9 +33,12 @@ export default {
 
     /** 创建监听器函数 触碰滑动时暂停, 2秒钟不操作继续监听器 */
     let lyricScrollUnwatch = null as any;
-    lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
-      getIndexChangeScrollFn(newVal.index);
-    });
+    lyricScrollUnwatch = watch(
+      storeSongPlay.songLyricInfo,
+      (newVal, oldVal) => {
+        getIndexChangeScrollFn(newVal.index);
+      }
+    );
     /** 定时器 存储 */
     let storageWatchTimer = null as any;
     /** 歌词 滚动时 触发函数 */
@@ -50,9 +53,12 @@ export default {
       storageWatchTimer = setTimeout(() => {
         getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
         //  赋予监听器
-        lyricScrollUnwatch = watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
-          getIndexChangeScrollFn(newVal.index);
-        });
+        lyricScrollUnwatch = watch(
+          storeSongPlay.songLyricInfo,
+          (newVal, oldVal) => {
+            getIndexChangeScrollFn(newVal.index);
+          }
+        );
       }, 1.5 * 1000);
     }
 
@@ -91,12 +97,20 @@ export default {
     <ul class="playSongComopnent">
       <!-- v-show="false" -->
       <li class="picUrl">
-        <img v-show="false && storeSongPlay.songInfo.picUrl" :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`" />
+        <img
+          v-show="false && storeSongPlay.songInfo.picUrl"
+          :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`"
+        />
       </li>
       <li class="songLyricInfo">
         <!-- 返回 -->
         <div class="goBack" @click="$router.back()">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
             <path
               fillRule="evenodd"
               d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z"
@@ -109,11 +123,18 @@ export default {
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
         <!-- 歌词 -->
-        <div class="lyricDiv" @touchstart="lyricUlScroll" @touchend="lyricScrollTouchEnd" ref="lyricDivRef">
+        <div
+          class="lyricDiv"
+          @touchstart="lyricUlScroll"
+          @touchend="lyricScrollTouchEnd"
+          ref="lyricDivRef"
+        >
           <ul class="lyricUl">
             <li
               class="textEllipsis"
-              :class="{ lyricActivedNum: storeSongPlay.songLyricInfo.index === index }"
+              :class="{
+                lyricActivedNum: storeSongPlay.songLyricInfo.index === index,
+              }"
               v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
               :key="index"
             >
@@ -164,7 +185,11 @@ export default {
         width: 100vw;
         height: 100vh;
         background: rgba(255, 255, 255, 0.6);
-        background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(34, 34, 34, 0.2));
+        // background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(34, 34, 34, 0.2));
+        background-image: linear-gradient(
+          rgba(255, 255, 255, 0.6),
+          rgb(159 159 159 / 20%)
+        );
         // background: white;
       }
       img {

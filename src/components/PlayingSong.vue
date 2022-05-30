@@ -15,12 +15,13 @@ export default {
     onBeforeMount(() => {});
     onMounted(() => {});
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
-
     // 计算属性 歌词信息
-    // watch(storeSongPlay.songLyricInfo, (newVal, oldVal) => {
+    // watch(storeSongPlay, (newVal, oldVal) => {
     //   console.log("watch 属性监听 歌曲的歌词信息");
-    //   console.log(newVal);
+    //   // console.log();
     // });
+    // console.log(storeSongPlay.songInfo);
+
 
     return { storeSongPlay };
   },
@@ -42,11 +43,6 @@ export default {
       <li class="songLyricInfo">
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
-          <!-- <span class="author textEllipsis">
-            <span v-for="(artistsItem, index) in storeSongPlay.songInfo.song.artists">
-              {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
-            </span>
-          </span> -->
         </div>
         <div class="lyricDiv">
           <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }">
@@ -68,9 +64,6 @@ export default {
 @transitionTime: all 0.6s;
 .playBox {
   position: relative;
-  // position: fixed;
-  // left: 0;
-  // bottom: 0;
   width: 100vw;
   height: 20vw;
   transition: @transitionTime;
@@ -140,7 +133,7 @@ export default {
         // text-align: center;
         transition: @transitionTime;
         .lyricUl {
-          transition: transform 0.3s;
+          // transition: transform 0.3s;
           transform: translateY(0vw);
           li {
             height: 5vw;

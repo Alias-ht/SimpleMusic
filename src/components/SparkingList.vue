@@ -35,6 +35,8 @@ export default {
     });
     props.info.picUrlHandler = `${props.info.picUrl}?param=160y160`;
     const info = props.info;
+    // console.log(info);
+
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
 
@@ -100,10 +102,10 @@ export default {
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
         <div class="author textEllipsis">
-          <span v-for="(artistsItem, index) in info.song.artists"> {{ index > 0 ? " /" : "" }} {{ artistsItem.name }} </span>
+          <span v-for="(artistsItem, index) in info?.song?.artists " :key="index"> {{ index > 0 ? " /" : "" }} {{ artistsItem.name }} </span>
         </div>
         <div class="alias">
-          <span v-for="aliasItem in info.song.alias">{{ aliasItem }} </span>
+          <span v-for="(aliasItem,index) in info?.song?.alias" :key="index">{{ aliasItem }} </span>
         </div>
       </li>
       <div class="playFLag">

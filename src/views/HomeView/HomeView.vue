@@ -3,8 +3,7 @@ import { onMounted, onUpdated, onBeforeUnmount, reactive, ref, onDeactivated, on
 // 引入组件
 import SparkingList from "@/components/SparkingList.vue";
 // 引入接口
-import { newSongApi } from "../../api/home";
-// import { newSongApi } from "@/api/home";
+import { getNewSongApi } from "../../api/home";
 export default {
   name: "",
   setup() {
@@ -18,12 +17,12 @@ export default {
 
     /** 获取 新歌曲 推荐 (无需登录)  ---- start */
     const newSongList = ref([]);
-    const getNewSongFn = async () => {
-      const { data } = await newSongApi();
-      newSongList.value = data.result;
-    };
-    getNewSongFn();
+    getNewSongApi((result:any)=>{
+      newSongList.value = result;
+    })
     /** 获取 新歌曲 推荐 (无需登录)  ---- end */
+
+
 
     return {
       newSongList,
