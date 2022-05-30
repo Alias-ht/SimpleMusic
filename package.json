@@ -17,6 +17,7 @@
     "lyric-parser": "^1.0.1",
     "pinia": "^2.0.14",
     "pinia-plugin-persist": "^1.0.0",
+    "vant": "^3.4.9",
     "vue": "^3.2.25",
     "vue-router": "^4.0.15",
     "vue3-lottie": "^2.1.0"

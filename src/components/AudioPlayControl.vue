@@ -11,6 +11,8 @@ export default {
       storeSongPlay.stopSong(); // 初始化暂停歌曲
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
+
+    storeSongPlay.getSongUrl(true)
     /** 音乐播放 控件 */
     const audioRef = ref(null as any);
     return { storeSongPlay, audioRef };

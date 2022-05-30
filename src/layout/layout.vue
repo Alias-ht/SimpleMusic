@@ -1,11 +1,26 @@
 <script lang="ts">
-import { onBeforeMount, onUpdated, onBeforeUnmount, ref, watch, onActivated, onDeactivated } from "vue";
+import {
+  onBeforeMount,
+  onUpdated,
+  onBeforeUnmount,
+  ref,
+  watch,
+  onActivated,
+  onDeactivated,
+} from "vue";
 
 // 引入 组件
 import PlayingSongVue from "../components/PlayingSong.vue";
+// 引入 图标 组件
+import { HomeIcon,SearchIcon,UserIcon } from '@heroicons/vue/outline'
+// import { HomeIcon } from '@heroicons/vue/solid'
 
 // 引入hooks 函数
-import { routerSkipTransitionName, routerSkipMode, delayedExecute } from "../hooks/common";
+import {
+  routerSkipTransitionName,
+  routerSkipMode,
+  delayedExecute,
+} from "../hooks/common";
 
 export default {
   name: "layout",
@@ -19,9 +34,23 @@ export default {
     let timer = null as any;
     const fillBoxRef = ref(null as any);
 
-    return { routerSkipTransitionName, routerSkipMode, fillBoxRef };
+    const tabBarList = [{
+      pushPath:'/home',
+      text:'主页',
+      component:'HomeIcon'
+    },{
+      pushPath:'/search',
+      text:'搜索',
+      component:'SearchIcon'
+    },{
+      pushPath:'/my',
+      text:'我的',
+      component:'UserIcon'
+    }];
+
+    return { routerSkipTransitionName, routerSkipMode, fillBoxRef,tabBarList };
   },
-  components: { PlayingSongVue },
+  components: { PlayingSongVue,HomeIcon ,SearchIcon,UserIcon},
 };
 </script>
 
@@ -31,8 +60,12 @@ export default {
     <div class="content">
       <div class="fillBox" ref="fillBoxRef">
         <RouterView v-slot="{ Component }">
-          <Transition appear :name="routerSkipTransitionName($route)" :mode="routerSkipMode($route)">
-          <!-- <Transition name="page" :mode="routerSkipMode($route)"> -->
+          <Transition
+            appear
+            :name="routerSkipTransitionName($route)"
+            :mode="routerSkipMode($route)"
+          >
+            <!-- <Transition name="page" :mode="routerSkipMode($route)"> -->
             <!-- 非活跃的组件将会被缓存！ -->
             <KeepAlive :max="3">
               <Component :is="Component" />
@@ -47,14 +80,13 @@ export default {
     </ul>
     <div class="tarBarBox">
       <ul class="tabBar">
-        <li @click="$router.push('/home')">
-        <span>主页</span>
-        </li>
-        <li @click="$router.push('/search')">
-        <span>搜索</span>
-        </li>
-        <li @click="$router.push('/my')">
-        <span>我的</span>
+        <li v-for='(item,index) in tabBarList' :key='index' @click="$router.push(item.pushPath)" :class='{actived:$route.fullPath === item.pushPath}'>
+          <!-- {{$route.fullPath}} -->
+          <span class="icon">
+              <!-- <HomeIcon class="h-5 w-5 text-blue-500"/> -->
+              <component :is="item.component" class="h-5 w-5 text-blue-500"></component>
+          </span>
+          <span class="text"> {{item.text }} </span>
         </li>
       </ul>
     </div>
@@ -73,11 +105,12 @@ export default {
   flex-direction: column;
 
   .content {
-    // height: calc(100vh - 30vw);
-    // overflow-y: auto;
     overflow: hidden;
     flex: 1;
     z-index: 4;
+    padding-top: 20px;
+    box-sizing: border-box;
+
     .fillBox {
       position: relative;
       width: 100%;
@@ -87,19 +120,14 @@ export default {
     }
   }
   .songPlayComponent {
-    // opacity: 0;
-    // flex: 2;
     height: @tarBarHeight;
     background: rgb(255, 255, 255);
     box-shadow: 0 -3vw 5vw rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    // z-index: 50;
     z-index: 5;
   }
   .tarBarBox {
-    // opacity: 0;
-    // flex: 1;
-    height: 10vw;
+    height: 14vw;
     z-index: 101;
     background: white;
     z-index: 6;
@@ -107,16 +135,28 @@ export default {
       display: flex;
       font-weight: 600;
       li {
-        height: 10vw;
-        line-height: 10vw;
+        height: 14vw;
+        // line-height: 10vw;
+        font-size: 3vw;
         flex: 1;
         text-align: center;
         box-sizing: border-box;
         padding: 0 3vw;
-        span{
+        transition: all .3s;
+        span {
           display: inline-block;
           width: 100%;
         }
+
+        .icon{
+          width: 8vw;
+        }
+        .text{
+
+        }
+      }
+      li.actived{
+        color: royalblue;
       }
     }
   }

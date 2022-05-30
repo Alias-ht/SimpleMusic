@@ -24,3 +24,10 @@ export const searchApi = (params: search) => get(api.search, params);
  * @returns promise
  */
 export const searchHotApi = () => get(api.searchHot);
+
+
+/**
+ * 热搜列表 (详细)
+ * @returns promise
+ */
+export const searchHotDetailApi = () => get(api.searchHotDetail);

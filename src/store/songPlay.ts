@@ -63,17 +63,22 @@ export const useSongPlay = defineStore({
       this.songId = id;
       this.songInfo = info; // 解析存储  信息和id
 
-      this.getSongUrl(id); // 获取url 并调用开始播放
+      this.getSongUrl(); // 获取url 并调用开始播放
       this.getSongLyric(id); // 获取歌词
     },
-    /** 获取歌曲 url */
-    async getSongUrl(id: number) {
+    /** 获取歌曲 url
+     *  @params flag 用来确定(true)是否需要指定播放重置
+    */
+    async getSongUrl(flag?:boolean) {
+      console.log(' 获取 song url ');
+
       //  调用接口 ,根据id  查询 url
       const {
         data: { data: songUrlInfo },
-      } = await getSongUrlApi(id);
+      } = await getSongUrlApi(this.songId);
       // 存储数据
       this.songUrl = songUrlInfo[0].url;
+      if(flag) return
       this.startSong(); // 开始播放
       // 重置播放时间
       this.songLyricInfo.songPlayTime = null;

@@ -95,7 +95,7 @@ export default {
       </li>
       <li class="songLyricInfo">
         <!-- 返回 -->
-        <div class="backup" @click="$router.back()">
+        <div class="goBack" @click="$router.back()">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
               fillRule="evenodd"
@@ -181,7 +181,7 @@ export default {
       flex-direction: column;
       box-sizing: border-box;
       user-select: nonee;
-      .backup {
+      .goBack {
         padding-left: 5vw;
         color: black;
         z-index: 1;
