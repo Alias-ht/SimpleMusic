@@ -14,6 +14,8 @@ import store from "./store/index";
 import vant from 'vant'
 import 'vant/lib/index.css';
 
+import { Lazyload } from 'vant';
+
 const app = createApp(App);
-app.use(router).use(Vue3Lottie).use(store).use(vant);
+app.use(router).use(Vue3Lottie).use(store).use(vant).use(Lazyload, {lazyComponent:true});
 app.mount("#app");

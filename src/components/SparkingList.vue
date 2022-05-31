@@ -96,7 +96,8 @@ export default {
   <div class="listContainer">
     <ul class="listBox" :class="{ InThePlay: info.id === storeSongPlay.songId }" @click="clickSongList">
       <li class="avatarBox">
-        <img :src="info.picUrlHandler || info.picUrl" alt="" />
+        <img  alt=""  v-lazy="info.picUrlHandler || info.picUrl" />
+        <!-- :src="info.picUrlHandler || info.picUrl" -->
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
@@ -107,7 +108,7 @@ export default {
           <span v-for="(aliasItem,index) in info?.song?.alias" :key="index">{{ aliasItem }} </span>
         </div>
       </li>
-      <div class="playFLag">
+      <div class="playFLag" v-if="false">
         <div class="box" v-if="info.id === storeSongPlay.songId">
           <Vue3Lottie ref="playinglottieRef" class="lottie" :animationData="playingLottieJson" />
         </div>
@@ -121,14 +122,14 @@ export default {
 
 .listContainer {
   display: flex;
-  width: 100vw;
+  width: 100%;
   padding: 1vw 5vw;
   box-sizing: border-box;
 }
 .listBox {
   position: relative;
   display: flex;
-  width: 100vw;
+  width: 100%;
   padding: 3vw 5vw;
   border-radius: 2vw;
   box-sizing: border-box;

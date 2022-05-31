@@ -9,14 +9,28 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "layout",
-    redirect: "/home",
+    redirect: "/home/recommend",
     component: () => import("@/layout/layout.vue"),
     children: [
       {
         path: "home",
         name: "Home",
+        redirect: "/home/recommend",
         component: () => import("@/views/HomeView/HomeView.vue"),
         meta: { title: "主页", mode: "", transIndex: 1 },
+        children: [
+          {
+            path: "recommend",
+            name: "Recommend",
+            component: () => import("@/views/RecommendView/RecommendView.vue"),
+            meta: { title: "主页-推荐", mode: "", transIndex: 1 },
+          }, {
+            path: "musicHall",
+            name: "MusicHall",
+            component: () => import("@/views/MusicHallView/MusicHallView.vue"),
+            meta: { title: "主页-音乐馆", mode: "", transIndex: 2 },
+          }
+        ],
       },
       {
         path: "search",

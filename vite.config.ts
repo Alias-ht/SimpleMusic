@@ -17,10 +17,10 @@ export default defineConfig({
       ext: ".gz", //文件类型
     }), */
   ],
-  esbuild: {
-    pure: ["console.log"],
-    minify: true,
-  },
+  // esbuild: {
+  //   pure: ["console.log"],
+  //   minify: true,
+  // },
   server: {
     host: "0.0.0.0",
     port: 20509,
