@@ -57,7 +57,8 @@ export const useSongPlay = defineStore({
   actions: {
     /** 获取 歌曲 信息 */
     async getSongInfo(info: any) {
-      console.log('获取歌曲信息');
+      // console.log('获取歌曲信息');
+      // debugger
 
       if (typeof info.id !== "number") return totalTip("歌曲格式不正确");
       getCheckMusicApi(info.id, ({ success }: { success: boolean }) => {
@@ -78,7 +79,7 @@ export const useSongPlay = defineStore({
      *  @params flag 用来确定(true)是否需要指定播放重置
      */
     async getSongUrl(flag?: boolean) {
-      console.log(" 获取 song url ");
+      // console.log(" 获取 song url ");
 
       //  调用接口 ,根据id  查询 url
       const {

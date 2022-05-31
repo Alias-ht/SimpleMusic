@@ -61,11 +61,12 @@ export default {
 </template>
 
 <style scoped lang="less">
+@import '../theme/layout.less';
 @transitionTime: all 0.6s;
 .playBox {
   position: relative;
   width: 100vw;
-  height: 20vw;
+  height: @playControlHeight;
   transition: @transitionTime;
   background: rgba(255, 255, 255);
 
@@ -74,20 +75,21 @@ export default {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 20vw;
+    height: @playControlHeight;
     box-sizing: border-box;
-    overflow: hidden;
+    // overflow: hidden;
     transition: @transitionTime;
 
     .picUrl {
       position: absolute;
-      top: 2.5vw;
+      top: -5vw;
       left: 4vw;
       overflow: hidden;
       width: 15vw;
       height: 15vw;
       box-sizing: border-box;
       background: silver;
+      box-shadow: 0 0 2vw rgb(0 0 0 / 50%);
       border-radius: 1.8vw;
       overflow: hidden;
 
@@ -112,7 +114,7 @@ export default {
         left: 0;
         color: black;
         font-weight: 600;
-        font-size: 5vw;
+        font-size: 4vw;
         transition: @transitionTime;
 
         .author {
@@ -124,8 +126,8 @@ export default {
       .lyricDiv {
         position: absolute;
         left: 0;
-        top: 9vw;
-        font-size: 4vw;
+        top: 6.2vw;
+        font-size: 3vw;
         width: 100%;
         height: 5vw;
 
@@ -145,12 +147,12 @@ export default {
     }
     .btnGroup {
       position: absolute;
-      top: 2.5vw;
-      left: 81vw;
+      top: 1.6vw;
+      left: 85vw;
       transition: @transitionTime;
 
       .stop {
-        width: 15vw;
+        width: 11.8vw;
       }
     }
   }

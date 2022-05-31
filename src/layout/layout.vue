@@ -93,7 +93,8 @@ export default {
 </template>
 
 <style scoped lang="less">
-@tarBarHeight: 20vw;
+// @playControlHeight: 15vw;
+@import '../theme/layout.less';
 
 .layout-container {
   position: relative;
@@ -109,6 +110,8 @@ export default {
     z-index: 4;
     padding-top: 20px;
     box-sizing: border-box;
+    // background: rgb(245, 245, 245);
+    background: white;
 
     .fillBox {
       position: relative;
@@ -119,14 +122,13 @@ export default {
     }
   }
   .songPlayComponent {
-    height: @tarBarHeight;
+    height: @playControlHeight;
     background: rgb(255, 255, 255);
-    box-shadow: 0 -3vw 5vw rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    box-shadow: 0 -3vw 6vw rgba(0, 0, 0, 0.05);
     z-index: 5;
   }
   .tarBarBox {
-    height: 14vw;
+    height: 12vw;
     z-index: 101;
     background: white;
     z-index: 6;
@@ -134,9 +136,9 @@ export default {
       display: flex;
       font-weight: 600;
       li {
-        height: 14vw;
+        height: 12vw;
         // line-height: 10vw;
-        font-size: 3vw;
+        font-size: 2.8vw;
         flex: 1;
         text-align: center;
         box-sizing: border-box;
@@ -148,7 +150,7 @@ export default {
         }
 
         .icon{
-          width: 8vw;
+          width: 6vw;
         }
        /*  .text{
 

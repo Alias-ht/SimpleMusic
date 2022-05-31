@@ -16,7 +16,6 @@ export default {
       if (playinglottieRef.value) {
         delayedExecute(() => {
           try {
-            // console.log("playing Animation");
             // @ts-ignore
             getStoreSongPlayState.value && playinglottieRef.value.play();
             // @ts-ignore
@@ -154,21 +153,21 @@ export default {
     overflow: hidden;
     .title {
       font-weight: 600;
-      font-size: 4vw;
+      font-size: 3.6vw;
       overflow: hidden;
       transition: @colortrans;
     }
 
     .author {
       margin-top: 1vw;
-      font-size: 3vw;
+      font-size: 2.8vw;
       overflow: hidden;
       color: rgb(61, 61, 61);
       transition: @colortrans;
     }
     .alias {
       margin-top: 1vw;
-      font-size: 2vw;
+      font-size: 1.8vw;
       overflow: hidden;
       color: gray;
       transition: @colortrans;

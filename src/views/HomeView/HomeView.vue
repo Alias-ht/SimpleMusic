@@ -39,7 +39,7 @@ export default {
   <div class="HomeView" ref="homeRef">
     <div class="home">
       <div class="container">
-        <h2>新歌推荐</h2>
+        <h3>新歌推荐</h3>
         <SparkingList v-for="item in newSongList" :key="item.id" :info="item"></SparkingList>
       </div>
     </div>
@@ -56,11 +56,11 @@ export default {
     height: 100%;
   }
   .container {
-    & > h2 {
+    & > h3 {
       // margin-top: 2vw;
       margin: 3vw 0;
-      font-size: 7vw;
-      padding-left: 3vw;
+      font-size: 5vw;
+      padding-left: 4vw;
     }
   }
 }
