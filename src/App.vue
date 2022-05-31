@@ -24,8 +24,6 @@ export default {
     }
 
     function modeChange(route: any) {
-      // console.log('app');
-
       if (nameTransition.value === "lyricPageLeave" || nameTransition.value === "lyricPageEnter") return "";
       if (route.meta.mode) {
         if (route.meta.mode === " ") return "";

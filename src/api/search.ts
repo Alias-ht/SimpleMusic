@@ -22,6 +22,9 @@ type search = {
  */
 export const getSearchListApi = async (params: search, fn: Function) => {
   const res = await get(api.search, params);
+  console.log(params);
+  console.log(res);
+  
   if (res.status === 200) fn && fn(res.data.result);
   else console.log("数据获取失败 ==> @getSearchHot");
 };

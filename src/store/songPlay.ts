@@ -34,14 +34,14 @@ type SongStateType = {
 export const useSongPlay = defineStore({
   id: "songPlay", // id必填，且需要唯一
   state: (): SongStateType => {
-    let songPlayState = false;
+    // let songPlayState = false;
     return {
       songInfo: {}, // 音乐信息
       songUrl: "", // 音乐 url
       songId: 0, // 音乐正在播放id
       songPlaying: {}, // 正在播放的音乐信息
       songRef: "", // 音乐元素 保存
-      songPlayState, // 播放状态
+      songPlayState: false, // 播放状态
       songPlaygress: {
         progress: 0,
         timer: "",
@@ -57,6 +57,8 @@ export const useSongPlay = defineStore({
   actions: {
     /** 获取 歌曲 信息 */
     async getSongInfo(info: any) {
+      console.log('获取歌曲信息');
+
       if (typeof info.id !== "number") return totalTip("歌曲格式不正确");
       getCheckMusicApi(info.id, ({ success }: { success: boolean }) => {
         if (success) {
@@ -76,7 +78,7 @@ export const useSongPlay = defineStore({
      *  @params flag 用来确定(true)是否需要指定播放重置
      */
     async getSongUrl(flag?: boolean) {
-      // console.log(" 获取 song url ");
+      console.log(" 获取 song url ");
 
       //  调用接口 ,根据id  查询 url
       const {

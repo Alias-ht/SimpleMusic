@@ -1,24 +1,29 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-
+import commpressPlugin from "vite-plugin-compression"; // 引入 代码压缩
 // const fs = require('fs')
 const path = require("path");
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  // transpileDependencies: true,
+  plugins: [
+    vue(),
+   /*  commpressPlugin({
+      verbose: true, // 默认即可
+      disable: false, //开启压缩(不禁用)，默认即可
+      deleteOriginFile: false, //删除源文件
+      threshold: 10240, //压缩前最小文件大小
+      algorithm: "gzip", //压缩算法
+      ext: ".gz", //文件类型
+    }), */
+  ],
+  esbuild: {
+    pure: ["console.log"],
+    minify: true,
+  },
   server: {
-    // host: 'huating.com',
     host: "0.0.0.0",
     port: 20509,
-    // https: {
-    //   // 主要是下面两行的配置文件，不要忘记引入 fs 和 path 两个对象
-    //   cert: fs.readFileSync(path.join(__dirname, 'src/ssl/ca.crt')),
-    //   key: fs.readFileSync(path.join(__dirname, 'src/ssl/ca.key'))
-    // }
-    // disableHostCheck: true,
-    // compress: true,
   },
   resolve: {
     alias: {

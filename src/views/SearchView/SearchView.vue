@@ -4,6 +4,7 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
+import YhSelect from "@/components/YhSelect.vue";
 export default {
   name: "",
   setup() {
@@ -20,9 +21,19 @@ export default {
     });
     /** 热搜列表 详细 --- end   */
 
+    const searchParams = {
+      limit: 50,
+      offset: 1,
+      type: 1,
+    };
+    var searchFnTimer: any;
     /** 监听 搜索关键词 变化 */
     watch(searchkeyWords, (newVal, oldVal) => {
       if (newVal) {
+        clearTimeout(searchFnTimer);
+        searchFnTimer = setTimeout(() => {
+          searchSongFn();
+        }, 300);
       } else {
         searchResultList.value = [];
       }
@@ -38,17 +49,10 @@ export default {
     /** 进行搜索 事件 */
     function searchSongFn() {
       getSearchListApi(
-        {
-          keywords: searchkeyWords.value,
-          // limit: number,
-          // offset: number,
-          // type: number,
-        },
+        { keywords: searchkeyWords.value, ...searchParams },
         (result: any) => {
-          // console.log(result);
           // @ts-ignore
           searchResultList.value.push(...result.songs);
-          // console.log(searchResultList);
         }
       );
     }
@@ -62,6 +66,7 @@ export default {
   },
   components: {
     SongList,
+    YhSelect,
   },
 };
 </script>
@@ -71,7 +76,12 @@ export default {
     <div class="serch">
       <!-- <h2>搜索</h2> -->
       <div class="searchInputBox">
-        <van-search placeholder="请输入搜索关键词" v-model="searchkeyWords" />
+        <YhSelect></YhSelect>
+        <van-search
+          class="searchInput"
+          placeholder="请输入搜索关键词"
+          v-model="searchkeyWords"
+        />
       </div>
       <div class="searchWordBox" v-if="!searchResultList.length">
         <van-button
@@ -113,6 +123,10 @@ export default {
       width: 100%;
       background: white;
       z-index: 55;
+      display: flex;
+      .searchInput {
+        flex: 1;
+      }
     }
     .searchWordBox {
       padding: 3vw 4vw;

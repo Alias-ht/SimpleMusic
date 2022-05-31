@@ -20,7 +20,7 @@ export default {
     function clickSongList() {
       const info = reactive({ ...props.info, playState: true });
       storeSongPlay.getSongInfo(info);
-    //   console.log(info);
+      // console.log(info);
 
     }
 
