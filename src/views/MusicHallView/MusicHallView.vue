@@ -18,6 +18,7 @@ export default {
 
 <style scoped lang="less">
 .MusicHallView{
+    width: 100%;
     height: 2000px;
     background: royalblue;
 }

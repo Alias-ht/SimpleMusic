@@ -9,7 +9,7 @@ import {
   onActivated,
 } from "vue";
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from "vue-router";
 
 // 引入hooks 函数
 import {
@@ -20,13 +20,24 @@ import {
 export default {
   name: "",
   setup() {
-    const router = useRouter()
-    // const route = useRoute()
-    onMounted(() => {});
+    const router = useRouter();
+    const route = useRoute();
+    onMounted(() => {
+      storageCurrentFn()
+    });
     onUpdated(() => {});
+    onDeactivated(() => {});
     onActivated(() => {});
     onBeforeUnmount(() => {});
 
+    /** 保存当前页 设置路由重定向 */
+    function storageCurrentFn() {
+      const index = router.currentRoute.value.matched.findIndex(
+        (item) => item.path === "/home"
+      );
+      router.currentRoute.value.matched[index].redirect =
+        vanTabConfig[homeVanTab.value].routerPath;
+    }
     // 主页 van 标签切换页
     const homeVanTab = ref(0);
 
@@ -35,9 +46,10 @@ export default {
       { title: "音乐馆", routerPath: "/home/musicHall" },
     ];
 
-    function changeTabIndexFn(index:number){
-      homeVanTab.value = index
-      router.push(vanTabConfig[index].routerPath)
+    function changeTabIndexFn(index: number) {
+      homeVanTab.value = index;
+      router.push(vanTabConfig[index].routerPath);
+      storageCurrentFn();
     }
 
     return {
@@ -45,7 +57,7 @@ export default {
       vanTabConfig,
       routerSkipTransitionName,
       routerSkipMode,
-      changeTabIndexFn
+      changeTabIndexFn,
     };
   },
 };
@@ -55,7 +67,13 @@ export default {
   <div class="HomeView" ref="homeRef">
     <div class="tabs">
       <ul class="tab-bar">
-        <li v-for='item,index in vanTabConfig' :key="index" @click='changeTabIndexFn(index)'>{{item.title}}</li>
+        <li
+          v-for="(item, index) in vanTabConfig"
+          :key="index"
+          @click="changeTabIndexFn(index)"
+        >
+          {{ item.title }}
+        </li>
         <li class="barre-mark"></li>
       </ul>
       <div class="tab">
@@ -90,24 +108,24 @@ export default {
     position: relative;
     display: flex;
     height: 10vw;
-    li{
+    li {
       flex: 1;
+      font-size: 4vw;
+      font-weight: 600;
     }
     .barre-mark {
       position: absolute;
       top: 70%;
       width: 10vw;
       height: 1vw;
-      border-radius: .5vw;
+      border-radius: 0.5vw;
       background: royalblue;
-
     }
   }
   .tab {
+    position: relative;
     flex: 1;
-  overflow-y: auto;
-
+    overflow: hidden;
   }
 }
-
 </style>

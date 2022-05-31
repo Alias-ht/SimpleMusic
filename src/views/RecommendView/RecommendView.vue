@@ -19,7 +19,7 @@ export default {
     // 获取 推荐歌单 (无需登录)
     const personalizedList = ref([]);
     getPersonalizedApi((resultList: any) => {
-      console.log(resultList[0]);
+    //   console.log(resultList[0]);
       personalizedList.value = resultList;
     });
 
@@ -64,11 +64,18 @@ export default {
 </template>
 
 <style scoped lang="less">
-.home {
+.RecommendView {
   width: 100%;
   height: 100%;
+//   overflow-y: auto;
+}
+.home {
+    width: 100%;
+  height: 100%;
+      overflow-y: auto;
 }
 .container {
+    overflow: hidden;
   & > h3 {
     // margin-top: 2vw;
     margin: 10vw 0 3vw;
