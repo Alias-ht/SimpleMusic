@@ -22,7 +22,7 @@ export default {
   <div class="notFound">
     <!--  -->
     <Vue3Lottie class="lottie" :animationData="NotFoundJson" :loop="false" :speed="1.2" />
-    <button class="backBtn" ref="backBtnRef" @click="$router.push('/home')">返回首页</button>
+    <button class="backBtn" ref="backBtnRef" @click="$router.push('/home/recommend')">返回首页</button>
   </div>
 </template>
 

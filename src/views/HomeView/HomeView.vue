@@ -44,6 +44,7 @@ export default {
     const vanTabConfig = [
       { title: "推荐", routerPath: "/home/recommend" },
       { title: "音乐馆", routerPath: "/home/musicHall" },
+      // { title: "搜索", routerPath: "/home/search" },
     ];
 
     function changeTabIndexFn(index: number) {
@@ -97,7 +98,8 @@ export default {
 .HomeView {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  // overflow-y: auto;
+  overflow: hidden;
 }
 .tabs {
   height: 100%;

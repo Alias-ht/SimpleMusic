@@ -1,13 +1,14 @@
-<script lang='ts'>
-import { ref, watch } from "vue";
+<script lang="ts">
+import { onMounted, reactive, ref, watch } from "vue";
 // 引入接口
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
 import YhSelect from "@/components/YhSelect.vue";
 export default {
-  name: "SearchView",
+  name: "",
   setup() {
+    onMounted(() => {});
     /** 搜索关键词 */
     const searchkeyWords = ref("");
     /** 搜索列表 */
@@ -20,23 +21,7 @@ export default {
     });
     /** 热搜列表 详细 --- end   */
 
-    // 点击搜索关键词 标识
     let clickSearchKeywordFlag = true;
-
-    // 搜索类型
-    const searchType = ref(1);
-    //  1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音
-    const searchTypeOptions = [
-      { text: "单曲", value: 1 },
-      { text: "专辑", value: 100 },
-      { text: "歌手", value: 1000 },
-      { text: "歌单", value: 1002 },
-      { text: "用户", value: 1004 },
-      { text: "MV", value: 1006 },
-      { text: "歌词", value: 1009 },
-      { text: "电台", value: 1014 },
-      { text: "视频", value: 1018 },
-    ];
 
     // 搜索 参数
     const searchParams = {
@@ -82,8 +67,6 @@ export default {
       searchResultList,
       searchHotDetailList,
       searchBtnClick,
-      searchType,
-      searchTypeOptions,
     };
   },
   components: {
@@ -94,31 +77,25 @@ export default {
 </script>
 
 <template>
-  <div class="SearchView">
+  <!-- // 搜索页面 -->
+  <div class="SearchView" >
     <div class="serch">
       <!-- <h2>搜索</h2> -->
       <div class="searchInputBox">
         <!-- <YhSelect></YhSelect> -->
         <div class="selectBtnBox">
-          <!-- <button class="select textEllipsis" @click.stop="clickSelectBtnFn">
+          <button class="select textEllipsis" @click.stop="clickSelectBtnFn">
             {{ "当前" }}
-          </button> -->
-          <van-dropdown-menu active-color="#1989fa">
-            <van-dropdown-item
-              v-model="searchType"
-              :options="searchTypeOptions"
-            />
-          </van-dropdown-menu>
+          </button>
         </div>
         <van-search
           class="searchInput"
           placeholder="请输入搜索关键词"
           v-model="searchkeyWords"
+          :showAction='true'
         >
+          <!-- <div slot="action" @click="onSearch">搜索</div> -->
         </van-search>
-        <div class="searchButton">
-          <button class="searchBtn">搜索</button>
-        </div>
       </div>
       <div class="searchWordBox" v-if="!searchResultList.length">
         <van-button
@@ -147,101 +124,52 @@ export default {
 <style scoped lang="less">
 @import "../../theme/fontSize.less";
 .SearchView {
-  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
   .serch {
+    // position: relative;
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    padding-top: 8vw;
+    padding-top: 40px;
+    overflow: hidden;
     .searchInputBox {
       position: absolute;
-      top: 0px;
+      top: -10px;
       left: 0;
       width: 100%;
       background: white;
       z-index: 55;
       display: flex;
+      .selectBtnBox {
+        padding: 10px;
+        padding-right: 0px;
+        // line-height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .select {
+          border-radius: 5px;
+          background: #f7f8fa;
+          padding: 5px 10px;
+          max-width: 100px;
+          font-size: @fifthFontSize;
+        }
+      }
 
       .searchInput {
         flex: 1;
       }
-      .searchButton{
-        padding: 1vw 0;
-        padding-right: 3vw;
-button.searchBtn{
-  width: 100%;
-  height: 100%;
-        background: #f7f8fa;
-      }
-      }
-
     }
     .searchWordBox {
       padding: 3vw 4vw;
       .searchButtonItem {
-        font-size: 3vw;
         margin: 1vw;
         border-radius: 2vw;
-        box-sizing: content-box;
-        padding: 0.7vw 2.5vw;
       }
     }
   }
-}
-
-// 搜索 类型
-.searchInputBox {
-  .selectBtnBox {
-    width: 18vw;
-    display: flex;
-
-    ::v-deep .van-dropdown-menu {
-      padding: 1vw 2vw;
-      box-sizing: border-box;
-        height: 10vw;
-        line-height: 8vw;
-      .van-dropdown-menu__bar {
-        width: 10vw;
-        height: 100%;
-        overflow: hidden;
-        background: #f7f8fa;
-        padding: 0 1.5vw;
-        padding-right: 3vw;
-        box-shadow: 0 0 0 transparent;
-        // font-size: 4vw;
-        .van-dropdown-menu__title{
-          font-size: 3vw;
-          padding-right: 1.5vw;
-
-        }
-
-      }
-    }
-
-
-  }
-    ::v-deep .van-search.searchInput {
-      padding: 2vw;
-      height: 10vw;
-      .van-search__content.van-search__content--square{
-        height: 8vw;
-        line-height: 8vw;
-        font-size: 6vw;
-        .van-cell{
-          line-height: inherit;
-
-          font-size: 3vw;
-        }
-        .van-search__field{
-          padding: 0.4vw 0;
-        }
-        .van-field__left-icon .van-icon{
-          font-size: 3vw;
-        }
-      }
-    }
 }
 </style>

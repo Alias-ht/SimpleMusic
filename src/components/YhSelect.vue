@@ -48,9 +48,6 @@ export default {
       background: #f7f8fa;
       padding: 5px 10px;
       max-width: 100px;
-      //   overflow: hidden;
-      //   text-overflow: ellipsis;
-      //   white-space: nowrap;
     }
     .options {
       position: absolute;

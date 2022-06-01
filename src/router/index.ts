@@ -15,20 +15,26 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "home",
         name: "Home",
-        // redirect: "/home/recommend",
+        redirect: "/home/recommend",
         component: () => import("@/views/HomeView/HomeView.vue"),
-        meta: { title: "主页", mode: "", transIndex: 1 },
+        meta: { title: "主页", mode: "", transIndex: 4 },
         children: [
           {
             path: "recommend",
             name: "Recommend",
             component: () => import("@/views/RecommendView/RecommendView.vue"),
-            meta: { title: "主页-推荐", mode: "", transIndex: -2 },
+            meta: { title: "主页-推荐", mode: "", transIndex: 1 },
           }, {
             path: "musicHall",
             name: "MusicHall",
             component: () => import("@/views/MusicHallView/MusicHallView.vue"),
-            meta: { title: "主页-音乐馆", mode: "", transIndex: -1 },
+            meta: { title: "主页-音乐馆", mode: "", transIndex: 2 },
+          },
+          {
+            path: "search",
+            name: "Search",
+            component: () => import("@/views/SearchView/SearchView.vue"),
+            meta: { title: "主页-搜索", mode: "", transIndex: 3 },
           }
         ],
       },
@@ -36,13 +42,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "search",
         name: "Search",
         component: () => import("@/views/SearchView/SearchView.vue"),
-        meta: { title: "搜索", mode: "", transIndex: 2 },
+        meta: { title: "主页-搜索", mode: "", transIndex: 5 },
       },
       {
         path: "my",
         name: "My",
         component: () => import("@/views/MyView/MyView.vue"),
-        meta: { title: "我的", mode: "", transIndex: 3 },
+        meta: { title: "我的", mode: "", transIndex: 6 },
       },
     ],
   },

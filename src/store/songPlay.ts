@@ -29,7 +29,7 @@ type SongStateType = {
     songPlayTime?: any;
   };
 };
-
+let stopSongSetIntervalTimer: any;
 /** 对外导出 */
 export const useSongPlay = defineStore({
   id: "songPlay", // id必填，且需要唯一
@@ -57,8 +57,6 @@ export const useSongPlay = defineStore({
   actions: {
     /** 获取 歌曲 信息 */
     async getSongInfo(info: any) {
-      // console.log('获取歌曲信息');
-      // debugger
 
       if (typeof info.id !== "number") return totalTip("歌曲格式不正确");
       getCheckMusicApi(info.id, ({ success }: { success: boolean }) => {
@@ -117,24 +115,33 @@ export const useSongPlay = defineStore({
     },
     /** 暂停歌曲 */
     stopSong() {
-      // if (!this.songUrl) return totalTip("请先选择播放歌曲");
+      clearInterval(stopSongSetIntervalTimer)
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
-      // clearInterval(this.songPlaygress.timer); // 清除进度条 计时器
       try {
         this.songLyricInfo.lyricParserInstantiation.stop();
       } catch {}
+      clearInterval(stopSongSetIntervalTimer)
+      // 暂停音乐,触发定时暂停
+      stopSongSetIntervalTimer = setInterval(() => {
+        if (!this.songPlayState) {
+          try {
+            this.songRef.pause();
+            this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
+            this.songLyricInfo.lyricParserInstantiation.stop();
+          } catch (err) {
+            // console.log(err);
+          }
+        }
+      }, 2000);
     },
     /** 播放歌曲  @param flag 是否需要执行 歌词草错*/
     startSong(lyricFlag?: boolean) {
-      // if (!this.songUrl) return totalTip("请先选择播放歌曲");
       try {
         this.songRef.play();
         this.songPlayState = true;
         const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
-        // console.log(this.songRef.currentTime);
-
         if (lyricFlag) lyricInstan.seek && lyricInstan.seek(this.songRef.currentTime * 1000);
       } catch (err) {
         console.log(err);
@@ -143,14 +150,13 @@ export const useSongPlay = defineStore({
     },
     /** 每次播放音乐 触发函数 执行歌词 */
     songPlayStart(elInfo: any) {
-      // this.songPlayState = true;
       const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
       if (lyricInstan && lyricInstan.seek) {
         lyricInstan.seek(this.songRef.currentTime * 1000);
       } else {
         /** 存在歌曲存储记录 直接播放 */
         if (this.songLyricInfo.songPlayTime) this.songRef.currentTime = this.songLyricInfo.songPlayTime;
-        console.log("播放歌曲,歌词实例消失,触发重新加载歌词 ");
+        // console.log("播放歌曲,歌词实例消失,触发重新加载歌词 ");
         this.getSongLyric(this.songId);
       }
     },
@@ -162,9 +168,6 @@ export const useSongPlay = defineStore({
     getSongPlayProgress() {
       clearInterval(this.songPlaygress.timer);
       const timePlaygressFn = () => {
-        // this.songLyricInfo.songPlayTime = this.songRef.currentTime;
-        // const currentTime = this.songLyricInfo.songPlayTime || 0;
-        // const currentTime = this.songLyricInfo.songPlayTime || 0;
         const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime;
         const allTime = this.songRef.duration;
         this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));

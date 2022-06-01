@@ -47,7 +47,7 @@ export default {
   <AudioPlayControl />
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
-      <Transition :name="transNameChange($route)" :mode="modeChange($route)">
+      <Transition appear :name="transNameChange($route)" :mode="modeChange($route)">
         <KeepAlive :max="4" exclude='LyricView'>
           <Component :is="Component" />
         </KeepAlive>

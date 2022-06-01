@@ -1,7 +1,7 @@
 <script>
 import { onMounted, reactive , ref } from "vue";
 export default {
-  name: "MusicHallView",
+  name: "SongSingleTableView",
   setup() {
     onMounted(()=>{
 })
@@ -11,16 +11,11 @@ export default {
 </script>
 
 <template>
-    <div class="MusicHallView">
+    <div class="SongSingleTableView">
 <!--  -->
     </div>
 </template>
 
 <style scoped lang="less">
-.MusicHallView{
-    width: 100%;
-    height: 2000px;
-    background: rgb(130, 157, 238);
-}
 
 </style>
