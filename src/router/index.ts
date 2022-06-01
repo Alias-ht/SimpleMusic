@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "search",
         name: "Search",
         component: () => import("@/views/SearchView/SearchView.vue"),
-        meta: { title: "主页-搜索", mode: "", transIndex: 5 },
+        meta: { title: "搜索", mode: "", transIndex: 5 },
       },
       {
         path: "my",

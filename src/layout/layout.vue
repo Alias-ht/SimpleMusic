@@ -80,8 +80,7 @@ export default {
     </ul>
     <div class="tarBarBox">
       <ul class="tabBar">
-        <li v-for='(item,index) in tabBarList' :key='index' @click="$router.push(item.pushPath)" :class='{actived:$route.fullPath === item.pushPath}'>
-          <!-- {{$route.fullPath}} -->
+        <li v-for='(item,index) in tabBarList' :key='index' @click="$router.push(item.pushPath)" :class='{actived:$route.fullPath.includes(item.pushPath)}'>
           <span class="icon">
               <component :is="item.component" class="h-5 w-5 text-blue-500"></component>
           </span>

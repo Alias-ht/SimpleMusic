@@ -23,12 +23,20 @@ export default {
     const router = useRouter();
     const route = useRoute();
     onMounted(() => {
-      storageCurrentFn()
+      storageCurrentFn();
     });
     onUpdated(() => {});
     onDeactivated(() => {});
-    onActivated(() => {});
-    onBeforeUnmount(() => {});
+    onActivated(() => {
+      initPage()
+    });
+    onBeforeUnmount(() => {
+      initPage()
+    });
+
+    function initPage() {
+      barreMarkLeft.value = `${homeVanTab.value * 20}vw`; // 初始化 小横条位置
+    }
 
     /** 保存当前页 设置路由重定向 */
     function storageCurrentFn() {
@@ -38,8 +46,6 @@ export default {
       router.currentRoute.value.matched[index].redirect =
         vanTabConfig[homeVanTab.value].routerPath;
     }
-    // 主页 van 标签切换页
-    const homeVanTab = ref(0);
 
     const vanTabConfig = [
       { title: "推荐", routerPath: "/home/recommend" },
@@ -47,10 +53,17 @@ export default {
       // { title: "搜索", routerPath: "/home/search" },
     ];
 
+    // 主页 van 标签切换页
+    const homeVanTab = ref(
+      vanTabConfig.findIndex((item) => item.routerPath === route.fullPath)
+    );
+    const barreMarkLeft = ref("0%"); // 主页横条左边距
+
     function changeTabIndexFn(index: number) {
       homeVanTab.value = index;
       router.push(vanTabConfig[index].routerPath);
       storageCurrentFn();
+      barreMarkLeft.value = `${index * 20}vw`;
     }
 
     return {
@@ -59,6 +72,7 @@ export default {
       routerSkipTransitionName,
       routerSkipMode,
       changeTabIndexFn,
+      barreMarkLeft,
     };
   },
 };
@@ -72,10 +86,11 @@ export default {
           v-for="(item, index) in vanTabConfig"
           :key="index"
           @click="changeTabIndexFn(index)"
+          :class="{actived: $route.fullPath == item.routerPath}"
         >
           {{ item.title }}
         </li>
-        <li class="barre-mark"></li>
+        <li class="barre-mark" :style="{ left: barreMarkLeft }"></li>
       </ul>
       <div class="tab">
         <RouterView v-slot="{ Component }">
@@ -98,7 +113,6 @@ export default {
 .HomeView {
   width: 100%;
   height: 100%;
-  // overflow-y: auto;
   overflow: hidden;
 }
 .tabs {
@@ -111,9 +125,14 @@ export default {
     display: flex;
     height: 10vw;
     li {
-      flex: 1;
+      width: 20vw;
+      text-align: center;
       font-size: 4vw;
       font-weight: 600;
+      transition: color 0.4s;
+      &.actived{
+        color: royalblue;
+      }
     }
     .barre-mark {
       position: absolute;
@@ -122,6 +141,8 @@ export default {
       height: 1vw;
       border-radius: 0.5vw;
       background: royalblue;
+      transform: translateX(5vw);
+      transition: all 0.5s;
     }
   }
   .tab {
