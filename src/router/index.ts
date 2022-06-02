@@ -5,6 +5,9 @@ import {
   createWebHashHistory /** 哈希 模式 */,
 } from "vue-router";
 
+// 引入 滚动存储
+import { setScroll, getScroll } from "../hooks/storageScroll";
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -24,7 +27,8 @@ const routes: Array<RouteRecordRaw> = [
             name: "Recommend",
             component: () => import("@/views/RecommendView/RecommendView.vue"),
             meta: { title: "主页-推荐", mode: "", transIndex: 1 },
-          }, {
+          },
+          {
             path: "musicHall",
             name: "MusicHall",
             component: () => import("@/views/MusicHallView/MusicHallView.vue"),
@@ -35,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
             name: "Search",
             component: () => import("@/views/SearchView/SearchView.vue"),
             meta: { title: "主页-搜索", mode: "", transIndex: 3 },
-          }
+          },
         ],
       },
       {
@@ -59,6 +63,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: { transition: "lyricPage", title: "歌词", mode: " " },
   },
   {
+    path: "/songSingle",
+    name: "SongSingle",
+    component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
+  },
+  {
     path: "/404",
     name: "NotFound",
     meta: {
@@ -77,15 +86,19 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return { top: 0 };
-    }
+    // @ts-ignore
+    getScroll(to.fullPath, to.meta?.containerRef?.value);
+    // @ts-ignore
+    setScroll(from.fullPath, from.meta.containerRef?.value?.scrollTop);
+
   },
 });
 
 router.beforeEach((to, from, next) => {
+  // console.log(to);
+
+  // console.log(from);
+
   if (typeof to.meta.title === "string") {
     document.title = to.meta.title;
   } else {

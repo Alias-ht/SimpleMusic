@@ -9,7 +9,7 @@ import api from "./index";
  * @param fn 回调函数
  */
 export const getNewSongApi = async (fn: Function) => {
-  const res = await get(api.newSong);
+  const res = await get(api.newSong, { limit: 30 });
   if (res.status === 200) fn && fn(res?.data?.result);
   else console.log("数据获取失败 ==> @getNewSong");
 };
@@ -39,8 +39,7 @@ export const getBannerApi = async (fn?: Function) => {
  * @param fn 回调函数
  */
 export const getRecommendRoaidApi = async (fn?: Function) => {
-  const res = await get(api.personalizedDjprogram)
+  const res = await get(api.personalizedDjprogram);
   if (res?.status === 200) fn && fn(res?.data?.result);
   else console.log("数据获取失败 ==> @getRecommendRoaidApi");
-
-}
+};

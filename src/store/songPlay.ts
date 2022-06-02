@@ -189,6 +189,7 @@ export const useSongPlay = defineStore({
     getSongPictrue(id: number) {
       // console.log(" 暂无 歌曲图片,进行获取 --- ");
       getSongDetailApi(id, (data: any) => {
+        // console.log(data.songs[0].al.picUrl );
         // @ts-ignore
         this.songInfo.picUrlHandler = data.songs[0].al.picUrl + "?param=160y160";
       });
@@ -200,7 +201,7 @@ export const useSongPlay = defineStore({
     strategies: [
       {
         storage: localStorage,
-        paths: ["songInfo", "songUrl", "songId", "songPlaygress", "songLyricInfo"],
+        paths: ["songInfo", "songUrl", "songId", "songPlaygress","songLyricInfo"],
       },
     ],
   },

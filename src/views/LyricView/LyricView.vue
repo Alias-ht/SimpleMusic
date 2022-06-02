@@ -72,10 +72,7 @@ export default {
       if (!lis[i]) return false;
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
-      // lyricRef.scrollTo({
-      //   top:offsetTop - height,
-      //   behavior:'smooth'
-      // })
+    
     }
 
     return {
@@ -98,7 +95,7 @@ export default {
       <!-- v-show="false" -->
       <li class="picUrl">
         <img
-          v-show="false && storeSongPlay.songInfo.picUrl"
+          v-show="true && storeSongPlay.songInfo.picUrl"
           :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`"
         />
       </li>
@@ -176,7 +173,7 @@ export default {
       width: 100vw;
       height: 100vh;
       transform: translate(-50%, -50%);
-      // filter: blur(3vw);
+      filter: blur(4vw);
       &::after {
         content: "";
         position: absolute;
@@ -185,12 +182,10 @@ export default {
         width: 100vw;
         height: 100vh;
         background: rgba(255, 255, 255, 0.6);
-        // background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(34, 34, 34, 0.2));
         background-image: linear-gradient(
           rgba(255, 255, 255, 0.6),
           rgb(159 159 159 / 20%)
         );
-        // background: white;
       }
       img {
         object-fit: cover;

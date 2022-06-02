@@ -1,5 +1,7 @@
 <script lang="ts">
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, onMounted, reactive, ref,onActivated,onDeactivated } from "vue";
+// 引入路由
+import { useRouter, useRoute } from "vue-router";
 // 引入组件
 import SparkingList from "@/components/SparkingList.vue";
 import SongCard from "@/components/SongCard.vue";
@@ -16,6 +18,20 @@ export default {
     onBeforeMount(() => {
       createInit();
     });
+    onMounted(() => {
+    });
+    onActivated(()=>{
+      activedInit()
+    })
+
+    function activedInit() {
+      // @ts-ignore
+      route.meta.containerRef = RecommendContainer; // 用于存储滚动条
+    }
+    // ref 盒子元素 存储滚动
+    const RecommendContainer = ref(null as any);
+    const route = useRoute();
+
     /** 推荐新歌曲 列表  */
     const newSongList = ref([]);
     // 推荐歌单 列表
@@ -23,7 +39,7 @@ export default {
     // 轮播图 列表
     const bannerList = ref([]);
     // 推荐电台
-    const renRadioList = ref([])
+    const renRadioList = ref([]);
 
     /** 创建初始化 */
     function createInit() {
@@ -42,6 +58,7 @@ export default {
       //获取 推荐电台
       getRecommendRoaidApi((result: any) => {
         console.log(result);
+        renRadioList.value = result;
       });
     }
 
@@ -49,7 +66,8 @@ export default {
       newSongList,
       personalizedList,
       bannerList,
-      renRadioList
+      renRadioList,
+      RecommendContainer,
     };
   },
   components: {
@@ -61,8 +79,8 @@ export default {
 
 <template>
   <div class="RecommendView">
-    <div class="home">
-      <div class="container">
+    <div class="home" ref="RecommendContainer">
+      <div class="container" >
         <!-- 轮播图 -->
         <div class="banner">
           <van-swipe class="vant-swipe" :autoplay="3000" lazy-render>
@@ -71,7 +89,8 @@ export default {
             </van-swipe-item>
           </van-swipe>
         </div>
-
+        <h3 style="margin-top: 4vw">电台推荐</h3>
+        <span>暂无...</span>
         <h3>歌单推荐</h3>
         <div class="songCardBox">
           <ul>
