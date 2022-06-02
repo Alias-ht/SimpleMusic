@@ -16,7 +16,7 @@ export default {
 <template>
   <div class="SongCard">
     <div class="picture">
-      <img :src="item.picUrl + '?param=160y160'" alt="" />
+      <img :src="item.picUrl + '?param=80y80'" alt="" />
       <div class="description">
         <div class="box">
           <svg
@@ -50,7 +50,7 @@ export default {
   display: inline-block;
   padding: 1.2vw 1.5vw;
   width: 25vw;
-  height: 28vw;
+  height: 30vw;
   overflow: hidden;
   .picture {
     margin: 0 2vw;
@@ -69,19 +69,32 @@ export default {
       bottom: 0;
       left: 0;
       width: 100%;
-      padding-left: 1vw;
-      height: 3.6vw;
+      padding-left: 1.5vw;
+      box-sizing: border-box;
+      height: 4vw;
       color: white;
       background: rgba(0, 0, 0, 0.35);
       .box {
-        transform: translateY(-1.2vw);
+        left: 0;width: 100%;
+        height: 100%;
+        min-height: 12px;
+        display: flex;
+        align-items: center;
+        // transform: translateY(-1.2vw);
         svg {
-          transform: translateY(0.3vw);
+          // position: absolute;
+          transform: translateY(-0.3vw);
           width: 2.6vw;
           height: 2.6vw;
+          min-width: 12px;
+          min-height: 12px;
         }
         .playCount {
-          font-size: 2.5vw;
+          // position: absolute;
+          left: 3vw;
+          top: 0;
+          line-height: 4vw;
+          font-size: 2.4vw;
           padding-left: 1vw;
         }
       }
@@ -89,8 +102,9 @@ export default {
   }
   .text-name {
     padding-top: 1vw;
-    font-size: 3vw;
+    font-size: 10px;
     line-height: 4vw;
+    height: 8vw;
 
     display: -webkit-box;
     text-overflow: ellipsis;

@@ -9,7 +9,7 @@ import api from "./index";
  * @param fn 回调函数
  */
 export const getNewSongApi = async (fn: Function) => {
-  const res = await get(api.newSong, { limit: 30 });
+  const res = await get(api.newSong, { limit: 20 });
   if (res.status === 200) fn && fn(res?.data?.result);
   else console.log("数据获取失败 ==> @getNewSong");
 };

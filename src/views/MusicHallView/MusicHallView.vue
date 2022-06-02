@@ -1,8 +1,11 @@
+// @ts-nocheck -- 暂时不忽略
 <script lang='ts'>
 // 音乐馆 -- 页面
 import { onBeforeMount, reactive, ref } from "vue";
 // 引入接口
 import { getBannerApi } from "../../api/recommend";
+// 引入测试
+import { service } from "../../test/request";
 export default {
   name: "MusicHallView",
   setup() {
@@ -10,16 +13,22 @@ export default {
       createInit();
     });
 
-    const bannerList = ref([]);
+// console.log();
 
-    function createInit() {
-      // 获取 轮播图
-      getBannerApi((banners:[]) => {
-        bannerList.value = banners;
-      });
+
+    // window.navigator.equipmentFlag = equipmentFlag
+    // const userNavigator = window.navigator
+    // console.log(userNavigator);
+
+
+    async function createInit() {
+      const res = await service.get("/equipment");
+      showField.value = res.data;
     }
 
-    return { bannerList };
+    const showField = ref([]);
+
+    return { navigator, showField };
   },
 };
 </script>
@@ -28,13 +37,12 @@ export default {
   <div class="MusicHallView">
     <!--  -->
     <div class="musicHallBox">
-      <!-- <div class="banner">
-        <van-swipe class="vant-swipe" :autoplay="3000" lazy-render>
-          <van-swipe-item v-for="item in bannerList" :key="item.targetId">
-            <img class="bannerImg" :src="item.imageUrl + '?param=1080'" />
-          </van-swipe-item>
-        </van-swipe>
-      </div> -->
+
+      <div v-for="(item, index) in showField" :key="index">
+        {{ item }} __________ <br />
+        {{ navigator[item] }}
+        <hr />
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +56,6 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-
   }
 }
 </style>

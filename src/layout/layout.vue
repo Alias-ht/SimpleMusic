@@ -12,7 +12,7 @@ import {
 // 引入 组件
 import PlayingSongVue from "../components/PlayingSong.vue";
 // 引入 图标 组件
-import { HomeIcon,SearchIcon,UserIcon } from '@heroicons/vue/outline'
+import { HomeIcon, SearchIcon, UserIcon } from "@heroicons/vue/outline";
 // import { HomeIcon } from '@heroicons/vue/solid'
 
 // 引入hooks 函数
@@ -34,23 +34,30 @@ export default {
     let timer = null as any;
     const fillBoxRef = ref(null as any);
 
-    const tabBarList = [{
-      pushPath:'/home',
-      text:'主页',
-      component:'HomeIcon'
-    },{
-      pushPath:'/search',
-      text:'搜索',
-      component:'SearchIcon'
-    },{
-      pushPath:'/my',
-      text:'我的',
-      component:'UserIcon'
-    }];
+    // @ts-ignore
+    const equipmentFlag = window.navigator?.equipmentFlag;
 
-    return { routerSkipTransitionName, routerSkipMode, fillBoxRef,tabBarList };
+    const tabBarList = [
+      {
+        pushPath: "/home",
+        text: "主页",
+        component: "HomeIcon",
+      },
+      {
+        pushPath: "/search",
+        text: "搜索",
+        component: "SearchIcon",
+      },
+      {
+        pushPath: "/my",
+        text: "我的",
+        component: "UserIcon",
+      },
+    ];
+
+    return { routerSkipTransitionName, routerSkipMode, fillBoxRef, tabBarList,equipmentFlag };
   },
-  components: { PlayingSongVue,HomeIcon ,SearchIcon,UserIcon},
+  components: { PlayingSongVue, HomeIcon, SearchIcon, UserIcon },
 };
 </script>
 
@@ -58,6 +65,7 @@ export default {
   <div class="layout-container">
     <!-- 内容区域 -->
     <div class="content">
+      <div class=" topBar " :class='equipmentFlag'></div>
       <div class="fillBox" ref="fillBoxRef">
         <RouterView v-slot="{ Component }">
           <Transition
@@ -80,11 +88,19 @@ export default {
     </ul>
     <div class="tarBarBox">
       <ul class="tabBar">
-        <li v-for='(item,index) in tabBarList' :key='index' @click="$router.push(item.pushPath)" :class='{actived:$route.fullPath.includes(item.pushPath)}'>
+        <li
+          v-for="(item, index) in tabBarList"
+          :key="index"
+          @click="$router.push(item.pushPath)"
+          :class="{ actived: $route.fullPath.includes(item.pushPath) }"
+        >
           <span class="icon">
-              <component :is="item.component" class="h-5 w-5 text-blue-500"></component>
+            <component
+              :is="item.component"
+              class="h-5 w-5 text-blue-500"
+            ></component>
           </span>
-          <span class="text"> {{item.text }} </span>
+          <span class="text"> {{ item.text }} </span>
         </li>
       </ul>
     </div>
@@ -93,7 +109,7 @@ export default {
 
 <style scoped lang="less">
 // @playControlHeight: 15vw;
-@import '../theme/layout.less';
+@import "../theme/layout.less";
 
 .layout-container {
   position: relative;
@@ -104,13 +120,26 @@ export default {
   flex-direction: column;
 
   .content {
+    position: relative;
     overflow: hidden;
     flex: 1;
     z-index: 4;
-    padding-top: 20px;
+    padding-top: 30px;
     box-sizing: border-box;
-    // background: rgb(245, 245, 245);
+    // background: rgba(245, 245, 245, 0.5);
     background: white;
+    .topBar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: white;
+    }
+    .topBar.app{
+      background: #bcbcbc63;
+
+    }
 
     .fillBox {
       position: relative;
@@ -142,20 +171,20 @@ export default {
         text-align: center;
         box-sizing: border-box;
         padding: 0 3vw;
-        transition: all .3s;
+        transition: all 0.3s;
         span {
           display: inline-block;
           width: 100%;
         }
 
-        .icon{
+        .icon {
           width: 6vw;
         }
-       /*  .text{
+        /*  .text{
 
         } */
       }
-      li.actived{
+      li.actived {
         color: royalblue;
       }
     }

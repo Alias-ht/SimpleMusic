@@ -72,7 +72,7 @@ export default {
       if (!lis[i]) return false;
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
-    
+
     }
 
     return {
@@ -181,7 +181,7 @@ export default {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(220, 220, 220, 0.6);
         background-image: linear-gradient(
           rgba(255, 255, 255, 0.6),
           rgb(159 159 159 / 20%)
@@ -195,7 +195,7 @@ export default {
     }
     .songLyricInfo {
       height: 75vh;
-      padding-top: 3vw;
+      padding-top: 24px;
       overflow: hidden;
       display: flex;
       flex-direction: column;

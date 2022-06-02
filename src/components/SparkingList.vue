@@ -7,7 +7,7 @@ import playingLottieJson from "../assets/lottie/playing.json";
 import { useSongPlay } from "../store/songPlay";
 // 引入 hooks 函数
 import { delayedExecute } from "../hooks/common";
-import {downloadSong} from '../hooks/songHandler'
+import { downloadSong } from "../hooks/songHandler";
 // 引入 图标 组件
 import { DownloadIcon } from "@heroicons/vue/outline";
 export default {
@@ -35,7 +35,7 @@ export default {
         playinglottieRef.value && playinglottieRef.value?.destroy();
       } catch {}
     });
-    props.info.picUrlHandler = `${props.info.picUrl}?param=160y160`;
+    props.info.picUrlHandler = `${props.info.picUrl}?param=80y80`;
     const info = props.info;
     // console.log(info);
 
@@ -77,14 +77,13 @@ export default {
       }
     }
 
-
     return {
       info,
       playingLottieJson,
       clickSongList,
       storeSongPlay,
       playinglottieRef,
-      downloadSong
+      downloadSong,
     };
   },
   components: {
@@ -101,8 +100,9 @@ export default {
       @click="clickSongList"
     >
       <li class="avatarBox">
-        <img alt="" v-lazy="info.picUrlHandler || info.picUrl" />
-        <!-- :src="info.picUrlHandler || info.picUrl" -->
+        <!-- <img alt="" v-lazy="info.picUrlHandler || info.picUrl" /> -->
+        <img :src="info.picUrlHandler || info.picUrl" alt="" />
+        <!--  -->
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
@@ -114,7 +114,7 @@ export default {
             {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
           </span>
         </div>
-        <div class="alias">
+        <div class="alias textEllipsis">
           <span v-for="(aliasItem, index) in info?.song?.alias" :key="index"
             >{{ aliasItem }}
           </span>
@@ -198,9 +198,9 @@ export default {
     display: flex;
     // justify-content: center;
     align-items: center;
-    .downloadIcon{
+    .downloadIcon {
       width: 6vw;
-    height: 6vw;
+      height: 6vw;
     }
   }
   .playFLag {
