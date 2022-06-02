@@ -7,6 +7,9 @@ import playingLottieJson from "../assets/lottie/playing.json";
 import { useSongPlay } from "../store/songPlay";
 // 引入 hooks 函数
 import { delayedExecute } from "../hooks/common";
+import {downloadSong} from '../hooks/songHandler'
+// 引入 图标 组件
+import { DownloadIcon } from "@heroicons/vue/outline";
 export default {
   name: "SparkingList",
   props: ["info"],
@@ -62,7 +65,8 @@ export default {
     function watchChangeAnimation(flag: boolean) {
       /** 是否执行过, 执行标识  */
       // @ts-ignore
-      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
+      if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id)
+        return;
       try {
         // @ts-ignore
         !flag && playinglottieRef.value?.pause();
@@ -73,46 +77,61 @@ export default {
       }
     }
 
-    /** 播放中动画暂停 */
-    // function onPlayingAniStop() {
-    //   // @ts-ignore
-    //   if (!playinglottieRef.value || storeSongPlay.songInfo.id !== info.id) return;
-    //   try {
-    //     setTimeout(() => {
-    //       // @ts-ignore
-    //       playinglottieRef.value.goToAndStop(0);
-    //     }, 42);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
 
-    return { info, playingLottieJson, clickSongList, storeSongPlay, playinglottieRef };
+    return {
+      info,
+      playingLottieJson,
+      clickSongList,
+      storeSongPlay,
+      playinglottieRef,
+      downloadSong
+    };
+  },
+  components: {
+    DownloadIcon,
   },
 };
 </script>
 
 <template>
   <div class="listContainer">
-    <ul class="listBox" :class="{ InThePlay: info.id === storeSongPlay.songId }" @click="clickSongList">
+    <ul
+      class="listBox"
+      :class="{ InThePlay: info.id === storeSongPlay.songId }"
+      @click="clickSongList"
+    >
       <li class="avatarBox">
-        <img  alt=""  v-lazy="info.picUrlHandler || info.picUrl" />
+        <img alt="" v-lazy="info.picUrlHandler || info.picUrl" />
         <!-- :src="info.picUrlHandler || info.picUrl" -->
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">{{ info.name }}</div>
         <div class="author textEllipsis">
-          <span v-for="(artistsItem, index) in info?.song?.artists " :key="index"> {{ index > 0 ? " /" : "" }} {{ artistsItem.name }} </span>
+          <span
+            v-for="(artistsItem, index) in info?.song?.artists"
+            :key="index"
+          >
+            {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
+          </span>
         </div>
         <div class="alias">
-          <span v-for="(aliasItem,index) in info?.song?.alias" :key="index">{{ aliasItem }} </span>
+          <span v-for="(aliasItem, index) in info?.song?.alias" :key="index"
+            >{{ aliasItem }}
+          </span>
         </div>
       </li>
-      <div class="playFLag" v-if="false">
+      <li class="download" @click.stop="downloadSong(info)">
+        <DownloadIcon class="downloadIcon"></DownloadIcon>
+      </li>
+      <li class="playFLag" v-if="false">
         <div class="box" v-if="info.id === storeSongPlay.songId">
-          <Vue3Lottie ref="playinglottieRef" class="lottie" :animationData="playingLottieJson" />
+          <Vue3Lottie
+            ref="playinglottieRef"
+            class="lottie"
+            :animationData="playingLottieJson"
+          />
         </div>
-      </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -172,6 +191,16 @@ export default {
       overflow: hidden;
       color: gray;
       transition: @colortrans;
+    }
+  }
+  .download {
+    width: 6vw;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    .downloadIcon{
+      width: 6vw;
+    height: 6vw;
     }
   }
   .playFLag {

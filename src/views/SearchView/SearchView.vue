@@ -4,7 +4,6 @@ import { ref, watch } from "vue";
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
-import YhSelect from "@/components/YhSelect.vue";
 export default {
   name: "SearchView",
   setup() {
@@ -88,7 +87,6 @@ export default {
   },
   components: {
     SongList,
-    YhSelect,
   },
 };
 </script>
@@ -98,7 +96,6 @@ export default {
     <div class="serch">
       <!-- <h2>搜索</h2> -->
       <div class="searchInputBox">
-        <!-- <YhSelect></YhSelect> -->
         <div class="selectBtnBox">
           <!-- <button class="select textEllipsis" @click.stop="clickSelectBtnFn">
             {{ "当前" }}

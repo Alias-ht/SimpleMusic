@@ -1,5 +1,12 @@
 <script lang="ts">
-import { onBeforeMount, onMounted, reactive, ref,onActivated,onDeactivated } from "vue";
+import {
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  onActivated,
+  onDeactivated,
+} from "vue";
 // 引入路由
 import { useRouter, useRoute } from "vue-router";
 // 引入组件
@@ -18,19 +25,18 @@ export default {
     onBeforeMount(() => {
       createInit();
     });
-    onMounted(() => {
+    onActivated(() => {
+      activedInit();
     });
-    onActivated(()=>{
-      activedInit()
-    })
+    const route = useRoute(); // 注册路由
 
+    // ref 盒子元素 存储滚动 距离
+    const RecommendContainer = ref(null as any);
+    // 缓存激活 初始化
     function activedInit() {
       // @ts-ignore
       route.meta.containerRef = RecommendContainer; // 用于存储滚动条
     }
-    // ref 盒子元素 存储滚动
-    const RecommendContainer = ref(null as any);
-    const route = useRoute();
 
     /** 推荐新歌曲 列表  */
     const newSongList = ref([]);
@@ -41,7 +47,7 @@ export default {
     // 推荐电台
     const renRadioList = ref([]);
 
-    /** 创建初始化 */
+    /** 创建时 初始化 */
     function createInit() {
       // 获取 轮播图
       getBannerApi((banners: any) => {
@@ -80,7 +86,7 @@ export default {
 <template>
   <div class="RecommendView">
     <div class="home" ref="RecommendContainer">
-      <div class="container" >
+      <div class="container">
         <!-- 轮播图 -->
         <div class="banner">
           <van-swipe class="vant-swipe" :autoplay="3000" lazy-render>

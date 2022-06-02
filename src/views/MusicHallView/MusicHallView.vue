@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 // 音乐馆 -- 页面
 import { onBeforeMount, reactive, ref } from "vue";
 // 引入接口
@@ -14,7 +14,7 @@ export default {
 
     function createInit() {
       // 获取 轮播图
-      getBannerApi((banners) => {
+      getBannerApi((banners:[]) => {
         bannerList.value = banners;
       });
     }
