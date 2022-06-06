@@ -35,7 +35,7 @@ export default {
         playinglottieRef.value && playinglottieRef.value?.destroy();
       } catch {}
     });
-    props.info.picUrlHandler = `${props.info.picUrl}?param=80y80`;
+    props.info.picUrlHandler = `${props.info.picUrl}?param=120y120`;
     const info = props.info;
     // console.log(info);
 

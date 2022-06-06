@@ -16,7 +16,7 @@ export default {
 <template>
   <div class="SongCard">
     <div class="picture">
-      <img :src="item.picUrl + '?param=80y80'" alt="" />
+      <img :src="item.picUrl + '?param=120y120'" alt="" />
       <div class="description">
         <div class="box">
           <svg
@@ -39,7 +39,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="text-name">
+    <div class="text-name" style='text-name'>
       {{ item.name }}
     </div>
   </div>
@@ -50,7 +50,7 @@ export default {
   display: inline-block;
   padding: 1.2vw 1.5vw;
   width: 25vw;
-  height: 30vw;
+  // height: 30vw;
   overflow: hidden;
   .picture {
     margin: 0 2vw;
@@ -102,9 +102,10 @@ export default {
   }
   .text-name {
     padding-top: 1vw;
-    font-size: 10px;
+    font-size: 3vw;
     line-height: 4vw;
-    height: 8vw;
+    height: 8.3vw;
+    // height: 10vw;
 
     display: -webkit-box;
     text-overflow: ellipsis;

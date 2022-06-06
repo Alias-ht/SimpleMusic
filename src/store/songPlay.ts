@@ -43,8 +43,9 @@ export const useSongPlay = defineStore({
       songRef: "", // 音乐元素 保存
       songPlayState: false, // 播放状态
       songPlaygress: {
-        progress: 0,
-        timer: "",
+        progress: 0, // 进度 百分比
+        timer: "", // 进度定时器
+        currentDuration: ref(0), // 当前时长
       }, // 歌曲播放进度
       songLyricInfo: {
         lyric: null, // 歌词列表
@@ -57,7 +58,6 @@ export const useSongPlay = defineStore({
   actions: {
     /** 获取 歌曲 信息 */
     async getSongInfo(info: any) {
-
       if (typeof info.id !== "number") return totalTip("歌曲格式不正确");
       getCheckMusicApi(info.id, ({ success }: { success: boolean }) => {
         if (success) {
@@ -86,7 +86,8 @@ export const useSongPlay = defineStore({
       // console.log(songUrlInfo);
 
       // 存储数据
-      this.songUrl = songUrlInfo[0].url;
+      this.songUrl = songUrlInfo[0]?.url;
+
       if (flag) return;
       this.startSong(); // 开始播放
       // 重置播放时间
@@ -115,14 +116,14 @@ export const useSongPlay = defineStore({
     },
     /** 暂停歌曲 */
     stopSong() {
-      clearInterval(stopSongSetIntervalTimer)
+      clearInterval(stopSongSetIntervalTimer);
       // @ts-ignore
       this.songRef.pause();
       this.songPlayState = false;
       try {
         this.songLyricInfo.lyricParserInstantiation.stop();
       } catch {}
-      clearInterval(stopSongSetIntervalTimer)
+      clearInterval(stopSongSetIntervalTimer);
       // 暂停音乐,触发定时暂停
       stopSongSetIntervalTimer = setInterval(() => {
         if (!this.songPlayState) {
@@ -140,6 +141,8 @@ export const useSongPlay = defineStore({
     startSong(lyricFlag?: boolean) {
       try {
         this.songRef.play();
+        !this.songRef.autoplay && (this.songRef.autoplay = true)
+
         this.songPlayState = true;
         const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
         if (lyricFlag) lyricInstan.seek && lyricInstan.seek(this.songRef.currentTime * 1000);
@@ -150,6 +153,8 @@ export const useSongPlay = defineStore({
     },
     /** 每次播放音乐 触发函数 执行歌词 */
     songPlayStart(elInfo: any) {
+      this.getSongTimeDuration();
+      // 歌词操作
       const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
       if (lyricInstan && lyricInstan.seek) {
         lyricInstan.seek(this.songRef.currentTime * 1000);
@@ -170,7 +175,12 @@ export const useSongPlay = defineStore({
       const timePlaygressFn = () => {
         const currentTime = this.songRef.currentTime || this.songLyricInfo.songPlayTime;
         const allTime = this.songRef.duration;
-        this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(5));
+        this.songPlaygress.progress = parseFloat(((currentTime / allTime) * 100).toFixed(4));
+        // 当前播放事件
+        const currentTimeSecond = parseInt((currentTime % 60) as any);
+        this.songPlaygress.currentDuration = `${parseInt((currentTime / 60) as any)}:${
+          currentTimeSecond < 10 ? "0" + currentTimeSecond : currentTimeSecond
+        }`;
       };
       timePlaygressFn();
       // @ts-ignore
@@ -194,6 +204,17 @@ export const useSongPlay = defineStore({
         this.songInfo.picUrlHandler = data.songs[0].al.picUrl + "?param=160y160";
       });
     },
+    /** 获取歌曲总时长 */
+    getSongTimeDuration() {
+      let allDuration: string | number = 0;
+      // 获取 歌曲总时长
+      const duration = this.songRef?.duration || 0;
+      const timeSecond = parseInt((duration % 60) as any);
+      duration && (allDuration = `${parseInt((duration / 60) as any)}:${timeSecond < 10 ? "0" + timeSecond : timeSecond}`);
+      // @ts-ignorec
+      this.songInfo.duration = allDuration;
+      return allDuration;
+    },
   },
   // 数据持久化, 存储参数
   persist: {
@@ -201,7 +222,7 @@ export const useSongPlay = defineStore({
     strategies: [
       {
         storage: localStorage,
-        paths: ["songInfo", "songUrl", "songId", "songPlaygress","songLyricInfo"],
+        paths: ["songInfo", "songUrl", "songId", "songPlaygress", "songLyricInfo"],
       },
     ],
   },

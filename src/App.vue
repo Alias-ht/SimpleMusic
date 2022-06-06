@@ -1,9 +1,11 @@
 <script lang="ts">
 import AudioPlayControl from "./components/AudioPlayControl.vue";
 import { computed, onBeforeUnmount, ref } from "vue";
+import GlobalCom from './components/GlobalCom.vue'
 export default {
   components: {
     AudioPlayControl,
+    GlobalCom
   },
   setup() {
     onBeforeUnmount(() => {});
@@ -54,7 +56,7 @@ export default {
       </Transition>
     </RouterView>
   </div>
-  <div id="total"></div>
+  <GlobalCom></GlobalCom>
 </template>
 
 <style lang="less" src="./theme/default.less"></style>

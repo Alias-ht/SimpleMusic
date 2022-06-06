@@ -6,6 +6,8 @@ import { useSongPlay } from "../../store/songPlay";
 // 引入组件
 import StopSongBtn from "@/components/StopSongBtn.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
+// 引入 图标 组件
+import { PlayIcon } from "@heroicons/vue/outline";
 
 export default {
   name: "LyricView",
@@ -27,8 +29,8 @@ export default {
       // 初始化歌词 ul
       const height = lyricDivRef.value.offsetHeight / 2;
       const lyricUlStyle = lyricDivRef.value.children[0].style as any;
-      lyricUlStyle.paddingTop = height + "px";
-      lyricUlStyle.paddingBottom = height + "px";
+      lyricUlStyle.paddingTop = height * 0.98 + "px";
+      lyricUlStyle.paddingBottom = height * 0.98 + "px";
     }
 
     /** 创建监听器函数 触碰滑动时暂停, 2秒钟不操作继续监听器 */
@@ -45,12 +47,32 @@ export default {
     function lyricUlScroll(event: any) {
       lyricScrollUnwatch && lyricScrollUnwatch(); // 存在的话清除 监听器
       clearTimeout(storageWatchTimer);
+
+      // touchStartLyricTimeShow()
+      lyricLis = lyricDivRef.value?.children[0]?.children;
+    }
+
+    /** 歌词 清单总和 */
+    let lyricLis = [] as any;
+    const scrollLyricIndex = ref(null as null | number);
+    const scrollLyricTime = ref(0);
+
+    /** 手指移动,lyricTime 改变 */
+    function touchmoveLyricTimeShow() {
+      const height = lyricLis[0]?.offsetHeight;
+      const scrollTop = lyricDivRef.value.scrollTop;
+      const index = Math.floor(scrollTop / height);
+      // console.log(index);
+      scrollLyricIndex.value = index;
+      scrollLyricTime.value =
+        storeSongPlay.songLyricInfo.lyric[scrollLyricIndex.value].time;
     }
 
     /** 手指移开,触发函数 */
     function lyricScrollTouchEnd() {
       clearTimeout(storageWatchTimer); //  清除定时器
       storageWatchTimer = setTimeout(() => {
+        scrollLyricIndex.value = null;
         getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
         //  赋予监听器
         lyricScrollUnwatch = watch(
@@ -72,7 +94,6 @@ export default {
       if (!lis[i]) return false;
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
-
     }
 
     return {
@@ -80,11 +101,15 @@ export default {
       lyricUlScroll,
       lyricDivRef,
       lyricScrollTouchEnd,
+      touchmoveLyricTimeShow,
+      scrollLyricIndex,
+      scrollLyricTime,
     };
   },
   components: {
     StopSongBtn,
     ProgressBar,
+    PlayIcon
   },
 };
 </script>
@@ -116,28 +141,59 @@ export default {
           </svg>
         </div>
         <!-- 歌名 -->
-        <div class="title textEllipsis">
+        <div class="title">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
-        </div>
-        <!-- 歌词 -->
-        <div
-          class="lyricDiv"
-          @touchstart="lyricUlScroll"
-          @touchend="lyricScrollTouchEnd"
-          ref="lyricDivRef"
-        >
-          <ul class="lyricUl">
-            <li
-              class="textEllipsis"
-              :class="{
-                lyricActivedNum: storeSongPlay.songLyricInfo.index === index,
-              }"
-              v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
+          <div class="author">
+            <span
+              v-for="(item, index) in storeSongPlay.songInfo.song.artists"
               :key="index"
             >
-              <span>{{ item.txt }}</span>
-            </li>
-          </ul>
+              {{ item.name }} {{ index > 0 ? " / " : "" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- 歌词 -->
+        <div class="lyricBox">
+          <div
+            class="lyricDiv"
+            @touchstart="lyricUlScroll"
+            @touchend="lyricScrollTouchEnd"
+            @touchmove="touchmoveLyricTimeShow"
+            ref="lyricDivRef"
+          >
+            <ul class="lyricUl">
+              <li
+                class="textEllipsis"
+                :class="{
+                  lyricActivedNum: storeSongPlay.songLyricInfo.index === index,
+                }"
+                v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
+                :key="index"
+              >
+                <span class="txt">{{ item.txt }}</span>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="lyricCenter"
+            :style="{
+              opacity:  scrollLyricIndex !==null  ? 1 : 0,
+            }"
+          >
+            <div class="time">
+              {{ parseInt(scrollLyricTime / 1000 / 60) }}:{{
+                (scrollLyricTime / 1000) % 60 < 10
+                  ? "0" + parseInt((scrollLyricTime / 1000) % 60)
+                  : parseInt((scrollLyricTime / 1000) % 60)
+              }}
+            </div>
+            <div class="play">
+              <!-- play -->
+              <PlayIcon></PlayIcon>
+            </div>
+            <hr>
+          </div>
         </div>
       </li>
       <!-- 按钮组 -->
@@ -148,6 +204,17 @@ export default {
       <!-- 进度条 -->
       <li class="yricProgressBox">
         <ProgressBar></ProgressBar>
+        <ul class="songTimeInfo">
+          <li class="start">
+            {{ storeSongPlay.songPlaygress.currentDuration }}
+          </li>
+          <li class="end" v-show="storeSongPlay.songInfo.duration ">
+            {{
+              storeSongPlay.songInfo.duration ||
+              storeSongPlay.getSongTimeDuration()
+            }}
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
@@ -205,46 +272,77 @@ export default {
         padding-left: 5vw;
         color: black;
         z-index: 1;
-        width: 10vw;
+        width: 7vw;
       }
 
       .title {
         text-align: center;
         font-weight: 600;
-        font-size: 7.6vw;
+        font-size: 6vw;
         z-index: 50;
         padding: 2vw;
         box-sizing: border-box;
+        .author {
+          font-size: 4vw;
+        }
       }
-      .lyricDiv {
+      .lyricBox {
         position: relative;
         flex: 8;
-        overflow: hidden;
-        box-sizing: border-box;
-        margin: 3vw;
-        margin-top: 6vw;
-        overflow-y: auto;
-        // transition: all 0.4s;
-        // scroll-behavior: smooth;
-        .lyricUl {
-          position: absolute;
-          padding-top: 31vh;
-          padding-bottom: 31vh;
-          width: 100%;
-          text-align: center;
+        .lyricDiv {
+          position: relative;
+          height: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
+          margin: 3vw;
+          margin-top: 6vw;
+          overflow-y: auto;
+          .lyricUl {
+            position: absolute;
+            padding-top: 31vh;
+            padding-bottom: 31vh;
+            width: 100%;
+            text-align: center;
 
-          li {
-            height: 9vw;
-            font-weight: 600;
-            font-size: 3.5vw;
-            color: #000;
-            transition: all 0.24s;
-            transform: scale(1);
+            li {
+              height: 9vw;
+              line-height: 9vw;
+              font-weight: 600;
+              font-size: 3.5vw;
+              color: #000;
 
-            &.lyricActivedNum {
-              color: royalblue;
-              transform: scale(1.24);
+
+              .txt {
+                display: inline-block;
+                transition: all 0.24s;
+                transform: scale(1);
+              }
+
+              &.lyricActivedNum {
+                .txt {
+                  color: royalblue;
+                  transform: scale(1.2);
+                }
+              }
             }
+          }
+        }
+        // 居中 横条
+        .lyricCenter {
+          position: absolute;
+          top: 53%;
+          width: 100%;
+          height: 0;
+          left: 0;
+          transition: opacity 0.2s;
+            font-size: 3vw;
+          .time {
+            float: left;
+          }
+          .play {
+            width: 4vw;
+            height: 4vw;
+            float: right;
           }
         }
       }
@@ -262,7 +360,17 @@ export default {
       }
     }
     .yricProgressBox {
+      position: relative;
       margin: 2vh 10vw 0;
+      .songTimeInfo {
+        font-size: 3vw;
+        .start {
+          float: left;
+        }
+        .end {
+          float: right;
+        }
+      }
     }
   }
 }

@@ -165,16 +165,22 @@ export default {
       .searchInput {
         flex: 1;
       }
-      .searchButton{
-        padding: 1vw 0;
+      .searchButton {
+        padding-top: 1vw;
+        // height: 10vw;
+        // padding: 2vw 0;
         padding-right: 3vw;
-button.searchBtn{
-  width: 100%;
-  height: 100%;
-        background: #f7f8fa;
+        button.searchBtn {
+          padding: 0 2vw;
+          font-size: 3.4vw;
+          width: 100%;
+          height: 8vw;
+          border-radius: 1vw;
+          background: royalblue;
+          font-weight: 600;
+          color: white;
+        }
       }
-      }
-
     }
     .searchWordBox {
       padding: 3vw 4vw;
@@ -192,16 +198,17 @@ button.searchBtn{
 // 搜索 类型
 .searchInputBox {
   .selectBtnBox {
-    width: 18vw;
+    width: 22vw;
     display: flex;
 
     ::v-deep .van-dropdown-menu {
       padding: 1vw 2vw;
       box-sizing: border-box;
-        height: 10vw;
-        line-height: 8vw;
+      height: 10vw;
+      line-height: 8vw;
       .van-dropdown-menu__bar {
-        width: 10vw;
+        width: 14vw;
+        // box-sizing: border-box;
         height: 100%;
         overflow: hidden;
         background: #f7f8fa;
@@ -209,36 +216,32 @@ button.searchBtn{
         padding-right: 3vw;
         box-shadow: 0 0 0 transparent;
         // font-size: 4vw;
-        .van-dropdown-menu__title{
+        .van-dropdown-menu__title {
           font-size: 3vw;
           padding-right: 1.5vw;
-
         }
-
       }
     }
-
-
   }
-    ::v-deep .van-search.searchInput {
-      padding: 2vw;
-      height: 10vw;
-      .van-search__content.van-search__content--square{
-        height: 8vw;
-        line-height: 8vw;
-        font-size: 6vw;
-        .van-cell{
-          line-height: inherit;
+  ::v-deep .van-search.searchInput {
+    padding: 2vw;
+    height: 10vw;
+    .van-search__content.van-search__content--square {
+      height: 8vw;
+      line-height: 8vw;
+      font-size: 6vw;
+      .van-cell {
+        line-height: inherit;
 
-          font-size: 3vw;
-        }
-        .van-search__field{
-          padding: 0.4vw 0;
-        }
-        .van-field__left-icon .van-icon{
-          font-size: 3vw;
-        }
+        font-size: 3vw;
+      }
+      .van-search__field {
+        padding: 0.4vw 0;
+      }
+      .van-field__left-icon .van-icon {
+        font-size: 3vw;
       }
     }
+  }
 }
 </style>

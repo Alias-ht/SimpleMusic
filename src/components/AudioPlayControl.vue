@@ -32,7 +32,6 @@ export default {
     ref="audioRef"
     :src="storeSongPlay.songUrl"
     id="song"
-    :autoplay="true"
     @play="storeSongPlay.songPlayStart"
     @ended="storeSongPlay.songPlayEnd"
   ></audio>

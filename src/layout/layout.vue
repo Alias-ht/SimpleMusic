@@ -124,7 +124,7 @@ export default {
     overflow: hidden;
     flex: 1;
     z-index: 4;
-    padding-top: 30px;
+    padding-top: 36px;
     box-sizing: border-box;
     // background: rgba(245, 245, 245, 0.5);
     background: white;

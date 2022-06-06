@@ -4,6 +4,9 @@ import { get } from "../utils/request";
 // 引入接口路径
 import api from "./index";
 
+// 引入公共函数
+import { totalTip } from "../hooks/common";
+
 /**
  *  获取 歌曲 url
  * @param id 需传递id
@@ -38,5 +41,9 @@ export const getSongDetailApi = async (id: number, fn: Function) => {
 export const getCheckMusicApi = async (id: number, fn?: Function) => {
   const res = await get(api.checkMusic, { id });
   if (res?.status === 200) fn && fn(res.data);
-  else console.log("数据获取失败 ==> @getSongDetailApi");
+  else {
+    // totalTip('音乐不可播放')
+    console.log("数据获取失败 ==> @getSongDetailApi");
+  }
+  // fn && fn({success:true})
 };

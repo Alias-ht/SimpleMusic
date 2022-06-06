@@ -21,9 +21,7 @@ export function totalTip(text: string) {
   total.innerText = text;
   totalTimer = setTimeout(() => {
     total.className = "";
-    setTimeout(() => {
-      total.innerText = "";
-    }, 200);
+
   }, 1.6 * 1000);
 }
 

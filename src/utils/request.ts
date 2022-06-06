@@ -7,6 +7,7 @@ import { totalTip } from "../hooks/common";
 // 引入 配置文件
 const service = axios.create({
   baseURL: "https://www.xn--rssu31g.club:20002",
+  // baseURL: "http://cloud-music.pl-fe.cn/",
   timeout: 8 * 1000,
   withCredentials: true,
 });
@@ -18,7 +19,6 @@ service.interceptors.request.use(
     // session的校验等。
     if (config.params) {
       // console.log(config.params);
-      // config.params.proxy = "http://121.196.226.246:84";
     } else {
     }
 
@@ -40,13 +40,17 @@ service.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    // console.log(error);
-    // console.log();
-
     if (JSON.stringify(error?.response?.data) !== "{}") {
       const data = error?.response?.data;
       // @ts-ignore
       if (data?.message) totalTip(data.message);
+    }
+    const data :any = error.response?.data
+    if (data.code && data.code !== 200) {
+      if (data.message) {
+
+        totalTip(data.message);
+      }
     }
   }
 );
