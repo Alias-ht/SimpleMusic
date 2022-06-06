@@ -7,6 +7,9 @@ import api from "./index";
 // 引入结果处理
 // import {resultDispose } from './indexHandler'
 
+// 引入 公共 hooks 函数
+import { totalTip } from "../hooks/common";
+
 type search = {
   keywords: string;
   limit?: number;
@@ -22,10 +25,7 @@ type search = {
  */
 export const getSearchListApi = async (params: search, fn: Function) => {
   const res = await get(api.search, params);
-  console.log(params);
-  console.log(res);
-  
-  if (res.status === 200) fn && fn(res.data.result);
+  if (res.status === 200) return fn && fn(res.data);
   else console.log("数据获取失败 ==> @getSearchHot");
 };
 

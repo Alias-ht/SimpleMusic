@@ -1,12 +1,24 @@
 <script lang='ts'>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 // 引入接口
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
+// 引入 公共 hooks 函数
+import { maskLayerShow, totalTip } from "../../hooks/common";
 export default {
   name: "SearchView",
   setup() {
+    onMounted(() => {
+      // console.log(searchResultBox.value);
+
+      maskLayerInstantiation = maskLayerShow(searchResultBox.value);
+    });
+    const searchResultBox = ref(); // ref 元素
+    /** 遮罩层 实例 */
+    let maskLayerInstantiation: any = { open, close };
+    // maskLayerInstantiation
+
     /** 搜索关键词 */
     const searchkeyWords = ref("");
     /** 搜索列表 */
@@ -37,22 +49,29 @@ export default {
       { text: "视频", value: 1018 },
     ];
 
+    const changeShowSearchOrResult = ref(false);
+
     // 搜索 参数
     const searchParams = {
       limit: 50,
       offset: 1,
       type: 1,
     };
+    /** 搜索定时器 */
     var searchFnTimer: any;
     /** 监听 搜索关键词 变化 */
     watch(searchkeyWords, (newVal, oldVal) => {
+      maskLayerInstantiation.open();
       if (newVal) {
+        changeShowSearchOrResult.value = true;
         clearTimeout(searchFnTimer);
         searchFnTimer = setTimeout(() => {
           clickSearchKeywordFlag && searchSongFn();
           clickSearchKeywordFlag = true;
-        }, 300);
+        }, 500);
       } else {
+        maskLayerInstantiation.close();
+        changeShowSearchOrResult.value = false;
         searchResultList.value = [];
       }
     });
@@ -61,7 +80,7 @@ export default {
     function searchBtnClick(searchWord: string) {
       searchResultList.value = [];
       searchkeyWords.value = searchWord;
-      searchSongFn();
+      searchSongFn(); // 进行搜索事件
     }
 
     /** 进行搜索 事件 */
@@ -69,9 +88,19 @@ export default {
       clickSearchKeywordFlag = false;
       getSearchListApi(
         { keywords: searchkeyWords.value, ...searchParams },
-        (result: any) => {
-          // @ts-ignore
-          searchResultList.value.push(...result.songs);
+        ({
+          result,
+          code,
+        }: {
+          result: { songs: []; songCount: number };
+          code: number;
+        }) => {
+          if (code == 200 && result.songs?.length) {
+            searchResultList.value.push(...result.songs);
+          } else {
+            totalTip("暂无数据");
+          }
+          maskLayerInstantiation.close();
         }
       );
     }
@@ -83,6 +112,8 @@ export default {
       searchBtnClick,
       searchType,
       searchTypeOptions,
+      changeShowSearchOrResult,
+      searchResultBox,
     };
   },
   components: {
@@ -117,23 +148,26 @@ export default {
           <button class="searchBtn">搜索</button>
         </div>
       </div>
-      <div class="searchWordBox" v-if="!searchResultList.length">
-        <van-button
-          class="searchButtonItem"
-          size="small"
-          v-for="(item, index) in searchHotDetailList"
-          :key="index"
-          @click="searchBtnClick(item.searchWord)"
-          >{{ item.searchWord }}
-        </van-button>
-      </div>
-      <div class="searchSongResultBox" v-else>
-        <div class="searchList">
-          <SongList
-            v-for="item in searchResultList"
-            :key="item.id"
-            :info="item"
-          ></SongList>
+      <div class="searchResultBox" ref="searchResultBox">
+        <div class="searchWordBox" v-show="!changeShowSearchOrResult">
+          <van-button
+            class="searchButtonItem"
+            size="small"
+            v-for="(item, index) in searchHotDetailList"
+            :key="index"
+            @click="searchBtnClick(item.searchWord)"
+            >{{ item.searchWord }}
+          </van-button>
+        </div>
+        <div class="searchSongResultBox" v-show="changeShowSearchOrResult">
+          <div class="searchList">
+            <SongList
+              v-for="item in searchResultList"
+              :key="item.id"
+              :info="item"
+              :keyword="searchkeyWords"
+            ></SongList>
+          </div>
         </div>
       </div>
     </div>
@@ -152,12 +186,14 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    padding-top: 8vw;
+    // padding-top: 8vw;
+    display: flex;
+    flex-direction: column;
     .searchInputBox {
-      position: absolute;
-      top: 0px;
-      left: 0;
-      width: 100%;
+      // position: absolute;
+      // top: 0px;
+      // left: 0;
+      // width: 100%;
       background: white;
       z-index: 55;
       display: flex;
@@ -182,6 +218,12 @@ export default {
         }
       }
     }
+    .searchResultBox {
+      position: relative;
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+    }
     .searchWordBox {
       padding: 3vw 4vw;
       .searchButtonItem {
@@ -201,13 +243,13 @@ export default {
     width: 22vw;
     display: flex;
 
-    ::v-deep .van-dropdown-menu {
+    :deep(.van-dropdown-menu) {
       padding: 1vw 2vw;
       box-sizing: border-box;
       height: 10vw;
       line-height: 8vw;
       .van-dropdown-menu__bar {
-        width: 14vw;
+        width: 15vw;
         // box-sizing: border-box;
         height: 100%;
         overflow: hidden;
@@ -223,8 +265,10 @@ export default {
       }
     }
   }
-  ::v-deep .van-search.searchInput {
+  :deep(.van-search.searchInput) {
+    margin-right: 4vw;
     padding: 2vw;
+    padding-right: 0;
     height: 10vw;
     .van-search__content.van-search__content--square {
       height: 8vw;
@@ -240,6 +284,9 @@ export default {
       }
       .van-field__left-icon .van-icon {
         font-size: 3vw;
+      }
+      .van-field__body {
+        padding-right: 2vw;
       }
     }
   }

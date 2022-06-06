@@ -19,6 +19,11 @@ export default {
         getIndexChangeScrollFn();
       }
       initLyricUlContainer();
+
+
+      // 测试显示字段
+      console.log(storeSongPlay.songInfo);
+
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
@@ -65,7 +70,7 @@ export default {
       // console.log(index);
       scrollLyricIndex.value = index;
       scrollLyricTime.value =
-        storeSongPlay.songLyricInfo.lyric[scrollLyricIndex.value].time;
+        storeSongPlay.songLyricInfo.lyric[index]?.time;
     }
 
     /** 手指移开,触发函数 */
@@ -144,11 +149,12 @@ export default {
         <div class="title">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
           <div class="author">
+            <!-- {{storeSongPlay.songInfo.artists}} -->
             <span
-              v-for="(item, index) in storeSongPlay.songInfo.song.artists"
+              v-for="(item, index) in storeSongPlay.songInfo.song?.artists || storeSongPlay.songInfo.artists || []"
               :key="index"
             >
-              {{ item.name }} {{ index > 0 ? " / " : "" }}
+            {{ index > 0 ? " / " : "" }}  {{ item.name }}
             </span>
           </div>
         </div>

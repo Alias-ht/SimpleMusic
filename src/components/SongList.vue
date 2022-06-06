@@ -6,25 +6,30 @@ import { useSongPlay } from "../store/songPlay";
 
 export default {
   name: "SparkingList",
-  props: ["info"],
+  props: ["info", "keyword"],
   setup(props: any) {
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
 
     /** 存储 信息 */
     const info = props.info;
-    // console.log(info);
+    // console.log(props);
 
+    //  props.keywords
+    const nameHighLight = info.name.replace(
+      props.keyword,
+      `<span class='highLight'>${props.keyword}</span>`
+    );
+
+    // console.log(nameHighLight);
 
     /** 点击 歌曲 进行播放 */
     function clickSongList() {
-      const info = reactive({ ...props.info, playState: true });
+      const info = reactive({ ...props.info });
       storeSongPlay.getSongInfo(info);
-      // console.log(info);
-
     }
 
-    return { info, clickSongList, storeSongPlay };
+    return { info, clickSongList, storeSongPlay, nameHighLight };
   },
 };
 </script>
@@ -37,7 +42,11 @@ export default {
       @click="clickSongList"
     >
       <li class="infoBox">
-        <div class="title textEllipsis">{{ info.name }}</div>
+        <div class="title textEllipsis">
+          <!-- {{ info.name }} -->
+          <!-- {{nameHighLight}} -->
+          <span v-html="nameHighLight"></span>
+        </div>
         <div class="author textEllipsis">
           <span v-for="(artistsItem, index) in info.artists" :key="index">
             {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
@@ -98,12 +107,13 @@ export default {
     }
   }
 }
-.listBox.InThePlay{
-    background: royalblue;
-     .infoBox {
+.listBox.InThePlay {
+  background: royalblue;
+  .infoBox {
     .title {
       color: white;
     }
+
     .author {
       color: rgb(220, 220, 220);
     }
@@ -111,6 +121,16 @@ export default {
       color: silver;
     }
   }
+}
+</style>
 
+<style lang="less">
+.title {
+  .highLight {
+    color: teal;
+  }
+}
+.InThePlay .title .highLight {
+  color: rgb(17, 231, 231);
 }
 </style>
