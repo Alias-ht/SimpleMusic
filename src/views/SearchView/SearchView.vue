@@ -10,14 +10,11 @@ export default {
   name: "SearchView",
   setup() {
     onMounted(() => {
-      // console.log(searchResultBox.value);
-
       maskLayerInstantiation = maskLayerShow(searchResultBox.value);
     });
     const searchResultBox = ref(); // ref 元素
     /** 遮罩层 实例 */
     let maskLayerInstantiation: any = { open, close };
-    // maskLayerInstantiation
 
     /** 搜索关键词 */
     const searchkeyWords = ref("");
@@ -31,20 +28,29 @@ export default {
     });
     /** 热搜列表 详细 --- end   */
 
-    // 点击搜索关键词 标识
+     /** 点击热搜 搜索关键词 标识 */
     let clickSearchKeywordFlag = true;
 
-    // 搜索类型
+    /** 搜索类型 */
     const searchType = ref(1);
+    watch(searchType,()=>{
+      searchSongFn()
+    })
+
     //  1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音
     const searchTypeOptions = [
       { text: "单曲", value: 1, type: "songs", component: "SongList" },
-      { text: "专辑", value: 100, type: "", component: "SongList" },
-      { text: "歌手", value: 1000, type: "playlists", component: "SongList" },
-      { text: "歌单", value: 1002, type: "", component: "SongList" },
-      { text: "用户", value: 1004, type: "", component: "SongList" },
-      { text: "歌词", value: 1009, type: "", component: "SongList" },
-      { text: "视频", value: 1018, type: "", component: "SongList" },
+      { text: "专辑", value: 10, type: "albums", component: "SongList" },
+      { text: "歌手", value: 100, type: "artists", component: "SongList" },
+      { text: "歌单", value: 1000, type: "playlists", component: "SongList" },
+      {
+        text: "用户",
+        value: 1002,
+        type: "userprofiles",
+        component: "SongList",
+      },
+      { text: "歌词", value: 1006, type: "songs", component: "SongList" },
+      { text: "视频", value: 1014, type: "videos", component: "SongList" },
     ];
 
     /** 改变显示 热搜 和 结果 */
@@ -84,9 +90,12 @@ export default {
     }
 
     /** 进行搜索 事件 */
-    function searchSongFn() {
+    function searchSongFn(flag?: string) {
       if (!searchkeyWords.value) return;
-      clickSearchKeywordFlag = false;
+      // 清楚搜索结果
+      searchResultList.value = []
+      maskLayerInstantiation.open();
+      clickSearchKeywordFlag = false;  // 防止点击后 导致再次触发结果
       getSearchListApi(
         {
           keywords: searchkeyWords.value,
@@ -113,6 +122,15 @@ export default {
       );
     }
 
+    /** 搜索类型 索引 */
+    const searchTypeIndex = ref(0);
+
+    /** 改变搜索类型 */
+    function changeSearchType(item: any, index: number) {
+      searchTypeIndex.value = index;
+      searchType.value = item.value;
+    }
+
     return {
       searchkeyWords,
       searchResultList,
@@ -123,6 +141,8 @@ export default {
       changeShowSearchOrResult,
       searchResultBox,
       searchSongFn,
+      changeSearchType,
+      searchTypeIndex,
     };
   },
   components: {
@@ -136,14 +156,6 @@ export default {
     <div class="serch">
       <!-- <h2>搜索</h2> -->
       <div class="searchInputBox">
-        <!-- <div class="selectBtnBox">
-          <van-dropdown-menu active-color="#1989fa">
-            <van-dropdown-item
-              v-model="searchType"
-              :options="searchTypeOptions"
-            />
-          </van-dropdown-menu>
-        </div> -->
         <van-search
           class="searchInput"
           placeholder="请输入搜索关键词"
@@ -151,9 +163,27 @@ export default {
         >
         </van-search>
         <div class="searchButton">
-          <button class="searchBtn" @click="searchSongFn">搜索</button>
+          <button class="searchBtn" @click="searchSongFn('clickBtn')">
+            搜索
+          </button>
         </div>
       </div>
+      <ul class="typeBocUl">
+        <li
+          v-for="(item, index) in searchTypeOptions"
+          :key="item.value"
+          :class="{ activedSel: searchType === item.value }"
+          @click="changeSearchType(item, index)"
+        >
+          {{ item.text }}
+        </li>
+        <li
+          class="smallStripes"
+          :style="{
+            left: `${searchTypeIndex * 14.285}vw`,
+          }"
+        ></li>
+      </ul>
       <div class="searchResultBox" ref="searchResultBox">
         <div class="searchWordBox" v-show="!changeShowSearchOrResult">
           <van-button
@@ -166,14 +196,14 @@ export default {
           </van-button>
         </div>
         <div class="searchSongResultBox" v-show="changeShowSearchOrResult">
-          <div class="searchList">
+          <div class="searchBox">
             <Component
               :is="searchTypeOptions[0].component"
               v-for="item in searchResultList"
               :key="item.id"
               :info="item"
               :keyword="searchkeyWords"
-              :type="searchSongFn"
+              :type="searchType"
             ></Component>
           </div>
         </div>
@@ -198,10 +228,6 @@ export default {
     display: flex;
     flex-direction: column;
     .searchInputBox {
-      // position: absolute;
-      // top: 0px;
-      // left: 0;
-      // width: 100%;
       background: white;
       z-index: 55;
       display: flex;
@@ -211,11 +237,9 @@ export default {
       }
       .searchButton {
         padding-top: 1vw;
-        // height: 10vw;
-        // padding: 2vw 0;
         padding-right: 3vw;
         button.searchBtn {
-          padding: 0 2vw;
+          padding: 0 3vw;
           font-size: 3.4vw;
           width: 100%;
           height: 8vw;
@@ -245,58 +269,34 @@ export default {
   }
 }
 
-// 搜索 类型
-.searchInputBox {
-  .selectBtnBox {
-    width: 22vw;
-    display: flex;
-
-    :deep(.van-dropdown-menu) {
-      padding: 1vw 2vw;
-      box-sizing: border-box;
-      height: 10vw;
-      line-height: 8vw;
-      .van-dropdown-menu__bar {
-        width: 15vw;
-        // box-sizing: border-box;
-        height: 100%;
-        overflow: hidden;
-        background: #f7f8fa;
-        padding: 0 1.5vw;
-        padding-right: 3vw;
-        box-shadow: 0 0 0 transparent;
-        // font-size: 4vw;
-        .van-dropdown-menu__title {
-          font-size: 3vw;
-          padding-right: 1.5vw;
-        }
-      }
-    }
+// 搜索结果 类型
+.typeBocUl {
+  position: relative;
+  display: flex;
+  margin-bottom: 1.6vw;
+  li {
+    flex: 1;
+    font-weight: 600;
+    font-size: 4vw;
+    line-height: 7vw;
+    text-align: center;
+    margin: 0 1vw;
+    border-radius: 1.5vw;
+    transition: color 0.2s;
   }
-  :deep(.van-search.searchInput) {
-    margin-right: 4vw;
-    padding: 2vw;
-    padding-right: 0;
-    height: 10vw;
-    .van-search__content.van-search__content--square {
-      height: 8vw;
-      line-height: 8vw;
-      font-size: 6vw;
-      .van-cell {
-        line-height: inherit;
 
-        font-size: 3vw;
-      }
-      .van-search__field {
-        padding: 0.4vw 0;
-      }
-      .van-field__left-icon .van-icon {
-        font-size: 3vw;
-      }
-      .van-field__body {
-        padding-right: 2vw;
-      }
-    }
+  li.activedSel {
+    color: white;
+  }
+
+  li.smallStripes {
+    position: absolute;
+    margin: 0 1vw;
+    width: 12.285vw;
+    height: 100%;
+    background: royalblue;
+    z-index: -1;
+    transition: all 0.2s;
   }
 }
 </style>

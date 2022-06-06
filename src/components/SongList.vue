@@ -65,8 +65,6 @@ export default {
     >
       <li class="infoBox">
         <div class="title textEllipsis">
-          <!-- {{ info.name }} -->
-          <!-- {{nameHighLight}} -->
           <span v-html="highLight.name"></span>
         </div>
         <div class="author textEllipsis">
