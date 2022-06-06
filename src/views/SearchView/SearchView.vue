@@ -38,17 +38,16 @@ export default {
     const searchType = ref(1);
     //  1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音
     const searchTypeOptions = [
-      { text: "单曲", value: 1 },
-      { text: "专辑", value: 100 },
-      { text: "歌手", value: 1000 },
-      { text: "歌单", value: 1002 },
-      { text: "用户", value: 1004 },
-      { text: "MV", value: 1006 },
-      { text: "歌词", value: 1009 },
-      { text: "电台", value: 1014 },
-      { text: "视频", value: 1018 },
+      { text: "单曲", value: 1, type: "songs", component: "SongList" },
+      { text: "专辑", value: 100, type: "", component: "SongList" },
+      { text: "歌手", value: 1000, type: "playlists", component: "SongList" },
+      { text: "歌单", value: 1002, type: "", component: "SongList" },
+      { text: "用户", value: 1004, type: "", component: "SongList" },
+      { text: "歌词", value: 1009, type: "", component: "SongList" },
+      { text: "视频", value: 1018, type: "", component: "SongList" },
     ];
 
+    /** 改变显示 热搜 和 结果 */
     const changeShowSearchOrResult = ref(false);
 
     // 搜索 参数
@@ -62,6 +61,7 @@ export default {
     /** 监听 搜索关键词 变化 */
     watch(searchkeyWords, (newVal, oldVal) => {
       maskLayerInstantiation.open();
+      searchResultList.value = [];
       if (newVal) {
         changeShowSearchOrResult.value = true;
         clearTimeout(searchFnTimer);
@@ -85,20 +85,28 @@ export default {
 
     /** 进行搜索 事件 */
     function searchSongFn() {
+      if (!searchkeyWords.value) return;
       clickSearchKeywordFlag = false;
       getSearchListApi(
-        { keywords: searchkeyWords.value, ...searchParams },
-        ({
-          result,
-          code,
-        }: {
-          result: { songs: []; songCount: number };
-          code: number;
-        }) => {
-          if (code == 200 && result.songs?.length) {
-            searchResultList.value.push(...result.songs);
+        {
+          keywords: searchkeyWords.value,
+          ...searchParams,
+          type: searchType.value,
+        },
+        ({ result, code }: { result: any; code: number }) => {
+          if (code == 200) {
+            const typeItem = searchTypeOptions.find(
+              (item) => item.value === searchType.value
+            );
+            // @ts-ignore
+            const resTypeItem: [] = result[typeItem.type || "songs"];
+
+            if (resTypeItem) {
+              searchResultList.value.push(...resTypeItem);
+            } else {
+            }
           } else {
-            totalTip("暂无数据");
+            totalTip("数据获取失败");
           }
           maskLayerInstantiation.close();
         }
@@ -114,6 +122,7 @@ export default {
       searchTypeOptions,
       changeShowSearchOrResult,
       searchResultBox,
+      searchSongFn,
     };
   },
   components: {
@@ -127,17 +136,14 @@ export default {
     <div class="serch">
       <!-- <h2>搜索</h2> -->
       <div class="searchInputBox">
-        <div class="selectBtnBox">
-          <!-- <button class="select textEllipsis" @click.stop="clickSelectBtnFn">
-            {{ "当前" }}
-          </button> -->
+        <!-- <div class="selectBtnBox">
           <van-dropdown-menu active-color="#1989fa">
             <van-dropdown-item
               v-model="searchType"
               :options="searchTypeOptions"
             />
           </van-dropdown-menu>
-        </div>
+        </div> -->
         <van-search
           class="searchInput"
           placeholder="请输入搜索关键词"
@@ -145,7 +151,7 @@ export default {
         >
         </van-search>
         <div class="searchButton">
-          <button class="searchBtn">搜索</button>
+          <button class="searchBtn" @click="searchSongFn">搜索</button>
         </div>
       </div>
       <div class="searchResultBox" ref="searchResultBox">
@@ -161,12 +167,14 @@ export default {
         </div>
         <div class="searchSongResultBox" v-show="changeShowSearchOrResult">
           <div class="searchList">
-            <SongList
+            <Component
+              :is="searchTypeOptions[0].component"
               v-for="item in searchResultList"
               :key="item.id"
               :info="item"
               :keyword="searchkeyWords"
-            ></SongList>
+              :type="searchSongFn"
+            ></Component>
           </div>
         </div>
       </div>

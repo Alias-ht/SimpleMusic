@@ -14,7 +14,7 @@ type search = {
   keywords: string;
   limit?: number;
   offset?: number;
-  type?: number;
+  type?: number | null;
 };
 // cloudsearch / search
 
@@ -23,7 +23,7 @@ type search = {
  * @param params 对象
  * @returns promise
  */
-export const getSearchListApi = async (params: search, fn: Function) => {
+export const getSearchListApi = async (params: search, fn?: Function) => {
   const res = await get(api.search, params);
   if (res.status === 200) return fn && fn(res.data);
   else console.log("数据获取失败 ==> @getSearchHot");

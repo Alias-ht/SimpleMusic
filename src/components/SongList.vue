@@ -6,7 +6,7 @@ import { useSongPlay } from "../store/songPlay";
 
 export default {
   name: "SparkingList",
-  props: ["info", "keyword"],
+  props: ["info", "keyword", "type"],
   setup(props: any) {
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
@@ -15,21 +15,43 @@ export default {
     const info = props.info;
     // console.log(props);
 
-    //  props.keywords
-    const nameHighLight = info.name.replace(
-      props.keyword,
-      `<span class='highLight'>${props.keyword}</span>`
-    );
-
-    // console.log(nameHighLight);
-
     /** 点击 歌曲 进行播放 */
     function clickSongList() {
       const info = reactive({ ...props.info });
       storeSongPlay.getSongInfo(info);
     }
 
-    return { info, clickSongList, storeSongPlay, nameHighLight };
+    /** 处理高亮 显示 --------- start */
+    let nameHighLight = info.name;
+    const keyWords = props.keyword.split(" ");
+    let authorHighLight: string = "";
+
+    keyWords.forEach((item: string) => {
+      nameHighLight = nameHighLight.replace(
+        item,
+        `<span class='highLight'>${item}</span>`
+      );
+    });
+
+    info.artists?.forEach((item: { name: string }, index: number) => {
+      let author = "";
+      keyWords.forEach((keyItem: string) => {
+        if (keyItem == item.name) return author = `<span class='highLight'>${props.keyword}</span>`
+        else  author = item.name
+      });
+
+      authorHighLight += `${index > 0 ? " / " : " "}` + author;
+
+
+    });
+    /** 处理高亮 显示 --------- end */
+
+    return {
+      info,
+      clickSongList,
+      storeSongPlay,
+      highLight: { name: nameHighLight, author: authorHighLight },
+    };
   },
 };
 </script>
@@ -45,12 +67,10 @@ export default {
         <div class="title textEllipsis">
           <!-- {{ info.name }} -->
           <!-- {{nameHighLight}} -->
-          <span v-html="nameHighLight"></span>
+          <span v-html="highLight.name"></span>
         </div>
         <div class="author textEllipsis">
-          <span v-for="(artistsItem, index) in info.artists" :key="index">
-            {{ index > 0 ? " /" : "" }} {{ artistsItem.name }}
-          </span>
+          <span v-html="highLight.author"></span>
         </div>
         <div class="alias">
           <span v-for="(aliasItem, index) in info.alias" :key="index"
@@ -130,7 +150,12 @@ export default {
     color: teal;
   }
 }
-.InThePlay .title .highLight {
-  color: rgb(17, 231, 231);
+.author .highLight {
+  color: teal;
+  font-weight: 600;
+}
+.InThePlay .title .highLight,
+.InThePlay .author .highLight {
+  color: #11d4d4;
 }
 </style>
