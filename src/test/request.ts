@@ -6,6 +6,6 @@ const server = axios.create({
   withCredentials: true,
 });
 
-export const service = server;
+export const  service = server;
 
 export const baseUrl = "http://182.92.122.114:22517/";

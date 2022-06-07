@@ -65,7 +65,8 @@ export default {
   <div class="layout-container">
     <!-- 内容区域 -->
     <div class="content">
-      <div class=" topBar " :class='equipmentFlag'></div>
+      <div class=" topBar " ></div>
+      <!-- :class='equipmentFlag' -->
       <div class="fillBox" ref="fillBoxRef">
         <RouterView v-slot="{ Component }">
           <Transition

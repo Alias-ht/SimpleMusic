@@ -93,3 +93,28 @@ export function maskLayerShow(element: any, flag?: boolean) {
     },
   };
 }
+
+
+
+/** 下载文件 -- 音视频除外 */
+export function DownloadFile(url: string, name?: string) {
+  var a = document.createElement("a");
+  a.download = name || ''
+  a.href = url;
+  a.style.display = "none";
+  document.querySelector("body")?.appendChild(a); // 修复firefox中无法触发click
+  a.click();
+  a?.parentNode?.removeChild(a);
+}
+
+
+
+/** 复制文本 */
+export function copy(value:string) {
+	let input = document.createElement('input');
+	input.value = value;
+	document.body.appendChild(input);
+	input.select();
+	document.execCommand('Copy');
+	input.remove();
+}

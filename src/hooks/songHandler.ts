@@ -12,18 +12,7 @@ export async function downloadSong(info: any) {
   downloadMp3(songUrl, name);
 }
 
-/** 下载文件 -- 音视频除外 */
-function download(url: string, name: string) {
-  var a = document.createElement("a");
-  a.download = name;
-  a.href = url;
-  a.style.display = "none";
-  document.querySelector("body")?.appendChild(a); // 修复firefox中无法触发click
-  console.log(a);
-  // a.click();
 
-  a?.parentNode?.removeChild(a);
-}
 
 /** 下载文件 -- blob流  可下载音视频 */
 function downloadMp3(filePath: string, name: string) {

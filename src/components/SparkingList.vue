@@ -77,6 +77,7 @@ export default {
       }
     }
 
+
     return {
       info,
       playingLottieJson,
@@ -84,6 +85,8 @@ export default {
       storeSongPlay,
       playinglottieRef,
       downloadSong,
+      // @ts-ignore
+      platformFlag,
     };
   },
   components: {
@@ -120,7 +123,11 @@ export default {
           </span>
         </div>
       </li>
-      <li class="download" @click.stop="downloadSong(info)">
+      <li
+        class="download"
+        @click.stop="downloadSong(info)"
+        v-show="platformFlag"
+      >
         <DownloadIcon class="downloadIcon"></DownloadIcon>
       </li>
       <li class="playFLag" v-if="false">

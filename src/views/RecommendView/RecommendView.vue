@@ -71,7 +71,6 @@ export default {
 
     /** 歌单页面跳转 */
     function songSingleSkip(item: any) {
-      console.log(item.id);
       router.push({
         path: "/songSingle",
         query: { id: item.id },
