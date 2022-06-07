@@ -2,14 +2,14 @@
 // 歌单列表 页面
 import { onMounted, reactive, ref, onActivated, onDeactivated } from "vue";
 // 引入接口
-import { getPlaylistDetailApi } from "../../api/song";
+import { getPlaylistDetailApi, getPlaylistTrackAllApi } from "../../api/song";
 // 引入路由参数
 import { useRoute, useRouter } from "vue-router";
 
 // 引入 图标组件
-// arrow-left
-// 引入 图标组件
 import { ChevronLeftIcon } from "@heroicons/vue/outline";
+// 组件
+import PrivilegesList from "../../components/PrivilegesList.vue";
 
 export default {
   name: "SongSingleTableView",
@@ -19,30 +19,46 @@ export default {
     const route = useRoute();
 
     // 类型约束
-    const playListType: { playlist: object; privileges: [] | null } = {
-      playlist: {},
-      privileges: null,
+    const playListType: { playlist: object; songSingleList: [] } = {
+      playlist: {}, // 歌单信息
+      songSingleList: [], // 歌单列表
     };
     /** 歌单详情  */
     const playListDetail = reactive(playListType);
 
+    /** 歌单 id */
+    const playlistId = Number(route.query.id);
+    const params = { id: playlistId, limit: 15, offset: 0 };
+
     /** 初始化 数据 */
     function initData() {
       // 获取 歌单详情
-      const playlistId = Number(route.query.id);
-      getPlaylistDetailApi(playlistId, ({ playlist, privileges }: { playlist: object; privileges: [] }) => {
+      getPlaylistDetailApi(playlistId, ({ playlist }: { playlist: object }) => {
         playListDetail.playlist = playlist;
-        playListDetail.privileges = privileges;
+      });
+
+      // 获取歌单 - 歌曲列表
+      getPlaylistTrackAllApi(params, (list: []) => {
+        playListDetail.songSingleList = list;
       });
     }
+
+    /** 歌单列表参数 */
+    const songSingleListConfig = {
+      picUrl: "al",
+      title: "name",
+      author: "ar",
+    };
 
     initData();
     return {
       playListDetail,
+      songSingleListConfig,
     };
   },
   components: {
     ChevronLeftIcon,
+    PrivilegesList,
   },
 };
 </script>
@@ -63,7 +79,14 @@ export default {
           <img :src="playListDetail.playlist.coverImgUrl || ''" alt="" />
         </div>
       </div>
-      <div class="privileges">sdfasdfasdf</div>
+      <div class="songSingleList">
+        <PrivilegesList
+          v-for="item in playListDetail.songSingleList"
+          :key="item.id"
+          :info="item"
+          :config="songSingleListConfig"
+        ></PrivilegesList>
+      </div>
     </div>
     <!--  -->
   </div>
@@ -74,10 +97,13 @@ export default {
   width: 100%;
   height: 100%;
   // background: #000;
+  display: flex;
+  flex-direction: column;
   .top {
     height: 12vw;
     line-height: 12vw;
     display: flex;
+    box-shadow: 0 2vw 3vw rgba(68, 68, 68, 0.2);
     .left {
       .icon {
         margin-top: 2vw;
@@ -93,6 +119,9 @@ export default {
     }
   }
   .container {
+    flex: 1;
+    overflow: hidden;
+    overflow-y: auto;
     .header {
       position: relative;
       height: 60vw;
@@ -115,7 +144,12 @@ export default {
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgb(255, 255, 255));
+        background-image: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0),
+          rgb(255, 255, 255)
+        );
       }
     }
   }

@@ -58,3 +58,14 @@ export const getPlaylistDetailApi = async (id: number, fn?: Function) => {
   if (res.status === 200 && res.data.code === 200) fn && fn(res.data);
   else console.log("数据获取失败 ==> @getPlaylistDetailApi");
 };
+
+/**
+ * 获取 歌单 - 歌曲列表
+ * @param params 参数
+ * @param fn 回调函数
+ */
+export async function getPlaylistTrackAllApi(params: { id: number | string; limit?: number; offset?: number }, fn?: Function) {
+  const res = await get(api.playlistTrackAll, params);
+  if (res.status === 200 && res.data.code === 200) fn && fn(res.data.songs);
+  else console.log("数据获取失败 ==> @getPlaylistTrackAllApi");
+}

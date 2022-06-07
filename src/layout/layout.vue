@@ -75,7 +75,7 @@ export default {
           >
             <!-- <Transition name="page" :mode="routerSkipMode($route)"> -->
             <!-- 非活跃的组件将会被缓存！ -->
-            <KeepAlive :max="7">
+            <KeepAlive :max="7" :exclude='["SongSingleTableView"]'>
               <Component :is="Component" />
             </KeepAlive>
           </Transition>

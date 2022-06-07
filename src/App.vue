@@ -57,8 +57,8 @@ export default {
         appear
         :name="transNameChange($route)"
         :mode="modeChange($route)"
-      >j
-        <KeepAlive :max="8" :exclude="['LyricView', 'SongSingleTableView']">
+      >
+        <KeepAlive :max="8" :exclude="['LyricView']">
           <Component :is="Component" />
         </KeepAlive>
       </Transition>

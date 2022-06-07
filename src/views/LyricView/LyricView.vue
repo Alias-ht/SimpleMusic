@@ -20,10 +20,8 @@ export default {
       }
       initLyricUlContainer();
 
-
       // 测试显示字段
-      console.log(storeSongPlay.songInfo);
-
+      // console.log(storeSongPlay.songInfo);
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
@@ -35,7 +33,7 @@ export default {
       const height = lyricDivRef.value.offsetHeight / 2;
       const lyricUlStyle = lyricDivRef.value.children[0].style as any;
       lyricUlStyle.paddingTop = height * 0.98 + "px";
-      lyricUlStyle.paddingBottom = height * 0.98 + "px";
+      lyricUlStyle.paddingBottom = height * 0.94 + "px";
     }
 
     /** 创建监听器函数 触碰滑动时暂停, 2秒钟不操作继续监听器 */
@@ -52,8 +50,6 @@ export default {
     function lyricUlScroll(event: any) {
       lyricScrollUnwatch && lyricScrollUnwatch(); // 存在的话清除 监听器
       clearTimeout(storageWatchTimer);
-
-      // touchStartLyricTimeShow()
       lyricLis = lyricDivRef.value?.children[0]?.children;
     }
 
@@ -68,9 +64,10 @@ export default {
       const scrollTop = lyricDivRef.value.scrollTop;
       const index = Math.floor(scrollTop / height);
       // console.log(index);
-      scrollLyricIndex.value = index;
-      scrollLyricTime.value =
-        storeSongPlay.songLyricInfo.lyric[index]?.time;
+      const lyricList = storeSongPlay.songLyricInfo.lyric;
+      scrollLyricIndex.value =
+        index < lyricList.length ? index : lyricList.length - 1;
+      scrollLyricTime.value = lyricList[index]?.time;
     }
 
     /** 手指移开,触发函数 */
@@ -101,6 +98,10 @@ export default {
       lyricRef.scrollTop = offsetTop - height;
     }
 
+    const lyricBackGroundPic =
+      // @ts-ignore
+      storeSongPlay.songInfo.picUrl || storeSongPlay.songInfo.al.picUrl;
+
     return {
       storeSongPlay,
       lyricUlScroll,
@@ -109,12 +110,13 @@ export default {
       touchmoveLyricTimeShow,
       scrollLyricIndex,
       scrollLyricTime,
+      lyricBackGroundPic,
     };
   },
   components: {
     StopSongBtn,
     ProgressBar,
-    PlayIcon
+    PlayIcon,
   },
 };
 </script>
@@ -125,8 +127,8 @@ export default {
       <!-- v-show="false" -->
       <li class="picUrl">
         <img
-          v-show="true && storeSongPlay.songInfo.picUrl"
-          :src="`${storeSongPlay.songInfo.picUrl}?param=200y420`"
+          v-show="true && lyricBackGroundPic"
+          :src="`${lyricBackGroundPic}?param=200y420`"
         />
       </li>
       <li class="songLyricInfo">
@@ -151,10 +153,12 @@ export default {
           <div class="author">
             <!-- {{storeSongPlay.songInfo.artists}} -->
             <span
-              v-for="(item, index) in storeSongPlay.songInfo.song?.artists || storeSongPlay.songInfo.artists || []"
+              v-for="(item, index) in storeSongPlay.songInfo.song?.artists ||
+              storeSongPlay.songInfo.artists ||
+              []"
               :key="index"
             >
-            {{ index > 0 ? " / " : "" }}  {{ item.name }}
+              {{ index > 0 ? " / " : "" }} {{ item.name }}
             </span>
           </div>
         </div>
@@ -184,7 +188,7 @@ export default {
           <div
             class="lyricCenter"
             :style="{
-              opacity:  scrollLyricIndex !==null  ? 1 : 0,
+              opacity: scrollLyricIndex !== null ? 1 : 0,
             }"
           >
             <div class="time">
@@ -198,7 +202,7 @@ export default {
               <!-- play -->
               <PlayIcon></PlayIcon>
             </div>
-            <hr>
+            <hr />
           </div>
         </div>
       </li>
@@ -214,7 +218,7 @@ export default {
           <li class="start">
             {{ storeSongPlay.songPlaygress.currentDuration }}
           </li>
-          <li class="end" v-show="storeSongPlay.songInfo.duration ">
+          <li class="end" v-show="storeSongPlay.songInfo.duration">
             {{
               storeSongPlay.songInfo.duration ||
               storeSongPlay.getSongTimeDuration()
@@ -317,7 +321,6 @@ export default {
               font-size: 3.5vw;
               color: #000;
 
-
               .txt {
                 display: inline-block;
                 transition: all 0.24s;
@@ -341,7 +344,7 @@ export default {
           height: 0;
           left: 0;
           transition: opacity 0.2s;
-            font-size: 3vw;
+          font-size: 3vw;
           .time {
             float: left;
           }

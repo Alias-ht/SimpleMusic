@@ -20,7 +20,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Home",
         redirect: "/home/recommend",
         component: () => import("@/views/HomeView/HomeView.vue"),
-        meta: { title: "主页", mode: "", transIndex: 4 },
+        meta: { title: "主页", mode: "", transIndex: 10 },
         children: [
           {
             path: "recommend",
@@ -34,25 +34,31 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import("@/views/MusicHallView/MusicHallView.vue"),
             meta: { title: "主页-音乐馆", mode: "", transIndex: 2 },
           },
-          {
+          /*   {
             path: "search",
             name: "Search",
             component: () => import("@/views/SearchView/SearchView.vue"),
             meta: { title: "主页-搜索", mode: "", transIndex: 3 },
-          },
+          }, */
         ],
+      },
+      {
+        path: "songSingle",
+        name: "SongSingle",
+        component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
+        meta: { transIndex: 12 },
       },
       {
         path: "search",
         name: "Search",
         component: () => import("@/views/SearchView/SearchView.vue"),
-        meta: { title: "搜索", mode: "", transIndex: 5 },
+        meta: { title: "搜索", mode: "", transIndex: 20 },
       },
       {
         path: "my",
         name: "My",
         component: () => import("@/views/MyView/MyView.vue"),
-        meta: { title: "我的", mode: "", transIndex: 6 },
+        meta: { title: "我的", mode: "", transIndex: 30 },
       },
     ],
   },
@@ -61,12 +67,6 @@ const routes: Array<RouteRecordRaw> = [
     name: "Lyric",
     component: () => import("@/views/LyricView/LyricView.vue"),
     meta: { transition: "lyricPage", title: "歌词", mode: " " },
-  },
-  {
-    path: "/songSingle",
-    name: "SongSingle",
-    component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
-    meta: { transition:'page' },
   },
   {
     path: "/404",
@@ -91,7 +91,6 @@ const router = createRouter({
     getScroll(to.fullPath, to.meta?.containerRef?.value);
     // @ts-ignore
     setScroll(from.fullPath, from.meta.containerRef?.value?.scrollTop);
-
   },
 });
 
