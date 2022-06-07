@@ -1,4 +1,6 @@
 <script lang='ts'>
+//  歌曲卡片 -- 歌单
+// 引入 vue 相关
 import { onMounted, reactive, ref } from "vue";
 export default {
   name: "SongCard",

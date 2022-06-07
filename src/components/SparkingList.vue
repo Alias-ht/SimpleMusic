@@ -8,7 +8,7 @@ import { useSongPlay } from "../store/songPlay";
 // 引入 hooks 函数
 import { delayedExecute } from "../hooks/common";
 import { downloadSong } from "../hooks/songHandler";
-// 引入 图标 组件
+// 引入 图标组件
 import { DownloadIcon } from "@heroicons/vue/outline";
 export default {
   name: "SparkingList",

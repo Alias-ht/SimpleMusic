@@ -47,3 +47,14 @@ export const getCheckMusicApi = async (id: number, fn?: Function) => {
   }
   // fn && fn({success:true})
 };
+
+/**
+ * 获取 歌单详情
+ * @param id  歌单 id
+ * @param fn 回调函数
+ */
+export const getPlaylistDetailApi = async (id: number, fn?: Function) => {
+  const res = await get(api.playlistDetail, { id });
+  if (res.status === 200 && res.data.code === 200) fn && fn(res.data);
+  else console.log("数据获取失败 ==> @getPlaylistDetailApi");
+};

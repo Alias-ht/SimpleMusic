@@ -29,6 +29,7 @@ export default {
       activedInit();
     });
     const route = useRoute(); // 注册路由
+    const router = useRouter(); // 注册 路由方法
 
     // ref 盒子元素 存储滚动 距离
     const RecommendContainer = ref(null as any);
@@ -68,12 +69,22 @@ export default {
       });
     }
 
+    /** 歌单页面跳转 */
+    function songSingleSkip(item: any) {
+      console.log(item.id);
+      router.push({
+        path: "/songSingle",
+        query: { id: item.id },
+      });
+    }
+
     return {
       newSongList,
       personalizedList,
       bannerList,
       renRadioList,
       RecommendContainer,
+      songSingleSkip,
     };
   },
   components: {
@@ -101,12 +112,20 @@ export default {
         <div class="songCardBox">
           <ul>
             <li v-for="(item, index) in personalizedList" :key="item.id">
-              <SongCard :info="item" v-if="index % 2 == 0"></SongCard>
+              <SongCard
+                @click="songSingleSkip(item)"
+                :info="item"
+                v-if="index % 2 == 0"
+              ></SongCard>
             </li>
           </ul>
           <ul>
             <li v-for="(item, index) in personalizedList" :key="item.id">
-              <SongCard :info="item" v-if="index % 2 == 1"></SongCard>
+              <SongCard
+                @click="songSingleSkip(item)"
+                :info="item"
+                v-if="index % 2 == 1"
+              ></SongCard>
             </li>
           </ul>
         </div>

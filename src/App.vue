@@ -1,11 +1,11 @@
 <script lang="ts">
 import AudioPlayControl from "./components/AudioPlayControl.vue";
 import { computed, onBeforeUnmount, ref } from "vue";
-import GlobalCom from './components/GlobalCom.vue'
+import GlobalCom from "./components/GlobalCom.vue";
 export default {
   components: {
     AudioPlayControl,
-    GlobalCom
+    GlobalCom,
   },
   setup() {
     onBeforeUnmount(() => {});
@@ -26,7 +26,11 @@ export default {
     }
 
     function modeChange(route: any) {
-      if (nameTransition.value === "lyricPageLeave" || nameTransition.value === "lyricPageEnter") return "";
+      if (
+        nameTransition.value === "lyricPageLeave" ||
+        nameTransition.value === "lyricPageEnter"
+      )
+        return "";
       if (route.meta.mode) {
         if (route.meta.mode === " ") return "";
         return route.meta.mode;
@@ -49,8 +53,12 @@ export default {
   <AudioPlayControl />
   <div class="mainContainer">
     <RouterView v-slot="{ Component }">
-      <Transition appear :name="transNameChange($route)" :mode="modeChange($route)">
-        <KeepAlive :max="4" exclude='LyricView'>
+      <Transition
+        appear
+        :name="transNameChange($route)"
+        :mode="modeChange($route)"
+      >j
+        <KeepAlive :max="8" :exclude="['LyricView', 'SongSingleTableView']">
           <Component :is="Component" />
         </KeepAlive>
       </Transition>

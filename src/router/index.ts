@@ -66,6 +66,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/songSingle",
     name: "SongSingle",
     component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
+    meta: { transition:'page' },
   },
   {
     path: "/404",

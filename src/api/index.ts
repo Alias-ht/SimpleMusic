@@ -7,6 +7,7 @@ export default {
   getLyric: "/lyric", // 获取歌词
   personalized: "/personalized", // 获取 推荐歌单
   personalizedDjprogram: "/personalized/djprogram", // 推荐电台
+  playlistDetail: "/playlist/detail", // 歌单详情
   newSong: "/personalized/newsong", // 推荐新音乐
   recommendResource: "/recommend/resource", // 每日推荐歌单 -- 需要登录
   recommendSongs: "/recommend/songs", // 每日推荐歌曲 -- 需要登录
