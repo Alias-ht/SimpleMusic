@@ -137,7 +137,7 @@ export const useSongPlay = defineStore({
         }
       }, 2000);
     },
-    /** 播放歌曲  @param flag 是否需要执行 歌词草错*/
+    /** 播放歌曲  @param flag 是否需要执行 歌词操作*/
     startSong(lyricFlag?: boolean) {
       try {
         this.songRef.play();
@@ -147,7 +147,6 @@ export const useSongPlay = defineStore({
         const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
         if (lyricFlag) lyricInstan.seek && lyricInstan.seek(this.songRef.currentTime * 1000);
       } catch (err) {
-        console.log(err);
         this.stopSong();
       }
     },

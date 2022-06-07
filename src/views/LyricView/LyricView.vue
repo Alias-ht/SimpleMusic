@@ -63,7 +63,6 @@ export default {
       const height = lyricLis[0]?.offsetHeight;
       const scrollTop = lyricDivRef.value.scrollTop;
       const index = Math.floor(scrollTop / height);
-      // console.log(index);
       const lyricList = storeSongPlay.songLyricInfo.lyric;
       scrollLyricIndex.value =
         index < lyricList.length ? index : lyricList.length - 1;
@@ -83,7 +82,7 @@ export default {
             getIndexChangeScrollFn(newVal.index);
           }
         );
-      }, 1.5 * 1000);
+      }, 2.2 * 1000);
     }
 
     /** 创建根据歌词索引滚动到相应位置 */
@@ -98,9 +97,19 @@ export default {
       lyricRef.scrollTop = offsetTop - height;
     }
 
+    /** 歌词背景图片 */
     const lyricBackGroundPic =
       // @ts-ignore
       storeSongPlay.songInfo.picUrl || storeSongPlay.songInfo.al.picUrl;
+
+    /** 播放音乐 */
+    function playSong() {
+      touchmoveLyricTimeShow();
+      storeSongPlay.songRef.currentTime = scrollLyricTime.value / (1 * 1000)
+      storeSongPlay.startSong(true)
+      // console.log(storeSongPlay.songRef.currentTime);
+      // console.log(scrollLyricTime.value / (1 * 1000));
+    }
 
     return {
       storeSongPlay,
@@ -111,6 +120,7 @@ export default {
       scrollLyricIndex,
       scrollLyricTime,
       lyricBackGroundPic,
+      playSong,
     };
   },
   components: {
@@ -185,6 +195,8 @@ export default {
               </li>
             </ul>
           </div>
+
+          <!-- 歌词中间 横条 -->
           <div
             class="lyricCenter"
             :style="{
@@ -198,7 +210,7 @@ export default {
                   : parseInt((scrollLyricTime / 1000) % 60)
               }}
             </div>
-            <div class="play">
+            <div class="play" @click="playSong">
               <!-- play -->
               <PlayIcon></PlayIcon>
             </div>
@@ -345,12 +357,19 @@ export default {
           left: 0;
           transition: opacity 0.2s;
           font-size: 3vw;
+          padding: 0 3vw;
+          box-sizing: border-box;
+          hr {
+            margin-left: 10vw;
+            margin-right: 10vw;
+            opacity: 0.5;
+          }
           .time {
             float: left;
           }
           .play {
-            width: 4vw;
-            height: 4vw;
+            width: 4.4vw;
+            height: 4.4vw;
             float: right;
           }
         }
