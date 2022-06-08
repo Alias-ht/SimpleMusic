@@ -6,8 +6,7 @@ import { DownloadFile, copy } from "../hooks/common";
 // 引入 vant 组件
 import { Dialog } from "vant";
 
-// 引入 复制
-import clipboard from "clipboardy";
+
 export default {
   name: "UpdateComponent",
   setup() {

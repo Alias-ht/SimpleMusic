@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 import { onMounted, reactive, ref } from "vue";
 
 // 引入 状态管理 - 音乐
@@ -7,7 +7,7 @@ import { useSongPlay } from "../store/songPlay";
 export default {
   name: "PrivilegesList",
   props: ["info", "config"],
-  setup(props) {
+  setup(props:any) {
     // console.log(props.config);
     onMounted(() => {});
     /** 状态管理 歌曲播放信息 */
@@ -30,8 +30,8 @@ export default {
 
     /** 歌曲作者叠加  */
     (function songAuthorAdd() {
-        const authorArr = []
-      props.info[props.config.author]?.forEach((item) =>authorArr.push(item.name));
+        const authorArr:any[] = []
+      props.info[props.config.author]?.forEach((item:any) =>authorArr.push(item.name));
       songInfo.author= authorArr.join(' / ')
     })();
 
