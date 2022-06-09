@@ -19,7 +19,10 @@ export default {
     const route = useRoute();
 
     // 类型约束
-    const playListType: { playlist: object; songSingleList: [] } = {
+    const playListType: {
+      playlist: { trackCount?: number };
+      songSingleList: [];
+    } = {
       playlist: {}, // 歌单信息
       songSingleList: [], // 歌单列表
     };
@@ -28,7 +31,7 @@ export default {
 
     /** 歌单 id */
     const playlistId = Number(route.query.id);
-    const params = { id: playlistId, limit: 15, offset: 0 };
+    const params = { id: playlistId,limit:15,offset:0 };
 
     /** 初始化 数据 */
     function initData() {
@@ -38,8 +41,29 @@ export default {
       });
 
       // 获取歌单 - 歌曲列表
-      getPlaylistTrackAllApi(params, (list: []) => {
+      getPlaylistTrackAllApi({...params,limit:100}, (list: []) => {
         playListDetail.songSingleList = list;
+      });
+    }
+
+    const loadList = reactive({ loading: false, finished: false });
+
+
+    /** The list of loading. // 列表加载 */
+    function loadingList() {
+      const total = playListDetail.playlist.trackCount;
+      console.log(total);
+      loadList.finished = true
+      return
+      params.offset = playListDetail.songSingleList.length
+// params.timestamp = Date.now()
+      console.log("加载");
+      console.log(params);
+
+      getPlaylistTrackAllApi(params, (list: []) => {
+        playListDetail.songSingleList.push(...list);
+        // console.log(list);
+        loadList.loading = false;
       });
     }
 
@@ -54,6 +78,8 @@ export default {
     return {
       playListDetail,
       songSingleListConfig,
+      loadingList,
+      loadList,
     };
   },
   components: {
@@ -80,12 +106,21 @@ export default {
         </div>
       </div>
       <div class="songSingleList">
+        <van-list
+          v-model:loading="loadList.loading"
+          :finished="loadList.finished"
+          :finished-text="`共${playListDetail.playlist.trackCount}首${playListDetail.playlist.trackCount>100?',由于数据原因,最多显示100首':''}`"
+          @load="loadingList"
+          :immediate-check="false"
+        >
         <PrivilegesList
-          v-for="item in playListDetail.songSingleList"
+          v-for="(item, index) in playListDetail.songSingleList"
           :key="item.id"
           :info="item"
           :config="songSingleListConfig"
+          :index="index"
         ></PrivilegesList>
+        </van-list>
       </div>
     </div>
     <!--  -->
@@ -96,7 +131,6 @@ export default {
 .SongSingleTableView {
   width: 100%;
   height: 100%;
-  // background: #000;
   display: flex;
   flex-direction: column;
   .top {

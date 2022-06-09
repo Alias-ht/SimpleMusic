@@ -12,6 +12,8 @@ import { useRouter, useRoute } from "vue-router";
 // 引入组件
 import SparkingList from "@/components/SparkingList.vue";
 import SongCard from "@/components/SongCard.vue";
+// 引入状态管理
+import { useSongPlay } from "../../store/songPlay";
 // 引入接口
 import {
   getNewSongApi,
@@ -30,6 +32,8 @@ export default {
     });
     const route = useRoute(); // 注册路由
     const router = useRouter(); // 注册 路由方法
+
+    const storeSongPlay = useSongPlay();
 
     // ref 盒子元素 存储滚动 距离
     const RecommendContainer = ref(null as any);
@@ -52,21 +56,28 @@ export default {
     function createInit() {
       // 获取 轮播图
       getBannerApi((banners: any) => {
-        bannerList.value = banners;
+        const arr = banners.filter((item: any) => item.targetType === 1);
+        // console.log(arr);
+
+        // bannerList.value = banners;
+        bannerList.value = arr;
       });
+
       // 获取 推荐歌单 (无需登录)
       getPersonalizedApi((resultList: any) => {
         personalizedList.value = resultList;
       });
+
       // 获取 推荐新歌曲 (无需登录)
       getNewSongApi((result: any) => {
         newSongList.value = result;
       });
+
       //获取 推荐电台
-      getRecommendRoaidApi((result: any) => {
-        console.log(result);
-        renRadioList.value = result;
-      });
+      // getRecommendRoaidApi((result: any) => {
+      //   // console.log(result);
+      //   renRadioList.value = result;
+      // });
     }
 
     /** 歌单页面跳转 */
@@ -77,6 +88,14 @@ export default {
       });
     }
 
+    /** 轮播图点击，调转到对应的信息 */
+    function bannerClick(item: any) {
+      // console.log(item.song);
+      storeSongPlay.getSongInfo(item.song);
+      // console.log(item.targetId);
+      // console.log(item.targetType);
+    }
+
     return {
       newSongList,
       personalizedList,
@@ -84,6 +103,7 @@ export default {
       renRadioList,
       RecommendContainer,
       songSingleSkip,
+      bannerClick,
     };
   },
   components: {
@@ -101,12 +121,16 @@ export default {
         <div class="banner">
           <van-swipe class="vant-swipe" :autoplay="3000" lazy-render>
             <van-swipe-item v-for="item in bannerList" :key="item.targetId">
-              <img class="bannerImg" :src="item.imageUrl + '?param=1080'" />
+              <img
+                class="bannerImg"
+                :src="item.pic + '?param=1080'"
+                @click="bannerClick(item)"
+              />
             </van-swipe-item>
           </van-swipe>
         </div>
-        <h3 style="margin-top: 4vw">电台推荐</h3>
-        <span>暂无...</span>
+        <!-- <h3 style="margin-top: 4vw">电台推荐</h3>
+        <span>暂无...</span> -->
         <h3>歌单推荐</h3>
         <div class="songCardBox">
           <ul>

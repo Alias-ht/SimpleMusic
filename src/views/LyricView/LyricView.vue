@@ -73,16 +73,21 @@ export default {
     function lyricScrollTouchEnd() {
       clearTimeout(storageWatchTimer); //  清除定时器
       storageWatchTimer = setTimeout(() => {
-        scrollLyricIndex.value = null;
-        getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
-        //  赋予监听器
-        lyricScrollUnwatch = watch(
-          storeSongPlay.songLyricInfo,
-          (newVal, oldVal) => {
-            getIndexChangeScrollFn(newVal.index);
-          }
-        );
+        lyricReset();
       }, 2.2 * 1000);
+    }
+
+/** 歌词不触摸时 进行重置 */
+    function lyricReset() {
+      scrollLyricIndex.value = null;
+      getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
+      //  赋予监听器
+      lyricScrollUnwatch = watch(
+        storeSongPlay.songLyricInfo,
+        (newVal, oldVal) => {
+          getIndexChangeScrollFn(newVal.index);
+        }
+      );
     }
 
     /** 创建根据歌词索引滚动到相应位置 */
@@ -105,8 +110,9 @@ export default {
     /** 播放音乐 */
     function playSong() {
       touchmoveLyricTimeShow();
-      storeSongPlay.songRef.currentTime = scrollLyricTime.value / (1 * 1000)
-      storeSongPlay.startSong(true)
+      storeSongPlay.songRef.currentTime = scrollLyricTime.value / (1 * 1000);
+      storeSongPlay.startSong(true);
+      lyricReset()
       // console.log(storeSongPlay.songRef.currentTime);
       // console.log(scrollLyricTime.value / (1 * 1000));
     }

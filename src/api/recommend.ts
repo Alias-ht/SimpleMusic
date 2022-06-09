@@ -29,7 +29,7 @@ export const getPersonalizedApi = async (fn: Function) => {
  * @param fn 回调函数
  */
 export const getBannerApi = async (fn?: Function) => {
-  const res = await get(api.banner);
+  const res = await get(api.banner, { type: 1 });
   if (res?.status === 200) fn && fn(res?.data?.banners);
   else console.log("数据获取失败 ==> @getBannerApi");
 };

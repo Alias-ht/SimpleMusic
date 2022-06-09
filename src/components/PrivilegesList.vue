@@ -6,7 +6,7 @@ import { useSongPlay } from "../store/songPlay";
 
 export default {
   name: "PrivilegesList",
-  props: ["info", "config"],
+  props: ["info", "config",'index'],
   setup(props:any) {
     // console.log(props.config);
     onMounted(() => {});
@@ -37,7 +37,7 @@ export default {
 
 
 
-    return { storeSongPlay, songInfo, clickSongList };
+    return { storeSongPlay, songInfo, clickSongList,songIndex:props.index };
   },
 };
 </script>
@@ -49,6 +49,7 @@ export default {
       :class="{ InThePlay: info.id === storeSongPlay.songId }"
       @click="clickSongList"
     >
+    <li class="index">{{songIndex+1}} </li>
       <!-- 图片 -->
       <li class="avatarBox">
         <img :src="songInfo.picUrl + '?param=160y160'" alt="" />
@@ -76,6 +77,7 @@ export default {
   display: flex;
   width: 100%;
   padding: 1vw 5vw;
+  padding-left: 3vw;
   box-sizing: border-box;
 }
 .listBox {
@@ -83,10 +85,16 @@ export default {
   display: flex;
   width: 100%;
   padding: 3vw 5vw;
+  // padding-left: 1vw;
   border-radius: 2vw;
   box-sizing: border-box;
   transition: background 0.3s;
   overflow: hidden;
+  .index{
+    width:10vw;
+    height: 15vw;
+    line-height: 15vw;
+  }
   .avatarBox {
     overflow: hidden;
     width: 15vw;
@@ -144,6 +152,9 @@ export default {
 }
 .listBox.InThePlay {
   background: royalblue;
+  .index{
+    color: white;
+  }
   .infoBox {
     .title {
       color: white;

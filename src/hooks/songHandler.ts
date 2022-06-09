@@ -12,10 +12,8 @@ export async function downloadSong(info: any) {
   downloadMp3(songUrl, name);
 }
 
-
-
 /** 下载文件 -- blob流  可下载音视频 */
-function downloadMp3(filePath: string, name: string) {
+export function downloadMp3(filePath: string, name: string) {
   fetch(filePath)
     .then((res) => res.blob())
     .then((blob) => {
@@ -37,3 +35,14 @@ function downloadMp3(filePath: string, name: string) {
       window.URL.revokeObjectURL(url);
     });
 }
+
+/**   1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音 */
+export const searchType = [
+  { text: "单曲", value: 1 },
+  { text: "专辑", value: 10 },
+  { text: "歌手", value: 100 },
+  { text: "歌单", value: 1000 },
+  { text: "用户", value: 1002 },
+  { text: "歌词", value: 1006 },
+  { text: "视频", value: 1014 },
+];
