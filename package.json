@@ -2,6 +2,7 @@
   "name": "sparkling",
   "private": true,
   "version": "0.0.0",
+  "author": "<huating_1101@163.com>",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",

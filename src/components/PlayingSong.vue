@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, ref, onMounted, watch, computed } from "vue";
+import { onBeforeMount, ref, onMounted, watch,reactive, computed } from "vue";
 
 // 引入 状态
 import { useSongPlay } from "../store/songPlay";
@@ -21,6 +21,8 @@ export default {
     //   // console.log();
     // });
     // console.log(storeSongPlay.songInfo);
+    // @ts-ignore
+
 
 
     return { storeSongPlay };
@@ -35,18 +37,26 @@ export default {
   <div class="playBox" @click="$router.push('/lyric')">
     <ul class="playSongComopnent">
       <li class="picUrl">
-        <img
-          v-show="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl"
-          :src="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl"
-        />
+        <img v-show="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl + '?param=160y160'" />
       </li>
       <li class="songLyricInfo">
         <div class="title textEllipsis">
           {{ storeSongPlay.songInfo.name || "歌曲名称" }}
         </div>
         <div class="lyricDiv">
-          <ul class="lyricUl" :style="{ transform: `translateY(${storeSongPlay.songLyricInfo.index * -5}vw)` }">
-            <li class="textEllipsis" v-for="(item, index) in storeSongPlay.songLyricInfo.lyric" :key="index">
+          <ul
+            class="lyricUl"
+            :style="{
+              transform: `translateY(${
+                storeSongPlay.songLyricInfo.index * -5
+              }vw)`,
+            }"
+          >
+            <li
+              class="textEllipsis"
+              v-for="(item, index) in storeSongPlay.songLyricInfo.lyric"
+              :key="index"
+            >
               <span>{{ item.txt }}</span>
             </li>
           </ul>
@@ -61,7 +71,7 @@ export default {
 </template>
 
 <style scoped lang="less">
-@import '../theme/layout.less';
+@import "../theme/layout.less";
 @transitionTime: all 0.6s;
 .playBox {
   position: relative;

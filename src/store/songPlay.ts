@@ -200,7 +200,7 @@ export const useSongPlay = defineStore({
       getSongDetailApi(id, (data: any) => {
         // console.log(data.songs[0].al.picUrl );
         // @ts-ignore
-        this.songInfo.picUrlHandler = data.songs[0].al.picUrl + "?param=160y160";
+        this.songInfo.picUrlHandler = data.songs[0].al.picUrl;
       });
     },
     /** 获取歌曲总时长 */

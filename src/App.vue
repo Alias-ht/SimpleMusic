@@ -1,6 +1,6 @@
 <script lang="ts">
 import AudioPlayControl from "./components/AudioPlayControl.vue";
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import GlobalCom from "./components/GlobalCom.vue";
 export default {
   components: {
@@ -9,6 +9,10 @@ export default {
   },
   setup() {
     onBeforeUnmount(() => {});
+    console.time("loadingTime");
+    onMounted(() => {
+      console.timeEnd("loadingTime");
+    });
 
     let nameTransition = ref("" as string);
     function transNameChange(route: any) {

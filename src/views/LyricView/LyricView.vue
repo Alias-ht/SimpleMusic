@@ -101,11 +101,13 @@ export default {
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
     }
+    // console.log(storeSongPlay.songInfo.picUrlHandler);
+
 
     /** 歌词背景图片 */
     const lyricBackGroundPic =
       // @ts-ignore
-      storeSongPlay.songInfo.picUrl || storeSongPlay.songInfo.al.picUrl;
+      storeSongPlay.songInfo?.picUrl || storeSongPlay.songInfo?.al?.picUrl || storeSongPlay.songInfo?.picUrlHandler || '';
 
     /** 播放音乐 */
     function playSong() {

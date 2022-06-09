@@ -4,6 +4,7 @@ import { ref, watch, onMounted } from "vue";
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
+import UserList from '@/components/UserList.vue'
 // 引入 公共 hooks 函数
 import { maskLayerShow, totalTip } from "../../hooks/common";
 export default {
@@ -47,10 +48,10 @@ export default {
         text: "用户",
         value: 1002,
         type: "userprofiles",
-        component: "SongList",
+        component: "userList",
       },
       { text: "歌词", value: 1006, type: "songs", component: "SongList" },
-      { text: "视频", value: 1014, type: "videos", component: "SongList" },
+      // { text: "视频", value: 1014, type: "videos", component: "SongList" },
     ];
 
     /** 改变显示 热搜 和 结果 */
@@ -147,6 +148,7 @@ export default {
   },
   components: {
     SongList,
+    UserList
   },
 };
 </script>
@@ -180,7 +182,7 @@ export default {
         <li
           class="smallStripes"
           :style="{
-            left: `${searchTypeIndex * 14.285}vw`,
+            left: `${(searchTypeIndex * 16.66)+1.2}vw`,
           }"
         ></li>
       </ul>
@@ -198,8 +200,8 @@ export default {
         <div class="searchSongResultBox" v-show="changeShowSearchOrResult">
           <div class="searchBox">
             <Component
-              :is="searchTypeOptions[0].component"
               v-for="item in searchResultList"
+              :is="searchTypeOptions[searchTypeIndex].component"
               :key="item.id"
               :info="item"
               :keyword="searchkeyWords"
