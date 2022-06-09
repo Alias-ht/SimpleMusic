@@ -15,7 +15,6 @@ export default {
   props: ["info"],
   setup(props: any) {
     onMounted(() => {
-      // onPlayingAniStop();
       if (playinglottieRef.value) {
         delayedExecute(() => {
           try {
@@ -37,7 +36,6 @@ export default {
     });
     props.info.picUrlHandler = `${props.info.picUrl}?param=120y120`;
     const info = props.info;
-    // console.log(info);
 
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();

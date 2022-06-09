@@ -20,8 +20,6 @@ export default {
       }
       initLyricUlContainer();
 
-      // 测试显示字段
-      // console.log(storeSongPlay.songInfo);
     });
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
@@ -101,7 +99,6 @@ export default {
       const offsetTop = lis[i].offsetTop;
       lyricRef.scrollTop = offsetTop - height;
     }
-    // console.log(storeSongPlay.songInfo.picUrlHandler);
 
 
     /** 歌词背景图片 */
@@ -115,8 +112,6 @@ export default {
       storeSongPlay.songRef.currentTime = scrollLyricTime.value / (1 * 1000);
       storeSongPlay.startSong(true);
       lyricReset()
-      // console.log(storeSongPlay.songRef.currentTime);
-      // console.log(scrollLyricTime.value / (1 * 1000));
     }
 
     return {

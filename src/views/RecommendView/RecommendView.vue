@@ -90,10 +90,7 @@ export default {
 
     /** 轮播图点击，调转到对应的信息 */
     function bannerClick(item: any) {
-      // console.log(item.song);
       storeSongPlay.getSongInfo(item.song);
-      // console.log(item.targetId);
-      // console.log(item.targetType);
     }
 
     return {

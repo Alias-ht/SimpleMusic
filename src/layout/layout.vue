@@ -19,7 +19,6 @@ import { HomeIcon, SearchIcon, UserIcon } from "@heroicons/vue/outline";
 import {
   routerSkipTransitionName,
   routerSkipMode,
-  delayedExecute,
 } from "../hooks/common";
 
 export default {
@@ -66,7 +65,6 @@ export default {
     <!-- 内容区域 -->
     <div class="content">
       <div class=" topBar " ></div>
-      <!-- :class='equipmentFlag' -->
       <div class="fillBox" ref="fillBoxRef">
         <RouterView v-slot="{ Component }">
           <Transition
@@ -74,8 +72,6 @@ export default {
             :name="routerSkipTransitionName($route)"
             :mode="routerSkipMode($route)"
           >
-            <!-- <Transition name="page" :mode="routerSkipMode($route)"> -->
-            <!-- 非活跃的组件将会被缓存！ -->
             <KeepAlive :max="7" :exclude='["SongSingleTableView"]'>
               <Component :is="Component" />
             </KeepAlive>
@@ -109,7 +105,6 @@ export default {
 </template>
 
 <style scoped lang="less">
-// @playControlHeight: 15vw;
 @import "../theme/layout.less";
 
 .layout-container {
@@ -127,7 +122,6 @@ export default {
     z-index: 4;
     padding-top: 36px;
     box-sizing: border-box;
-    // background: rgba(245, 245, 245, 0.5);
     background: white;
     .topBar {
       position: absolute;
@@ -181,9 +175,6 @@ export default {
         .icon {
           width: 6vw;
         }
-        /*  .text{
-
-        } */
       }
       li.actived {
         color: royalblue;

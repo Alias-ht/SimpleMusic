@@ -8,7 +8,6 @@ export default {
   name: "PrivilegesList",
   props: ["info", "config",'index'],
   setup(props:any) {
-    // console.log(props.config);
     onMounted(() => {});
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();

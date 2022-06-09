@@ -15,15 +15,6 @@ export default {
     onBeforeMount(() => {});
     onMounted(() => {});
     const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
-    // 计算属性 歌词信息
-    // watch(storeSongPlay, (newVal, oldVal) => {
-    //   console.log("watch 属性监听 歌曲的歌词信息");
-    //   // console.log();
-    // });
-    // console.log(storeSongPlay.songInfo);
-    // @ts-ignore
-
-
 
     return { storeSongPlay };
   },

@@ -19,7 +19,6 @@ export default {
       const {
         data: { versions, url },
       } = await service.get("/versions");
-      // console.log(url);
 
       // @ts-ignore
       // 如果版本存在更新 获取最新
@@ -43,14 +42,11 @@ export default {
       })
         .then(() => {
           copy(url);
-          //
-          // console.log('复制');
 
           // on confirm
         })
         .catch(() => {
           // on cancel
-          // console.log('取消');
         });
     }
 

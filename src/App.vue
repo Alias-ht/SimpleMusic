@@ -16,7 +16,6 @@ export default {
 
     let nameTransition = ref("" as string);
     function transNameChange(route: any) {
-      // console.log(route);
       if (route.query.upPage === "/lyric") {
         nameTransition.value = "lyricPageLeave";
         return "lyricPageLeave";

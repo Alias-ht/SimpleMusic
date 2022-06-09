@@ -7,7 +7,6 @@ export default {
   props: ["info"],
   setup(props: any) {
     onMounted(() => {});
-    // console.log(props.info);
     return {
       item: props.info,
     };

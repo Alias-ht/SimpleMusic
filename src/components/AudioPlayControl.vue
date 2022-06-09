@@ -35,7 +35,6 @@ export default {
     @play="storeSongPlay.songPlayStart"
     @ended="storeSongPlay.songPlayEnd"
   ></audio>
-  <!-- :autoplay="true" -->
 </template>
 
 <style scoped lang="less"></style>

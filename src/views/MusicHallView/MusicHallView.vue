@@ -13,13 +13,6 @@ export default {
       createInit();
     });
 
-// console.log();
-
-
-    // window.navigator.equipmentFlag = equipmentFlag
-    // const userNavigator = window.navigator
-    // console.log(userNavigator);
-
 
     async function createInit() {
       const res = await service.get("/equipment");
@@ -37,8 +30,6 @@ export default {
   <div class="MusicHallView">
     <!--  -->
     <div class="musicHallBox">
-      <!-- <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=29412405&auto=1&height=66"></iframe> -->
-
       <div v-for="(item, index) in showField" :key="index">
         {{ item }} __________ <br />
         {{ navigator[item] }}

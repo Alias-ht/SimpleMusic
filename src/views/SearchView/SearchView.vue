@@ -51,7 +51,6 @@ export default {
         component: "userList",
       },
       { text: "歌词", value: 1006, type: "songs", component: "SongList" },
-      // { text: "视频", value: 1014, type: "videos", component: "SongList" },
     ];
 
     /** 改变显示 热搜 和 结果 */

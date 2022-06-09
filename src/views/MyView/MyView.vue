@@ -12,11 +12,9 @@ export default {
 <template>
   <div class="MyView">
     <div class="my">
-      <!-- <h2>我的信息</h2> -->
       <h2>登录</h2>
       <van-cell-group inset v-if='false'>
         <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-        <!-- error-message="手机号格式错误"  -->
         <van-field v-model="password" label="密码" placeholder="请输入密码" />
 
         <van-field

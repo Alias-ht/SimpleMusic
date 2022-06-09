@@ -12,7 +12,6 @@ export default {
     });
     onUnmounted(() => {
       clearInterval(storeSongPlay.songPlaygress.timer);
-      // console.log('清除');
     });
 
     /** 音乐实例 */
