@@ -124,7 +124,7 @@ export default {
       <li
         class="download"
         @click.stop="downloadSong(info)"
-        v-show="platformFlag"
+        v-show="false"
       >
         <DownloadIcon class="downloadIcon"></DownloadIcon>
       </li>

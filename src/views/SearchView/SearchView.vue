@@ -80,7 +80,7 @@ export default {
         changeShowSearchOrResult.value = false;
         searchResultList.value = [];
       }
-    });
+    });7
 
     /** 搜索按钮 点击 赋值 */
     function searchBtnClick(searchWord: string) {

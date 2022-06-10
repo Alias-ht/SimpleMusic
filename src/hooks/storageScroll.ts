@@ -13,3 +13,8 @@ export function getScroll(path: string, ref?: any) {
     }
   return storageScroll[path] || 0;
 }
+
+
+
+
+

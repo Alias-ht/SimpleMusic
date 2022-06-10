@@ -25,8 +25,6 @@ export function totalTip(text: string) {
   }, 1.6 * 1000);
 }
 
-/** 动画名称 */
-
 /** 路由跳转 动画名称 */
 export function routerSkipTransitionName(route?: any) {
   /** 歌词页面 进行对应匹配 */
