@@ -1,16 +1,73 @@
 <script lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
+// 引入接口
+import { captchaSentApi, captchaVerifyApi ,loginStatusApi,logoutApi} from "../../api/user";
+// 引入公共 hooks
+import { totalTip } from "../../hooks/common";
 export default {
   name: "",
   setup() {
     onMounted(() => {});
 
-    const params: { phone: null | number; sms: null | number } = {
+    const params: { phone: null | number; captcha: null | number } = {
       phone: null,
-      sms: null,
+      captcha: null,
     };
     const paramsReactive = reactive(params);
-    return { paramsReactive };
+
+    /** 发送验证码 实例 */
+    const sendSmsInstantiation = {
+      getSendSmsTime() {
+        try {
+          const timeNum: number = JSON.parse(
+            localStorage.getItem("sendSmsTime") || "0"
+          );
+          if(timeNum) this.resetTimer()
+          return timeNum;
+        } catch {
+          return 0;
+        }
+      },
+      setSendSmsTime(value: number) {
+        localStorage.setItem("sendSmsTime", JSON.stringify(value));
+      },
+      resetTimer() {
+        clearInterval(sendSmsInstantiation.timer);
+        setInterval(() => {
+          sendSmsTime.value > 0 && sendSmsTime.value--;
+          if (sendSmsTime.value <= 0) clearInterval(sendSmsInstantiation.timer);
+        }, 1 * 1000);
+      },
+      timer: null as any,
+    };
+
+    // 验证码间隔发送 时间
+    const sendSmsTime = ref(sendSmsInstantiation.getSendSmsTime());
+    watch(sendSmsTime, (newVal) => {
+      sendSmsInstantiation.setSendSmsTime(newVal);
+    });
+
+    /** 发送验证码 */
+    function sendSmsFn() {
+      if (sendSmsTime.value) {
+        return;
+        totalTip("手机号不能为空");
+      }
+      if (!paramsReactive.phone) return totalTip("手机号不能为空");
+
+      captchaSentApi(paramsReactive.phone, () => {
+        sendSmsTime.value = 60;
+        sendSmsInstantiation.resetTimer;
+      });
+    }
+
+    /** 登录 */
+    function loginFn() {
+      captchaVerifyApi(paramsReactive, () => {});
+    }
+    // logoutApi()
+    // loginStatusApi()
+    return { paramsReactive, sendSmsFn, sendSmsTime, loginFn };
   },
 };
 </script>
@@ -26,19 +83,27 @@ export default {
           placeholder="请输入手机号"
         />
         <van-field
-          v-model.number="paramsReactive.sms"
+          v-model.number="paramsReactive.captcha"
           center
           clearable
           label="短信验证码"
           placeholder="请输入短信验证码"
         >
           <template #button>
-            <van-button size="small" type="primary">发送验证码</van-button>
+            <van-button
+              :disabled="Boolean(sendSmsTime)"
+              size="small"
+              type="primary"
+              @click="sendSmsFn"
+              >发送验证码 {{ sendSmsTime ? sendSmsTime : "" }}</van-button
+            >
           </template>
         </van-field>
       </van-cell-group>
       <div class="loginBox">
-        <van-button type="primary" class="login">登录</van-button>
+        <van-button type="primary" class="login" @click="loginFn"
+          >登录</van-button
+        >
       </div>
     </div>
     <!--  -->

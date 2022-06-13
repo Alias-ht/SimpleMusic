@@ -8,6 +8,8 @@ export default {
   getSongUrl: "/song/url", // 获取音乐 url
   getLyric: "/lyric", // 获取歌词
   loginCellphone: "/login/cellphone", // 手机号登录
+  loginStatus: "/login/status", // 登录状态
+  logout: "/logout", // 退出登录
   personalized: "/personalized", // 获取 推荐歌单
   personalizedDjprogram: "/personalized/djprogram", // 推荐电台
   playlistDetail: "/playlist/detail", // 歌单详情
@@ -22,5 +24,5 @@ export default {
   searchHotDetail: "/search/hot/detail", // 热搜列表 (详细)
   searchSuggest: "/search/suggest", // 搜索建议
   searchMultimatch: "/search/multimatch", // 搜索多重匹配
-  userAccount:'/user/account',// 登陆后 获取账号信息
+  userAccount: "/user/account", // 登陆后 获取账号信息
 };
