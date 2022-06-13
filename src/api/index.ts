@@ -3,8 +3,11 @@ export default {
   albumNewest: "/album/newest", // 最新专辑
   banner: "/banner", // 轮播图
   checkMusic: "/check/music", // 检查音乐是否 可用
+  captchaSent: "/captcha/sent", // 发送验证码
+  captchaVerify: "/captcha/verify", // 验证验证码
   getSongUrl: "/song/url", // 获取音乐 url
   getLyric: "/lyric", // 获取歌词
+  loginCellphone: "/login/cellphone", // 手机号登录
   personalized: "/personalized", // 获取 推荐歌单
   personalizedDjprogram: "/personalized/djprogram", // 推荐电台
   playlistDetail: "/playlist/detail", // 歌单详情
@@ -19,4 +22,5 @@ export default {
   searchHotDetail: "/search/hot/detail", // 热搜列表 (详细)
   searchSuggest: "/search/suggest", // 搜索建议
   searchMultimatch: "/search/multimatch", // 搜索多重匹配
+  userAccount:'/user/account',// 登陆后 获取账号信息
 };

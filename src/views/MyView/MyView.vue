@@ -4,7 +4,13 @@ export default {
   name: "",
   setup() {
     onMounted(() => {});
-    return {};
+
+    const params: { phone: null | number; sms: null | number } = {
+      phone: null,
+      sms: null,
+    };
+    const paramsReactive = reactive(params);
+    return { paramsReactive };
   },
 };
 </script>
@@ -13,12 +19,14 @@ export default {
   <div class="MyView">
     <div class="my">
       <h2>登录</h2>
-      <van-cell-group inset v-if='false'>
-        <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-        <van-field v-model="password" label="密码" placeholder="请输入密码" />
-
+      <van-cell-group inset v-if="true">
         <van-field
-          v-model="sms"
+          v-model.number="paramsReactive.phone"
+          label="手机号"
+          placeholder="请输入手机号"
+        />
+        <van-field
+          v-model.number="paramsReactive.sms"
           center
           clearable
           label="短信验证码"
@@ -29,6 +37,9 @@ export default {
           </template>
         </van-field>
       </van-cell-group>
+      <div class="loginBox">
+        <van-button type="primary" class="login">登录</van-button>
+      </div>
     </div>
     <!--  -->
   </div>
@@ -38,12 +49,10 @@ export default {
 .MyView {
   width: 100%;
   height: 100%;
-  // overflow-y: auto;
   overflow: hidden;
   .my {
     height: 100%;
     overflow-y: auto;
-    // overflow: hidden;
     background: repeating-linear-gradient(
       to bottom,
       rgba(255, 255, 255) 0%,
@@ -51,6 +60,19 @@ export default {
       rgba(245, 245, 245) 25%,
       rgb(245, 245, 245) 100%
     );
+
+    .loginBox {
+      text-align: center;
+      .login {
+        text-align: center;
+        margin-top: 10vw;
+        font-weight: 600;
+        font-size: 5vw;
+        background: royalblue;
+        border-radius: 2vw;
+        padding: 2vw 5vw;
+      }
+    }
   }
 }
 </style>

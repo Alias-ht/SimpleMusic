@@ -28,7 +28,6 @@ export const getLyricApi = (id: number) => get(api.getLyric, { id });
  */
 export const getSongDetailApi = async (id: number, fn: Function) => {
   const res = await get(api.songDetail, { ids: id });
-  //   console.log(res.data);
   if (res.status === 200) fn && fn(res.data);
   else console.log("数据获取失败 ==> @getSongDetailApi");
 };
