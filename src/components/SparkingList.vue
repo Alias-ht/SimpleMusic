@@ -101,8 +101,8 @@ export default {
       @click="clickSongList"
     >
       <li class="avatarBox">
-        <!-- <img alt="" v-lazy="info.picUrlHandler || info.picUrl" /> -->
-        <img :src="info.picUrlHandler || info.picUrl" alt="" />
+        <!-- <img :src="info.picUrlHandler || info.picUrl" alt="" /> -->
+        <img  alt="" v-img-lazy='info.picUrlHandler || info.picUrl' />
         <!--  -->
       </li>
       <li class="infoBox">

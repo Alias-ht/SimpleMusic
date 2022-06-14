@@ -51,7 +51,8 @@ export default {
     <li class="index">{{songIndex+1}} </li>
       <!-- 图片 -->
       <li class="avatarBox">
-        <img :src="songInfo.picUrl + '?param=160y160'" alt="" />
+        <!-- <img  alt=""  :src="songInfo.picUrl + '?param=160y160'"/> -->
+        <img  alt=""  v-img-lazy="songInfo.picUrl + '?param=160y160'"/>
       </li>
       <!-- 信息 -->
       <li class="infoBox">

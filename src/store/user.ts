@@ -15,7 +15,8 @@ export const userInfo = defineStore({
       profile: {},
     };
   },
-  actions: {},
+  actions: {
+  },
   // 数据持久化, 存储参数
   persist: {
     enabled: true,
