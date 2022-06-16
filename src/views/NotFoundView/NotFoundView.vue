@@ -13,7 +13,7 @@ export default {
 
     var requestIngList: any = {};
 
-    /** Test request cancelled.  */
+    /** Test request cancelled.  取消请求 */
     function testRequestClone() {
       const source = CancelToken.source();
       const baseUrl = "http://localhost:18726";

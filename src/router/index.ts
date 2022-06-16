@@ -69,6 +69,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: { transition: "lyricPage", title: "歌词", mode: " " },
   },
   {
+    path: "/conceal",
+    name: "ConcealView",
+    component: () => import("@/views/ConcealView/ConcealView.vue"),
+  },
+  {
     path: "/404",
     name: "NotFound",
     meta: {

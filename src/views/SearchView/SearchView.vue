@@ -1,5 +1,6 @@
 <script lang='ts'>
 import { ref, watch, onMounted } from "vue";
+import {useRouter} from 'vue-router';
 // 引入接口
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
@@ -16,7 +17,7 @@ export default {
     const searchResultBox = ref(); // ref 元素
     /** 遮罩层 实例 */
     let maskLayerInstantiation: any = { open, close };
-
+const router = useRouter()
     /** 搜索关键词 */
     const searchkeyWords = ref("");
     /** 搜索列表 */
@@ -92,6 +93,7 @@ export default {
     /** 进行搜索 事件 */
     function searchSongFn(flag?: string) {
       if (!searchkeyWords.value) return;
+      if(searchkeyWords.value === 'yinCang')return router.push('/conceal');
       // 清楚搜索结果
       searchResultList.value = []
       maskLayerInstantiation.open();
