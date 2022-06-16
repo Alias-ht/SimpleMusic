@@ -88,5 +88,4 @@ const del = (url: string, params?: any) => {
   });
 };
 
-// export default service;
 export { get, put, post, del };

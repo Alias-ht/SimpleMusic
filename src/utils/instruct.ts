@@ -1,4 +1,4 @@
-import dufaulrImg from "../assets/logo.png";
+import dufaulrImg from "../assets/gif/loading.gif"; // 默认图片
 
 /** 图片懒加载 */
 export const imgLazyLoad = {
@@ -6,18 +6,13 @@ export const imgLazyLoad = {
     // 默认图片
     let defaultSrc = dufaulrImg; // 懒加载
     const imgLazyLoad = (el: any, binding: any) => {
-      // console.log(binding);
-
       el.src = defaultSrc; // 给图片添加一个默认图
       const observer = new IntersectionObserver((entries, observe) => {
-        // console.log(entries);
-        // console.log(observe);
         entries.forEach((item: any) => {
           let target = item.target;
           if (item.isIntersecting) {
-            //   console.log(item)
             target.src = binding.value;
-            observe.unobserve(item.target); // 取消观察
+            observe.unobserve(item.target); // 取消观察 - 确保执行一次
           }
         });
       });
