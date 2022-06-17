@@ -1,11 +1,13 @@
 <script lang='ts'>
 import { ref, watch, onMounted } from "vue";
-import {useRouter} from 'vue-router';
+import { useRouter } from "vue-router";
 // 引入接口
 import { getSearchHotDetailApi, getSearchListApi } from "../../api/search";
 // 引入组件
 import SongList from "@/components/SongList.vue";
-import UserList from '@/components/UserList.vue'
+import UserList from "@/components/UserList.vue";
+import SingerList from "../../components/SingerList.vue";
+import SearchPlaylist from "../../components/SearchPlaylist.vue";
 // 引入 公共 hooks 函数
 import { maskLayerShow, totalTip } from "../../hooks/common";
 export default {
@@ -17,7 +19,7 @@ export default {
     const searchResultBox = ref(); // ref 元素
     /** 遮罩层 实例 */
     let maskLayerInstantiation: any = { open, close };
-const router = useRouter()
+    const router = useRouter();
     /** 搜索关键词 */
     const searchkeyWords = ref("");
     /** 搜索列表 */
@@ -30,27 +32,32 @@ const router = useRouter()
     });
     /** 热搜列表 详细 --- end   */
 
-     /** 点击热搜 搜索关键词 标识 */
+    /** 点击热搜 搜索关键词 标识 */
     let clickSearchKeywordFlag = true;
 
     /** 搜索类型 */
     const searchType = ref(1);
-    watch(searchType,()=>{
-      searchSongFn()
-    })
+    watch(searchType, () => {
+      searchSongFn();
+    });
 
     //  1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音
     const searchTypeOptions = [
       { text: "单曲", value: 1, type: "songs", component: "SongList" },
-      { text: "专辑", value: 10, type: "albums", component: "SongList" },
-      { text: "歌手", value: 100, type: "artists", component: "SongList" },
-      { text: "歌单", value: 1000, type: "playlists", component: "SongList" },
+      // { text: "专辑", value: 10, type: "albums", component: "SongList" },
+      { text: "歌手", value: 100, type: "artists", component: "SingerList" },
       {
-        text: "用户",
-        value: 1002,
-        type: "userprofiles",
-        component: "userList",
+        text: "歌单",
+        value: 1000,
+        type: "playlists",
+        component: "SearchPlaylist",
       },
+      // {
+      //   text: "用户",
+      //   value: 1002,
+      //   type: "userprofiles",
+      //   component: "userList",
+      // },
       { text: "歌词", value: 1006, type: "songs", component: "SongList" },
     ];
 
@@ -61,7 +68,6 @@ const router = useRouter()
     const searchParams = {
       limit: 50,
       offset: 1,
-      type: 1,
     };
     /** 搜索定时器 */
     var searchFnTimer: any;
@@ -81,7 +87,8 @@ const router = useRouter()
         changeShowSearchOrResult.value = false;
         searchResultList.value = [];
       }
-    });7
+    });
+    7;
 
     /** 搜索按钮 点击 赋值 */
     function searchBtnClick(searchWord: string) {
@@ -93,28 +100,33 @@ const router = useRouter()
     /** 进行搜索 事件 */
     function searchSongFn(flag?: string) {
       if (!searchkeyWords.value) return;
-      if(searchkeyWords.value === 'yinCang')return router.push('/conceal');
+      if (searchkeyWords.value === "yinCang") return router.push("/conceal");
       // 清楚搜索结果
-      searchResultList.value = []
+      searchResultList.value = [];
       maskLayerInstantiation.open();
-      clickSearchKeywordFlag = false;  // 防止点击后 导致再次触发结果
+      clickSearchKeywordFlag = false; // 防止点击后 导致再次触发结果
+      // 设置参数
+      let params = {
+        keywords: searchkeyWords.value,
+        type: searchType.value,
+      };
+      // 非 歌手类型 进行 分页查询
+      if (searchType.value !== 100) params = { ...params, ...searchParams };
+
       getSearchListApi(
-        {
-          keywords: searchkeyWords.value,
-          ...searchParams,
-          type: searchType.value,
-        },
+        params,
         ({ result, code }: { result: any; code: number }) => {
           if (code == 200) {
             const typeItem = searchTypeOptions.find(
               (item) => item.value === searchType.value
             );
             // @ts-ignore
-            const resTypeItem: [] = result[typeItem.type || "songs"];
+            const resTypeItem: [] = result[typeItem.type]; // 拿到对应字段的列表 结果
 
             if (resTypeItem) {
               searchResultList.value.push(...resTypeItem);
             } else {
+              totalTip("暂无数据");
             }
           } else {
             totalTip("数据获取失败");
@@ -149,7 +161,9 @@ const router = useRouter()
   },
   components: {
     SongList,
-    UserList
+    UserList,
+    SingerList,
+    SearchPlaylist,
   },
 };
 </script>
@@ -183,7 +197,7 @@ const router = useRouter()
         <li
           class="smallStripes"
           :style="{
-            left: `${(searchTypeIndex * 16.66)+1.2}vw`,
+            left: `${searchTypeIndex * 25 + 5}vw`,
           }"
         ></li>
       </ul>
@@ -239,7 +253,7 @@ const router = useRouter()
         flex: 1;
       }
       .searchButton {
-        padding-top: 1vw;
+        // padding-top: 1vw;
         padding-right: 3vw;
         button.searchBtn {
           padding: 0 3vw;
@@ -272,6 +286,43 @@ const router = useRouter()
   }
 }
 
+// 搜索框
+.searchInputBox {
+  height: 15vw;
+  .searchInput {
+    height: 8vw;
+    overflow: hidden;
+    padding: 0;
+    margin: 0 4vw;
+    border-radius: 1vw;
+    background: #f7f8fa;
+
+    ::v-deep .van-search__field {
+      padding: 0;
+    }
+    ::v-deep .van-search__content.van-search__content--square {
+      height: 8vw;
+      .van-search__field .van-field__left-icon {
+        line-height: 8vw;
+        .van-badge__wrapper.van-icon.van-icon-search {
+          font-size: 3vw;
+        }
+      }
+      .van-field__body {
+        padding-right: 2vw;
+        .van-field__control {
+          height: 8vw;
+          font-size: 3vw;
+          padding-left: 2vw;
+        }
+      }
+    }
+  }
+  .searchButton {
+    height: 8vw;
+  }
+}
+
 // 搜索结果 类型
 .typeBocUl {
   position: relative;
@@ -301,5 +352,11 @@ const router = useRouter()
     z-index: -1;
     transition: all 0.2s;
   }
+}
+
+// 搜搜列表
+.searchBox {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

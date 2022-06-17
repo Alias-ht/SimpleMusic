@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import { service, baseUrl } from "../test/request";
 // 引入 hooks 函数
-import { DownloadFile, copy } from "../hooks/common";
+import { DownloadFile, copy ,totalTip} from "../hooks/common";
 // 引入 vant 组件
 import { Dialog } from "vant";
 
@@ -42,11 +42,14 @@ export default {
       })
         .then(() => {
           copy(url);
+          totalTip('复制成功')
 
           // on confirm
         })
         .catch(() => {
           // on cancel
+          totalTip('复制失败')
+
         });
     }
 

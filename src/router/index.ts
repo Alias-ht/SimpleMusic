@@ -42,12 +42,7 @@ const routes: Array<RouteRecordRaw> = [
           }, */
         ],
       },
-      {
-        path: "songSingle",
-        name: "SongSingle",
-        component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
-        meta: { transIndex: 12 },
-      },
+
       {
         path: "search",
         name: "Search",
@@ -59,6 +54,12 @@ const routes: Array<RouteRecordRaw> = [
         name: "My",
         component: () => import("@/views/MyView/MyView.vue"),
         meta: { title: "我的", mode: "", transIndex: 30 },
+      },
+      {
+        path: "songSingle",
+        name: "SongSingle",
+        component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
+        meta: { transIndex: 35 },
       },
     ],
   },

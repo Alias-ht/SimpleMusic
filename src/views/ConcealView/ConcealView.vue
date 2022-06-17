@@ -38,6 +38,7 @@ export default {
       });
     }
 
+/**   测试切片上传  / 断点续传   */
     const config = { index: 0, max: 12 };
     let intervalTime = 1 * 1000;
     function testCallBack() {

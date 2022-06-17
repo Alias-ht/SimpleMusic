@@ -124,6 +124,9 @@ export default {
     position: relative;
     display: flex;
     height: 10vw;
+    // box-shadow: 0 0 5vw rgba(0, 0, 0, 0.3);
+    // transition:all 0.3s;
+
     li {
       width: 20vw;
       text-align: center;
