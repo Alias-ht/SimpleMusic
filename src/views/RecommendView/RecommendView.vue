@@ -120,7 +120,7 @@ export default {
             <van-swipe-item v-for="item in bannerList" :key="item.targetId">
               <img
                 class="bannerImg"
-                :src="item.pic + '?param=1080'"
+                v-img-lazy="item.pic + '?param=1080'"
                 @click="bannerClick(item)"
               />
             </van-swipe-item>

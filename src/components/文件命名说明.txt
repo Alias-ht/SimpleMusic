@@ -2,3 +2,4 @@ songCard            --  歌单 卡片
 PrivilegesList.vue  --  歌单列表
 SingerList.vue      --  歌手列表
 SearchPlaylist      --  搜索歌单列表
+SearchLyricList     --  搜索 歌词列表

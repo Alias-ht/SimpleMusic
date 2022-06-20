@@ -8,6 +8,7 @@ import SongList from "@/components/SongList.vue";
 import UserList from "@/components/UserList.vue";
 import SingerList from "../../components/SingerList.vue";
 import SearchPlaylist from "../../components/SearchPlaylist.vue";
+import SearchLyricList from "../../components/SearchLyricList.vue";
 // 引入 公共 hooks 函数
 import { maskLayerShow, totalTip } from "../../hooks/common";
 export default {
@@ -58,7 +59,12 @@ export default {
       //   type: "userprofiles",
       //   component: "userList",
       // },
-      { text: "歌词", value: 1006, type: "songs", component: "SongList" },
+      {
+        text: "歌词",
+        value: 1006,
+        type: "songs",
+        component: "SearchLyricList",
+      },
     ];
 
     /** 改变显示 热搜 和 结果 */
@@ -100,7 +106,9 @@ export default {
     /** 进行搜索 事件 */
     function searchSongFn(flag?: string) {
       if (!searchkeyWords.value) return;
-      if (searchkeyWords.value === "author_Hidden") return router.push("/conceal");
+      // 手动触发按钮,并且为关键词 进入隐藏页面
+      if (flag === "clickBtn" && searchkeyWords.value === "author_Hidden")
+        return router.push("/conceal");
       // 清楚搜索结果
       searchResultList.value = [];
       maskLayerInstantiation.open();
@@ -164,6 +172,7 @@ export default {
     UserList,
     SingerList,
     SearchPlaylist,
+    SearchLyricList,
   },
 };
 </script>
@@ -297,10 +306,10 @@ export default {
     border-radius: 1vw;
     background: #f7f8fa;
 
-    ::v-deep .van-search__field {
+    :deep(.van-search__field) {
       padding: 0;
     }
-    ::v-deep .van-search__content.van-search__content--square {
+    :deep(.van-search__content.van-search__content--square) {
       height: 8vw;
       .van-search__field .van-field__left-icon {
         line-height: 8vw;
