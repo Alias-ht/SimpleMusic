@@ -100,7 +100,7 @@ export default {
     /** 进行搜索 事件 */
     function searchSongFn(flag?: string) {
       if (!searchkeyWords.value) return;
-      if (searchkeyWords.value === "yinCang") return router.push("/conceal");
+      if (searchkeyWords.value === "author_Hidden") return router.push("/conceal");
       // 清楚搜索结果
       searchResultList.value = [];
       maskLayerInstantiation.open();

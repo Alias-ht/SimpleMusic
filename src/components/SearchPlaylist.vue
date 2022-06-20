@@ -40,7 +40,7 @@ export default {
 <template>
   <div class="SearchPlaylist" @click="clickSearchPlaylistFn">
     <div class="picture">
-      <img :src="info.coverImgUrl + '?param=240y240'" alt="" />
+      <img v-img-lazy="info.coverImgUrl + '?param=240y240'" alt="" />
       <div class="description">
         <div class="box">
           <svg
