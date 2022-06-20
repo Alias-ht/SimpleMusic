@@ -19,9 +19,8 @@ export default {
         getIndexChangeScrollFn();
       }
       initLyricUlContainer();
-
     });
-    const storeSongPlay = useSongPlay(); // 创建实例 获取 歌曲播放状态
+    const storeSongPlay: any = useSongPlay(); // 创建实例 获取 歌曲播放状态
     const lyricDivRef = ref(null as any); // 歌词盒子 ref 元素
 
     /** 初始化歌词 容器*/
@@ -58,10 +57,13 @@ export default {
 
     /** 手指移动,lyricTime 改变 */
     function touchmoveLyricTimeShow() {
+      const lyricList = storeSongPlay.songLyricInfo.lyric;
+      // if (!lyricList) return;
       const height = lyricLis[0]?.offsetHeight;
       const scrollTop = lyricDivRef.value.scrollTop;
       const index = Math.floor(scrollTop / height);
-      const lyricList = storeSongPlay.songLyricInfo.lyric;
+      const time = lyricList[index]?.time;
+      if (typeof time !== "number") return;
       scrollLyricIndex.value =
         index < lyricList.length ? index : lyricList.length - 1;
       scrollLyricTime.value = lyricList[index]?.time;
@@ -75,7 +77,7 @@ export default {
       }, 2.2 * 1000);
     }
 
-/** 歌词不触摸时 进行重置 */
+    /** 歌词不触摸时 进行重置 */
     function lyricReset() {
       scrollLyricIndex.value = null;
       getIndexChangeScrollFn(storeSongPlay.songLyricInfo.index);
@@ -100,18 +102,19 @@ export default {
       lyricRef.scrollTop = offsetTop - height;
     }
 
-
     /** 歌词背景图片 */
     const lyricBackGroundPic =
-      // @ts-ignore
-      storeSongPlay.songInfo?.picUrl || storeSongPlay.songInfo?.al?.picUrl || storeSongPlay.songInfo?.picUrlHandler || '';
+      storeSongPlay.songInfo?.picUrl ||
+      storeSongPlay.songInfo?.al?.picUrl ||
+      storeSongPlay.songInfo?.picUrlHandler ||
+      "";
 
     /** 播放音乐 */
     function playSong() {
       touchmoveLyricTimeShow();
       storeSongPlay.songRef.currentTime = scrollLyricTime.value / (1 * 1000);
       storeSongPlay.startSong(true);
-      lyricReset()
+      lyricReset();
     }
 
     return {
@@ -204,6 +207,7 @@ export default {
             class="lyricCenter"
             :style="{
               opacity: scrollLyricIndex !== null ? 1 : 0,
+              visibility: scrollLyricIndex !== null ? 'visible' : 'hidden',
             }"
           >
             <div class="time">

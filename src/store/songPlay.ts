@@ -110,7 +110,15 @@ export const useSongPlay = defineStore({
         this.songLyricInfo.songPlayTime = this.songRef.currentTime;
       });
       // 存储并 设置 歌词 歌曲同步
-      this.songLyricInfo.lyric = this.songLyricInfo.lyricParserInstantiation.lines;
+      const lyricArr = this.songLyricInfo.lyricParserInstantiation.lines;
+
+      let lyricTxt: any[] = [];
+      if (!(lyricArr.length > 0)) {
+        this.songLyricInfo.lyricParserInstantiation.lrc.split("\n").forEach((item: any) => {
+          lyricTxt.push({ txt: item });
+        });
+      }
+      this.songLyricInfo.lyric = lyricArr.length > 0 ? lyricArr : lyricTxt;
 
       this.songLyricInfo.lyricParserInstantiation.seek(this.songRef.currentTime * 1000);
     },
@@ -141,7 +149,7 @@ export const useSongPlay = defineStore({
     startSong(lyricFlag?: boolean) {
       try {
         this.songRef.play();
-        !this.songRef.autoplay && (this.songRef.autoplay = true)
+        !this.songRef.autoplay && (this.songRef.autoplay = true);
 
         this.songPlayState = true;
         const lyricInstan = this.songLyricInfo.lyricParserInstantiation;
