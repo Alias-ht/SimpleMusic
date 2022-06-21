@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onBeforeMount, ref, onMounted, watch,reactive, computed } from "vue";
+import { onBeforeMount, ref, onMounted, watch, reactive, computed } from "vue";
 
 // 引入 状态
 import { useSongPlay } from "../store/songPlay";
@@ -28,7 +28,7 @@ export default {
   <div class="playBox" @click="$router.push('/lyric')">
     <ul class="playSongComopnent">
       <li class="picUrl">
-        <img v-show="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl" :src="storeSongPlay.songInfo.picUrlHandler || storeSongPlay.songInfo.picUrl + '?param=160y160'" />
+        <img v-imgLoadFinish v-show="storeSongPlay.storage.playSongAvatarImg" :src="storeSongPlay.storage.playSongAvatarImg" />
       </li>
       <li class="songLyricInfo">
         <div class="title textEllipsis">

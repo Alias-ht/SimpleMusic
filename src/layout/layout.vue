@@ -16,10 +16,7 @@ import { HomeIcon, SearchIcon, UserIcon } from "@heroicons/vue/outline";
 // import { HomeIcon } from '@heroicons/vue/solid'
 
 // 引入hooks 函数
-import {
-  routerSkipTransitionName,
-  routerSkipMode,
-} from "../hooks/common";
+import { routerSkipTransitionName, routerSkipMode } from "../hooks/common";
 
 export default {
   name: "layout",
@@ -54,7 +51,13 @@ export default {
       },
     ];
 
-    return { routerSkipTransitionName, routerSkipMode, fillBoxRef, tabBarList,equipmentFlag };
+    return {
+      routerSkipTransitionName,
+      routerSkipMode,
+      fillBoxRef,
+      tabBarList,
+      equipmentFlag,
+    };
   },
   components: { PlayingSongVue, HomeIcon, SearchIcon, UserIcon },
 };
@@ -72,7 +75,7 @@ export default {
             :name="routerSkipTransitionName($route)"
             :mode="routerSkipMode($route)"
           >
-            <KeepAlive :max="7" :exclude='["SongSingleTableView"]'>
+            <KeepAlive :max="7" :exclude='["SongSingleTableView","SingerDetailView"]'>
               <Component :is="Component" />
             </KeepAlive>
           </Transition>
@@ -131,9 +134,8 @@ export default {
       height: 30px;
       background: white;
     }
-    .topBar.app{
+    .topBar.app {
       background: #bcbcbc63;
-
     }
 
     .fillBox {

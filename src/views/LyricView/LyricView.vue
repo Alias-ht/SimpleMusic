@@ -57,6 +57,7 @@ export default {
 
     /** 手指移动,lyricTime 改变 */
     function touchmoveLyricTimeShow() {
+      clearTimeout(storageWatchTimer);
       const lyricList = storeSongPlay.songLyricInfo.lyric;
       // if (!lyricList) return;
       const height = lyricLis[0]?.offsetHeight;
@@ -102,13 +103,6 @@ export default {
       lyricRef.scrollTop = offsetTop - height;
     }
 
-    /** 歌词背景图片 */
-    const lyricBackGroundPic =
-      storeSongPlay.songInfo?.picUrl ||
-      storeSongPlay.songInfo?.al?.picUrl ||
-      storeSongPlay.songInfo?.picUrlHandler ||
-      "";
-
     /** 播放音乐 */
     function playSong() {
       touchmoveLyricTimeShow();
@@ -125,7 +119,6 @@ export default {
       touchmoveLyricTimeShow,
       scrollLyricIndex,
       scrollLyricTime,
-      lyricBackGroundPic,
       playSong,
     };
   },
@@ -143,8 +136,9 @@ export default {
       <!-- v-show="false" -->
       <li class="picUrl">
         <img
-          v-show="true && lyricBackGroundPic"
-          :src="`${lyricBackGroundPic}?param=200y420`"
+          v-imgLoadFinish
+          v-show="true && storeSongPlay.storage.lyricBackground"
+          :src="storeSongPlay.storage.lyricBackground"
         />
       </li>
       <li class="songLyricInfo">

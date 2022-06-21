@@ -54,12 +54,22 @@ button {
     filter: blur(5px);
 }
 
-
+// 返回箭头
 .goBackArrow {
     padding-left: 5vw;
     color: black;
     z-index: 1;
     width: 10vw;
+}
+
+// 图片可见度
+.imgOpacity {
+    transition: opacity 0.6s;
+    opacity: 0;
+
+    &.show {
+        opacity: 1;
+    }
 }
 
 @import './vueTransition.less';

@@ -14,7 +14,7 @@ import LyricParser from "lyric-parser";
 
 /** 定义 type */
 type SongStateType = {
-  songInfo: object;
+  songInfo: any;
   songUrl: string;
   songId: number;
   songPlaying: any;
@@ -28,6 +28,7 @@ type SongStateType = {
     index: number;
     songPlayTime?: any;
   };
+  storage?: any;
 };
 let stopSongSetIntervalTimer: any;
 /** 对外导出 */
@@ -53,6 +54,10 @@ export const useSongPlay = defineStore({
         lyricParserInstantiation: null, // 歌词实例存储
         songPlayTime: null, // 歌曲播放时间
       },
+      storage: {
+        playSongAvatarImg: "", // 播放音乐组件 小头像
+        lyricBackground: "",
+      },
     };
   },
   actions: {
@@ -65,8 +70,9 @@ export const useSongPlay = defineStore({
           if (id == this.songId) return;
           this.songId = id;
           this.songInfo = info; // 解析存储  信息和id
-          // @ts-ignore
-          this.songInfo.picUrl || this.getSongPictrue(this.songId);
+
+          // 加载歌曲图片
+          this.loadSongImg();
 
           this.getSongUrl(); // 获取url 并调用开始播放
           this.getSongLyric(this.songId); // 获取歌词
@@ -222,6 +228,20 @@ export const useSongPlay = defineStore({
       this.songInfo.duration = allDuration;
       return allDuration;
     },
+    /** 加载歌曲图片 */
+    loadSongImg() {
+      //  加载歌曲图片
+      this.songInfo.picUrl || this.getSongPictrue(this.songId);
+      let imgUrl = this.songInfo?.picUrl || this.songInfo?.al?.picUrl || this.songInfo?.picUrlHandler;
+
+      if (!imgUrl.split("?")[1]) {
+        this.storage.playSongAvatarImg = imgUrl + "?param=160y160";
+        this.storage.lyricBackground = imgUrl + "?param=200y420";
+      } else {
+        this.storage.playSongAvatarImg = imgUrl;
+        this.storage.lyricBackground = imgUrl;
+      }
+    },
   },
   // 数据持久化, 存储参数
   persist: {
@@ -229,7 +249,7 @@ export const useSongPlay = defineStore({
     strategies: [
       {
         storage: localStorage,
-        paths: ["songInfo", "songUrl", "songId", "songPlaygress", "songLyricInfo"],
+        paths: ["songInfo", "songUrl", "songId", "songPlaygress", "songLyricInfo", "storage"],
       },
     ],
   },

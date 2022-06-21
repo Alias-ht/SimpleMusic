@@ -31,9 +31,11 @@ export default {
 
 <style scoped lang="less">
 .TopGoBack {
+     z-index: +2;
   height: 12vw;
   line-height: 12vw;
   display: flex;
+  background: white;
   box-shadow: 0 2vw 3vw rgba(68, 68, 68, 0.2);
   .left {
     .icon {

@@ -24,3 +24,19 @@ export const imgLazyLoad = {
     });
   },
 };
+
+/** 图片加载完成 动画效果 */
+export const imgLoadFinish = {
+  install(Vue: any) {
+    const imgLazyLoad = (el: any, binding: any) => {
+      el.className += " imgOpacity ";
+      el.onload = () => {
+        const storClass = el.className.split(" ").includes("show");
+        if (!storClass) el.className += " show ";
+      };
+    };
+    Vue.directive("imgLoadFinish", {
+      created: imgLazyLoad,
+    });
+  },
+};

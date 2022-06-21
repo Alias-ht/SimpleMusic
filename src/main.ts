@@ -19,11 +19,12 @@ import { Lazyload } from "vant";
 const app = createApp(App);
 
 // 引入自定义指令
-import { imgLazyLoad } from "./utils/instruct";
-app.use(imgLazyLoad)
+import { imgLazyLoad, imgLoadFinish } from "./utils/instruct";
+app.use(imgLazyLoad);
+app.use(imgLoadFinish);
 
 // 引入默认event
-import 'default-passive-events'
+import "default-passive-events";
 
 app.use(router);
 app.use(Vue3Lottie);
