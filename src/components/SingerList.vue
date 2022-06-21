@@ -69,7 +69,7 @@ export default {
   <div class="SingerList">
     <ul class="listBox" @click="clickUserInfo">
       <li class="avatar">
-        <img :src="info.avatarImg" alt="" />
+        <img v-img-lazy="info.avatarImg" alt="" />
       </li>
       <li class="infoBox">
         <div class="title textEllipsis">

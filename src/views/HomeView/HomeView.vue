@@ -49,7 +49,7 @@ export default {
 
     const vanTabConfig = [
       { title: "推荐", routerPath: "/home/recommend" },
-      { title: "音乐馆", routerPath: "/home/musicHall" },
+      // { title: "音乐馆", routerPath: "/home/musicHall" },
       // { title: "搜索", routerPath: "/home/search" },
     ];
 

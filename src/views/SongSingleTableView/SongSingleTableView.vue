@@ -102,7 +102,7 @@ export default {
     <div class="container">
       <div class="header">
         <div class="imgBox">
-          <img :src="playListDetail.playlist.coverImgUrl || ''" alt="" />
+          <img v-imgLoadFinish :src="playListDetail.playlist.coverImgUrl || ''" alt="" />
         </div>
       </div>
       <div class="songSingleList">

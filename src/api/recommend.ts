@@ -43,3 +43,15 @@ export const getRecommendRoaidApi = async (fn?: Function) => {
   if (res?.status === 200) fn && fn(res?.data?.result);
   else console.log("数据获取失败 ==> @getRecommendRoaidApi");
 };
+
+/**
+ * 获取 排行榜
+ * @param fn 回调函数
+ */
+export const getTopListApi = async (fn?: Function) => {
+  const res = await get(api.toplist);
+  console.log(res.data);
+
+  if (res?.status === 200) fn && fn(res?.data);
+  else console.log("数据获取失败 ==> @getTopListApi");
+};

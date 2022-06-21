@@ -90,6 +90,11 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.GlobalCom{
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
 
 .lyricBackgroundPrestrain {
   img {

@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="SongCard">
     <div class="picture">
-      <img :src="item.picUrl + '?param=120y120'" alt="" />
+      <img v-imgLoadFinish :src="item.picUrl + '?param=120y120'" alt="" />
       <div class="description">
         <div class="box">
           <svg

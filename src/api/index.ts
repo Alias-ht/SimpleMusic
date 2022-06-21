@@ -25,5 +25,6 @@ export default {
   searchHotDetail: "/search/hot/detail", // 热搜列表 (详细)
   searchSuggest: "/search/suggest", // 搜索建议
   searchMultimatch: "/search/multimatch", // 搜索多重匹配
+  toplist: "/toplist", // 排行榜
   userAccount: "/user/account", // 登陆后 获取账号信息
 };
