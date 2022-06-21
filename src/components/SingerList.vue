@@ -1,13 +1,17 @@
 <script lang="ts">
 import { onMounted, onUnmounted, reactive, computed, watch, ref } from "vue";
+import { useRouter } from "vue-router";
 
 // 引入 状态管理 - 音乐
 import { useSongPlay } from "../store/songPlay";
+
+
 
 export default {
   name: "SingerList",
   props: ["info", "keyword", "type"],
   setup(props: any) {
+    const router = useRouter();
     /** 状态管理 歌曲播放信息 */
     const storeSongPlay = useSongPlay();
 
@@ -15,7 +19,13 @@ export default {
     const info = props.info;
 
     /** 点击 用户信息 */
-    function clickUserInfo() {}
+    function clickUserInfo() {
+      const id = info.id;
+      router.push({
+        path: "/singerDetail",
+        query: {singerId:id},
+      });
+    }
 
     /** 处理高亮 显示 --------- start */
     function highLight() {
@@ -40,9 +50,9 @@ export default {
       let processingAlias = "";
       info.alias.forEach((item: any, index: number) => {
         index > 0 && (processingAlias += " / ");
-        processingAlias+=item
+        processingAlias += item;
       });
-      info.processingAlias = processingAlias
+      info.processingAlias = processingAlias;
     }
     aliasHandler();
 
@@ -66,7 +76,7 @@ export default {
           <span v-html="info.highLightName"></span>
         </div>
         <div class="alias">
-         <span> {{info.processingAlias}} </span>
+          <span> {{ info.processingAlias }} </span>
         </div>
       </li>
     </ul>

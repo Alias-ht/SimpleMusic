@@ -59,10 +59,17 @@ const routes: Array<RouteRecordRaw> = [
         path: "songSingle",
         name: "SongSingle",
         component: () => import("../views/SongSingleTableView/SongSingleTableView.vue"),
-        meta: { transIndex: 35 },
+        meta: { transIndex: 35, titile: "歌单" },
+      },
+      {
+        path: "/singerDetail",
+        name: "singerDetail",
+        component: () => import("../views/SingerDetailView/SingerDetailView.vue"),
+        meta: { transIndex: 36, titile: "歌手详情" },
       },
     ],
   },
+
   {
     path: "/lyric",
     name: "Lyric",
