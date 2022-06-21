@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getSingerDetailApi } from "../../api/singer";
+import { getSingerDetailApi, getSingerArtistsApi } from "../../api/singer";
 
 // 组件
 import TopGoBack from "../../components/TopGoBack.vue";
@@ -22,7 +22,7 @@ export default {
     const tabsActive = ref(0);
     const tabsOptions = [
       {
-        title: "热门作品",
+        title: "热门单曲",
         componentName: "SingerPopularLiterature",
       },
       {
@@ -32,8 +32,12 @@ export default {
     ];
 
     function initCreate() {
-      getSingerDetailApi(singerId, (data: { data: any }) => {
-        singerInfo.value = data.data;
+      // getSingerDetailApi(singerId, (data: any) => {
+      //   singerInfo.value = data.data;
+      //   console.log(singerInfo.value);
+      // });
+      getSingerArtistsApi(singerId, (data: any) => {
+        singerInfo.value = data;
         console.log(singerInfo.value);
       });
     }
@@ -60,7 +64,11 @@ export default {
     <TopGoBack class="TopGoBack" :name="singerInfo.artist?.name"></TopGoBack>
     <div class="container">
       <div class="singerImg">
-        <img v-imgLoadFinish :src="singerInfo.artist?.cover + '?param=1080y1080'" alt="" />
+        <img
+          v-imgLoadFinish
+          :src="singerInfo.artist?.picUrl + '?param=1080y1080'"
+          alt=""
+        />
       </div>
       <div class="inner">
         <van-tabs v-model:active="tabsActive" swipeable>
@@ -72,7 +80,7 @@ export default {
             <div class="tabInnerBox">
               <Component
                 :is="item.componentName"
-                :singerDetail="singerInfo"
+                :singerInfo="singerInfo"
               ></Component>
             </div>
           </van-tab>

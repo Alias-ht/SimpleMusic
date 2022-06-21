@@ -2,6 +2,7 @@
 export default {
   albumNewest: "/album/newest", // 最新专辑
   artistDetail: "/artist/detail", // 歌手详情
+  artists: "/artists", // 歌手 部分信息和热门歌曲
   banner: "/banner", // 轮播图
   checkMusic: "/check/music", // 检查音乐是否 可用
   captchaSent: "/captcha/sent", // 发送验证码

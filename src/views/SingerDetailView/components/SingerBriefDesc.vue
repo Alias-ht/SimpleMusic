@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 export default {
   name: "SingerBriefDesc",
-  props: ["singerDetail"],
+  props: ["singerInfo"],
   setup(props) {
     onMounted(() => {});
 
@@ -16,9 +16,9 @@ export default {
 <template>
   <div class="SingerBriefDesc">
     <!--  -->
-    <h4>{{ props.singerDetail.artist?.name }} 简介</h4>
+    <h4>{{ props.singerInfo.artist?.name }} 简介</h4>
     <div class="inner">
-      {{ props.singerDetail.artist?.briefDesc }}
+      {{ props.singerInfo.artist?.briefDesc }}
     </div>
   </div>
 </template>
